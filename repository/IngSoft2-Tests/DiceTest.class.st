@@ -25,3 +25,14 @@ DiceTest >> testRollDeterministicDiceWithAmountOfFaces3AndRollOutcomeIsLessThan3
 	dice := Dice deterministicWithAmountOfFaces: 3.
 	self assert: dice roll <= 3
 ]
+
+{ #category : #tests }
+DiceTest >> testRollRandomDiceOutcomesLessThanAmountOfFaces [
+| dice |
+	dice := Dice deterministicWithAmountOfFaces: 6.
+	self assert: (dice roll between: 1 and:  6).
+	self assert: (dice roll between: 1 and:  6).
+	self assert: (dice roll between: 1 and:  6).
+	self assert: (dice roll between: 1 and:  6).
+	self assert: (dice roll between: 1 and:  6).
+]
