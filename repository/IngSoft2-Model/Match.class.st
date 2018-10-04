@@ -48,6 +48,11 @@ Match >> isPlayerTryingToMoveFurtherThanSpacesOfBoard [
 	^ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) >= board spaces
 ]
 
+{ #category : #comparing }
+Match >> isPlayerTryingToMoveFurtherThanSpacesOfBoard [
+	^ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) >= board spaces
+]
+
 { #category : #description }
 Match >> isThereAWinner [
 	^ (players select: [ :player | (self positionOf: player) = board spaces ]) isNotEmpty 
