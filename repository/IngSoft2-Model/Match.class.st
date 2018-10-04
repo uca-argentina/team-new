@@ -16,11 +16,6 @@ Match class >> withPlayers: thePlayers withDices: theDices onBoard: aBoard [
 	^ self new initializeWithPlayers: thePlayers withDices: theDices withBoard: aBoard
 ]
 
-{ #category : #comparing }
-Match >> IsPlayerTryingToMoveFurtherThanSpacesOfBoard [
-	^ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) >= board spaces
-]
-
 { #category : #playing }
 Match >> alternateTurn [
 	| playerAuxiliar |
@@ -31,7 +26,7 @@ Match >> alternateTurn [
 
 { #category : #playing }
 Match >> anAmountOfSpacesAccordingToDices [
-	^ self IsPlayerTryingToMoveFurtherThanSpacesOfBoard
+	^ self isPlayerTryingToMoveFurtherThanSpacesOfBoard
 		ifTrue: [ board spaces ]
 		ifFalse: [ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) ]
 ]
@@ -47,6 +42,11 @@ Match >> initializeWithPlayers: thePlayers withDices: theDices withBoard: aBoard
 		do: [ :player | 
 			positionOfPlayers at: player name put: 0.
 			orderOfPlayers add: player ]
+]
+
+{ #category : #comparing }
+Match >> isPlayerTryingToMoveFurtherThanSpacesOfBoard [
+	^ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) >= board spaces
 ]
 
 { #category : #description }
