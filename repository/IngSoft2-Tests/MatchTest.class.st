@@ -29,13 +29,13 @@ Class {
 { #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenGameIsOver [
 	| fabio match board players dices |
-	board := Board withAmountOfSpaces: 5.
-	fabio := Player withName: 'Fabio'.
+	board := Board has: 5.
+	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: fabio.
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 5)
 		with: (Dice deterministicWithAmountOfFaces: 3).
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	match
 		play;
 		play;
@@ -49,14 +49,14 @@ MatchTest >> testAPlayerWantsToPlayWhenGameIsOver [
 { #category : #tests }
 MatchTest >> testAPlayerWins [
 	| match board martin juan  dices players |
-	board := Board withAmountOfSpaces: 7.
-	martin := Player withName: 'Martin'.
-	juan := Player withName: 'Juan'.
+	board := Board has: 7.
+	martin := Player named: 'Martin'.
+	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 6)
 		with: (Dice deterministicWithAmountOfFaces: 5).
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	match play;
 	play;
 	play;
@@ -74,16 +74,16 @@ MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 5)
 		with: (Dice deterministicWithAmountOfFaces: 3).
-	board := Board withAmountOfSpaces: 10.
-	fabio := Player withName: 'Fabio'.
-	cristian := Player withName: 'Cristian'.
-	andres := Player withName: 'Andres'.
+	board := Board has: 10.
+	fabio := Player named: 'Fabio'.
+	cristian := Player named: 'Cristian'.
+	andres := Player named: 'Andres'.
 	players := OrderedCollection with: fabio with: cristian.
 	match := Match
-		withPlayers:
+		playedBy:
 			players
-		withDices: dices
-		onBoard: board.
+		throwing: dices
+		on: board.
 	self assert: (match positionOf: fabio) equals: 0.
 	self assert: (match positionOf: cristian) equals: 0.
 	self assert: (match positionOf: andres) equals: 'Player ' , andres name , ' is not playing'
@@ -95,15 +95,15 @@ MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace0 [
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 5)
 		with: (Dice deterministicWithAmountOfFaces: 3).
-	board := Board withAmountOfSpaces: 10.
-	fabio := Player withName: 'Fabio'.
-	cristian := Player withName: 'Cristian'.
+	board := Board has: 10.
+	fabio := Player named: 'Fabio'.
+	cristian := Player named: 'Cristian'.
 	players := OrderedCollection with: fabio with: cristian.
 	match := Match
-		withPlayers:
+		playedBy:
 			players
-		withDices: dices
-		onBoard: board.
+		throwing: dices
+		on: board.
 	self assert: (match positionOf: fabio) equals: 0.
 	self assert: (match positionOf: cristian) equals: 0
 ]
@@ -111,23 +111,23 @@ MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace0 [
 { #category : #tests }
 MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 	| match board mateo marcos players dices |
-	board := Board withAmountOfSpaces: 30.
-	mateo := Player withName: 'Mateo'.
-	marcos := Player withName: 'Marcos'.
+	board := Board has: 30.
+	mateo := Player named: 'Mateo'.
+	marcos := Player named: 'Marcos'.
 	players := OrderedCollection with: mateo with: marcos.
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 6)
 		with: (Dice deterministicWithAmountOfFaces: 10).
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	self assert: match winner equals: 'None'
 ]
 
 { #category : #tests }
 MatchTest >> testPlayerDoNotExceedLastSpace [
 	| match board martin juan dices players |
-	board := Board withAmountOfSpaces: 8.
-	martin := Player withName: 'Martin'.
-	juan := Player withName: 'Juan'.
+	board := Board has: 8.
+	martin := Player named: 'Martin'.
+	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 6)
@@ -135,7 +135,7 @@ MatchTest >> testPlayerDoNotExceedLastSpace [
 		with: (Dice deterministicWithAmountOfFaces: 5)
 		with: (Dice deterministicWithAmountOfFaces: 8)
 		with: (Dice deterministicWithAmountOfFaces: 2).
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	match
 		play;
 		play;
@@ -146,13 +146,13 @@ MatchTest >> testPlayerDoNotExceedLastSpace [
 { #category : #tests }
 MatchTest >> testPlayerMovesForwardOnGameBoard [
 	| fabio match dices board players |
-	board := Board withAmountOfSpaces: 10.
-	fabio := Player withName: 'Fabio'.
+	board := Board has: 10.
+	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: fabio.
 	dices := Array
 		with: (Dice deterministicWithAmountOfFaces: 5)
 		with: (Dice deterministicWithAmountOfFaces: 3).
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	match play.
 	self assert: (match positionOf: fabio) equals: 2
 ]
@@ -160,12 +160,12 @@ MatchTest >> testPlayerMovesForwardOnGameBoard [
 { #category : #tests }
 MatchTest >> testPlayersSequenceOnMatch [
 	| board martin juan match players dices |
-	board := Board withAmountOfSpaces: 20.
-	martin := Player withName: 'Martin'.
-	juan := Player withName: 'Juan'.
+	board := Board has: 20.
+	martin := Player named: 'Martin'.
+	juan := Player named: 'Juan'.
 	dices := Array with: (Dice deterministicWithAmountOfFaces: 6).
 	players := OrderedCollection with: martin with: juan.
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	self assert: match nextPlayer name equals: 'Martin'.
 	match play.
 	self assert: match nextPlayer name equals: 'Juan'.
@@ -181,9 +181,9 @@ MatchTest >> testPlayersSequenceOnMatch [
 MatchTest >> testWhenMatchIsCreatedWithOnePlayerItIsHisTurn [
 	| matias match dices board players |
 	dices := Array with: (Dice deterministicWithAmountOfFaces: 5).
-	board := Board withAmountOfSpaces: 10.
-	matias := Player withName: 'Matias'.
+	board := Board has: 10.
+	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	match := Match withPlayers: players withDices: dices onBoard: board.
+	match := Match playedBy: players throwing: dices on: board.
 	self assert: match nextPlayer name equals: 'Matias'
 ]

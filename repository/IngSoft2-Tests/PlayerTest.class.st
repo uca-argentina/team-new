@@ -7,14 +7,14 @@ Class {
 { #category : #tests }
 PlayerTest >> testCreatingPlayerWithName [
 	| martin |
-	martin := Player withName: 'Martin'.
+	martin := Player named: 'Martin'.
 	self assert: martin name equals: 'Martin'
 ]
 
 { #category : #tests }
 PlayerTest >> testPlayerThrowsDices [
 	| martin dice1 dice2 dice3 |
-	martin := Player withName: 'Martin'.
+	martin := Player named: 'Martin'.
 	dice1 := Dice deterministicWithAmountOfFaces: 4.
 	dice2 := Dice deterministicWithAmountOfFaces: 5.
 	dice3 := Dice deterministicWithAmountOfFaces: 6.

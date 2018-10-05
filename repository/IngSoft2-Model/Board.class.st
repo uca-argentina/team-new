@@ -7,20 +7,20 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-Board class >> assertAmountOfSpacesIsBiggerThanZero: aNumber [
-	aNumber > 0
+{ #category : #'creation validation' }
+Board class >> checkIsValid: anAmountOfSpaces [
+	anAmountOfSpaces > 0
 		ifFalse: [ AssertionFailure signal: 'you can not create a board with less than 1 space' ]
 ]
 
 { #category : #'instance creation' }
-Board class >> withAmountOfSpaces: aNumber [
-	self assertAmountOfSpacesIsBiggerThanZero: aNumber.
-	^ self new initializeWithSpaces: aNumber
+Board class >> has: anAmountOfSpaces [
+	self checkIsValid: anAmountOfSpaces.
+	^ self new initializeHas: anAmountOfSpaces
 ]
 
 { #category : #initialize }
-Board >> initializeWithSpaces: anAmountOfSpaces [
+Board >> initializeHas: anAmountOfSpaces [
 	spaces := anAmountOfSpaces.
 ]
 

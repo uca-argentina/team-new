@@ -12,8 +12,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-Match class >> withPlayers: thePlayers withDices: theDices onBoard: aBoard [
-	^ self new initializeWithPlayers: thePlayers withDices: theDices withBoard: aBoard
+Match class >> playedBy: thePlayers throwing: gameDices on: aBoard [
+	^ self new initializePlayedBy: thePlayers throwing: gameDices on: aBoard
 ]
 
 { #category : #playing }
@@ -32,7 +32,7 @@ Match >> anAmountOfSpacesAccordingToDices [
 ]
 
 { #category : #initialize }
-Match >> initializeWithPlayers: thePlayers withDices: theDices withBoard: aBoard [
+Match >> initializePlayedBy: thePlayers throwing: theDices on: aBoard [
 	players := thePlayers.
 	dices := theDices.
 	board := aBoard.
@@ -41,11 +41,6 @@ Match >> initializeWithPlayers: thePlayers withDices: theDices withBoard: aBoard
 	thePlayers do: [ :player | positionOfPlayers at: player name put: 0.
 										orderOfPlayers add: player]
 	
-]
-
-{ #category : #comparing }
-Match >> isPlayerTryingToMoveFurtherThanSpacesOfBoard [
-	^ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) >= board spaces
 ]
 
 { #category : #comparing }
