@@ -6,7 +6,8 @@ Class {
 		'players',
 		'dices',
 		'orderOfPlayers',
-		'positionOfPlayers'
+		'positionOfPlayers',
+		'playerIndex'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -16,36 +17,33 @@ Match class >> playedBy: thePlayers throwing: gameDices on: aBoard [
 	^ self new initializePlayedBy: thePlayers throwing: gameDices on: aBoard
 ]
 
-{ #category : #playing }
-Match >> alternateTurn [
-	| playerAuxiliar |
-	playerAuxiliar := orderOfPlayers first.
-	orderOfPlayers removeFirst.
-	orderOfPlayers add: playerAuxiliar
+{ #category : #comparing }
+Match >> adjust: valueOfDices [
+	^ valueOfDices > board spaces
+		ifTrue: [ board spaces ]
+		ifFalse: [ valueOfDices ]
 ]
 
 { #category : #playing }
-Match >> anAmountOfSpacesAccordingToDices [
-	^ self isPlayerTryingToMoveFurtherThanSpacesOfBoard
-		ifTrue: [ board spaces ]
-		ifFalse: [ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) ]
+Match >> alternateTurn [
+	playerIndex = players size
+		ifTrue: [ playerIndex := 1 ]
+		ifFalse: [ playerIndex := playerIndex + 1 ]
+]
+
+{ #category : #description }
+Match >> assertIsPlayerTurn: aPlayer [
+	^ aPlayer = self nextPlayer
 ]
 
 { #category : #initialize }
 Match >> initializePlayedBy: thePlayers throwing: theDices on: aBoard [
-	players := thePlayers.
+	players := thePlayers asOrderedCollection.
+	playerIndex := 1.
 	dices := theDices.
 	board := aBoard.
 	positionOfPlayers := Dictionary new.
-	orderOfPlayers := LinkedList new.
-	thePlayers do: [ :player | positionOfPlayers at: player name put: 0.
-										orderOfPlayers add: player]
-	
-]
-
-{ #category : #comparing }
-Match >> isPlayerTryingToMoveFurtherThanSpacesOfBoard [
-	^ (self positionOf: self nextPlayer) + (self nextPlayer throw: dices) >= board spaces
+	thePlayers do: [ :player | positionOfPlayers at: player put: 0 ]
 ]
 
 { #category : #description }
@@ -54,32 +52,43 @@ Match >> isThereAWinner [
 ]
 
 { #category : #playing }
-Match >> movePlayer [
-	positionOfPlayers at: self nextPlayer name put: self anAmountOfSpacesAccordingToDices
+Match >> move: aPlayer [
+	(self assertIsPlayerTurn: aPlayer)
+		ifTrue: [ positionOfPlayers at: aPlayer put: self nextPlayerPosition ]
+		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
 { #category : #description }
 Match >> nextPlayer [
-	^ orderOfPlayers first
+	^ players at: playerIndex
 ]
 
 { #category : #playing }
-Match >> play [
+Match >> nextPlayerPosition [
+	| newPosition |
+	newPosition := (self positionOf: self nextPlayer) + (self nextPlayer throw: dices).
+	^ self adjust: newPosition
+]
+
+{ #category : #playing }
+Match >> playedBy: aPlayer [
 	self isThereAWinner
-		ifTrue: [AssertionFailure signal:'The game is over'  ]
+		ifTrue: [ AssertionFailure signal: 'The game is over' ]
 		ifFalse: [ self
-				movePlayer;
+				move: aPlayer;
 				alternateTurn ]
 ]
 
 { #category : #description }
 Match >> positionOf: aPlayer [
-	^ positionOfPlayers at: aPlayer name ifAbsent: [ ^ 'Player ' , aPlayer name , ' is not playing' ]
+	^ positionOfPlayers
+		at: aPlayer
+		ifAbsent: [ ^ 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
 Match >> winner [
 	^ self isThereAWinner
-		ifTrue: [  (players select: [ :player | (self positionOf: player) = board spaces ]) first ]
-		ifFalse: [ 'None']
+		ifTrue: [ (players select: [ :player | (self positionOf: player) = board spaces ]) first ]
+		ifFalse: [ 'None' ]
 ]

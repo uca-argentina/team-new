@@ -8,7 +8,7 @@ Class {
 BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
 	| board |
 	self
-		should: [ board := Board has: -30 ]
+		should: [ board := Board with: -30 ]
 		raise: AssertionFailure
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a board with less than 1 space' ]
 ]
@@ -16,6 +16,6 @@ BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
 { #category : #tests }
 BoardTest >> testCreatingBoardWithValidAmountOfSpaces [
 	| board |
-	board := Board has: 30.
+	board := Board with: 30.
 	self assert: board spaces equals: 30
 ]

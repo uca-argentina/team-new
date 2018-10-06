@@ -9,7 +9,7 @@ Class {
 
 { #category : #'instance creation' }
 Player class >> named: aName [
-	^ self new initializeWithName: aName
+	^ self new initializeWith: aName
 ]
 
 { #category : #playing }
@@ -18,7 +18,7 @@ Player >> countValueOf: gameDices [
 ]
 
 { #category : #initialize }
-Player >> initializeWithName: aName [
+Player >> initializeWith: aName [
 	name := aName
 ]
 

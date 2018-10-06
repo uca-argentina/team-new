@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #rolling }
+{ #category : #'game play' }
 RandomDice >> roll: anAmountOfFaces [
 	| random |
 	random := Random new.

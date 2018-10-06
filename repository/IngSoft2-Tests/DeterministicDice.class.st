@@ -1,10 +1,19 @@
 Class {
 	#name : #DeterministicDice,
 	#superclass : #Object,
+	#instVars : [
+		'value'
+	],
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #rolling }
+{ #category : #initialize }
+DeterministicDice >> initialize [
+	value := 0
+]
+
+{ #category : #'game play' }
 DeterministicDice >> roll: anAmountOfFaces [
-	^ 1
+	value:= (value%anAmountOfFaces)+1.
+	^ (value)
 ]

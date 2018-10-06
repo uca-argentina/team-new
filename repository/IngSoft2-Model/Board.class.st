@@ -14,13 +14,13 @@ Board class >> checkIsValid: anAmountOfSpaces [
 ]
 
 { #category : #'instance creation' }
-Board class >> has: anAmountOfSpaces [
+Board class >> with: anAmountOfSpaces [
 	self checkIsValid: anAmountOfSpaces.
-	^ self new initializeHas: anAmountOfSpaces
+	^ self new initializeWith: anAmountOfSpaces
 ]
 
 { #category : #initialize }
-Board >> initializeHas: anAmountOfSpaces [
+Board >> initializeWith: anAmountOfSpaces [
 	spaces := anAmountOfSpaces.
 ]
 
