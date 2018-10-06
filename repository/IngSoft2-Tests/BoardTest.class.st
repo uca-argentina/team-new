@@ -5,15 +5,17 @@ Class {
 }
 
 { #category : #tests }
-BoardTest >> testCreatingBoardWith30Spaces [
-	|board|
-	board := Board withAmountOfSpaces: 30.
-	self assert: board spaces equals: 30.
+BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
+	| board |
+	self
+		should: [ board := Board with: -30 ]
+		raise: AssertionFailure
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a board with less than 1 space' ]
 ]
 
 { #category : #tests }
-BoardTest >> testCreatingBoardWithMinus30SpacesFails [
-	|board|
-	self should: [board := Board withAmountOfSpaces: -30]raise: AssertionFailure withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a board with less than 1 space' ].
-	
+BoardTest >> testCreatingBoardWithValidAmountOfSpaces [
+	| board |
+	board := Board with: 30.
+	self assert: board spaces equals: 30
 ]

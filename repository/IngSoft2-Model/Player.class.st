@@ -8,26 +8,26 @@ Class {
 }
 
 { #category : #'instance creation' }
-Player class >> withName: aName [
-	^ self new initializeWithName: aName
+Player class >> named: aName [
+	^ self new initializeWith: aName
 ]
 
 { #category : #playing }
-Player >> countValueOfDicesRolled: theDices [
-	^ theDices sumNumbers: [ :dice | dice roll ]
+Player >> countValueOf: gameDices [
+	^ gameDices sumNumbers: [ :dice | dice roll ]
 ]
 
 { #category : #initialize }
-Player >> initializeWithName: aName [
+Player >> initializeWith: aName [
 	name := aName
 ]
 
-{ #category : #description }
+{ #category : #accesing }
 Player >> name [
 	^ name
 ]
 
 { #category : #playing }
-Player >> throw: theDices [
-	^ self countValueOfDicesRolled: theDices
+Player >> throw: gameDices [
+	^ self countValueOf: gameDices
 ]
