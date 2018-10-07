@@ -8,12 +8,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
-Dice class >> assertAmountOfFacesIsBiggerThanZero: aNumber [
-	aNumber > 0
-		ifFalse: [ AssertionFailure signal: 'you can not create a dice with less than 1 face' ]
-]
-
 { #category : #'creation validation' }
 Dice class >> checkIsValid: anAmountOfFaces [
 	anAmountOfFaces > 0
@@ -26,35 +20,19 @@ Dice class >> deterministicWith: anAmountOfFaces [
 ]
 
 { #category : #'instance creation' }
-Dice class >> deterministicWithAmountOfFaces: aNumber [
-	^ self withAmountOfFaces: aNumber diceType: DeterministicDice new
-]
-
-{ #category : #'instance creation' }
 Dice class >> randomWith: anAmountOfFaces [
 	^ self with: anAmountOfFaces of: RandomDice new
 ]
 
 { #category : #'instance creation' }
-Dice class >> randomWithAmountOfFaces: aNumber [
-	^ self withAmountOfFaces: aNumber diceType: RandomDice new
-]
-
-{ #category : #'instance creation' }
-Dice class >> with: aNumber of: aDiceType [
-	self checkIsValid: aNumber.
-	^ self new initializeWith: aNumber of: aDiceType
-]
-
-{ #category : #'instance creation' }
-Dice class >> withAmountOfFaces: aNumber diceType: aDiceType [
-	self assertAmountOfFacesIsBiggerThanZero: aNumber.
-	^ self new initializeWithAmountOfFaces: aNumber diceType: aDiceType
+Dice class >> with: anAmountOfFaces of: aDiceType [
+	self checkIsValid: anAmountOfFaces.
+	^ self new initializeWith: anAmountOfFaces of: aDiceType
 ]
 
 { #category : #initialize }
-Dice >> initializeWith: anInteger of: aDiceType [
-	amountOfFaces := anInteger.
+Dice >> initializeWith: anAmountOfFaces of: aDiceType [
+	amountOfFaces := anAmountOfFaces.
 	type := aDiceType
 ]
 
