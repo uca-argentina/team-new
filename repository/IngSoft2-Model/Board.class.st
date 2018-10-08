@@ -13,15 +13,9 @@ Board class >> checkIsValid: anAmountOfSpaces [
 		ifFalse: [ AssertionFailure signal: 'you can not create a board with less than 1 space' ]
 ]
 
-{ #category : #'creation validation' }
-Board class >> checkIsValidThrowing: anAmountOfSpaces [
-	anAmountOfSpaces > 0
-		ifFalse: [ AssertionFailure signal: 'you can not create a board with less than 1 space' ]
-]
-
 { #category : #'instance creation' }
 Board class >> with: anAmountOfSpaces [
-	self checkIsValidThrowing: anAmountOfSpaces.
+	self checkIsValid: anAmountOfSpaces.
 	^ self new initializeWith: anAmountOfSpaces
 ]
 

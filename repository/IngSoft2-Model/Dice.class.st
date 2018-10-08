@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'amountOfFaces',
-		'type'
+		'rollingStrategy'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -25,27 +25,27 @@ Dice class >> checkIsValidThrowing: sequence with: anAmountOfFaces [
 Dice class >> deterministicWith: anAmountOfFaces throwing: sequence [
 self checkIsValid: anAmountOfFaces.
 	self checkIsValidThrowing: sequence with: anAmountOfFaces.
-	^ self with: anAmountOfFaces of: (DeterministicDice withThrowing: sequence)
+	^ self with: anAmountOfFaces of: (DeterministicStrategy withThrowing: sequence)
 ]
 
 { #category : #'instance creation' }
 Dice class >> randomWith: anAmountOfFaces [
 self checkIsValid: anAmountOfFaces.
-	^ self with: anAmountOfFaces of: RandomDice new
+	^ self with: anAmountOfFaces of: RandomStrategy new
 ]
 
 { #category : #'instance creation' }
-Dice class >> with: anAmountOfFaces of: aDiceType [
-	^ self new initializeWith: anAmountOfFaces of: aDiceType
+Dice class >> with: anAmountOfFaces of: aRollingStrategy [
+	^ self new initializeWith: anAmountOfFaces of: aRollingStrategy
 ]
 
 { #category : #initialize }
 Dice >> initializeWith: anAmountOfFaces of: aDiceType [
 	amountOfFaces := anAmountOfFaces.
-	type := aDiceType
+	rollingStrategy  := aDiceType
 ]
 
 { #category : #'game play' }
 Dice >> roll [
-	^ type roll: amountOfFaces
+	^ rollingStrategy generateNumberUsing: amountOfFaces
 ]

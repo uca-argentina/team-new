@@ -1,5 +1,5 @@
 Class {
-	#name : #DeterministicDice,
+	#name : #DeterministicStrategy,
 	#superclass : #Object,
 	#instVars : [
 		'value',
@@ -9,18 +9,18 @@ Class {
 }
 
 { #category : #'instance creation' }
-DeterministicDice class >> withThrowing: sequence [
+DeterministicStrategy class >> withThrowing: sequence [
 	^ self new initializeThrowing: sequence
 ]
 
-{ #category : #initialize }
-DeterministicDice >> initializeThrowing: sequence [
-	value := 0.
-	numberSequence := sequence
-]
-
 { #category : #'game play' }
-DeterministicDice >> roll: anAmountOfFaces [
+DeterministicStrategy >> generateNumberUsing: anAmountOfFaces [
 	value := value % numberSequence size + 1.
 	^ numberSequence at: value
+]
+
+{ #category : #initialize }
+DeterministicStrategy >> initializeThrowing: sequence [
+	value := 0.
+	numberSequence := sequence
 ]
