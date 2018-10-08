@@ -27,26 +27,6 @@ Class {
 }
 
 { #category : #tests }
-MatchTest >> testAPlayerWantsToPlayWhenGameIsOver [
-	| fabio match board players dices |
-	board := Board with: 5.
-	fabio := Player named: 'Fabio'.
-	players := OrderedCollection with: fabio.
-	dices := Array
-		with: (Dice deterministicWith: 5)
-		with: (Dice deterministicWith: 3).
-	match := Match playedBy: players throwing: dices on: board.
-	match
-		playedBy: fabio;
-		playedBy: fabio.
-	self
-		should: [ match playedBy: fabio]
-		raise: AssertionFailure
-		withExceptionDo:
-			[ :exception | self assert: exception messageText equals: 'The game is over' ]
-]
-
-{ #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 	| match board martin juan dices players |
 	board := Board with: 15.
@@ -64,6 +44,26 @@ MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 		should: [ match playedBy: juan ]
 		raise: AssertionFailure
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'It is not Juan turn']
+]
+
+{ #category : #tests }
+MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
+	| fabio match board players dices |
+	board := Board with: 5.
+	fabio := Player named: 'Fabio'.
+	players := OrderedCollection with: fabio.
+	dices := Array
+		with: (Dice deterministicWith: 5)
+		with: (Dice deterministicWith: 3).
+	match := Match playedBy: players throwing: dices on: board.
+	match
+		playedBy: fabio;
+		playedBy: fabio.
+	self
+		should: [ match playedBy: fabio]
+		raise: AssertionFailure
+		withExceptionDo:
+			[ :exception | self assert: exception messageText equals: 'The game is over' ]
 ]
 
 { #category : #tests }
@@ -154,7 +154,7 @@ MatchTest >> testPlayerDoNotExceedLastSpace [
 ]
 
 { #category : #tests }
-MatchTest >> testPlayerMovesForwardOnGameBoard [
+MatchTest >> testPlayerMovesForwardOnBoard [
 	| fabio match dices board players |
 	board := Board with: 10.
 	fabio := Player named: 'Fabio'.

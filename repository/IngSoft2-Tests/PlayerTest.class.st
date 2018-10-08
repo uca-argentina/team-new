@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : #tests }
+PlayerTest >> testCreatingInvalidPlayer [
+	| nicolas |
+	self
+		should: [ nicolas := Player named: '' ]
+		raise: AssertionFailure
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'You can not create a player with no name' ]
+]
+
+{ #category : #tests }
 PlayerTest >> testCreatingPlayerWithName [
 	| martin |
 	martin := Player named: 'Martin'.

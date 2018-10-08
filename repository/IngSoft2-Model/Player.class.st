@@ -7,14 +7,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-Player class >> named: aName [
-	^ self new initializeWith: aName
+{ #category : #'creation validation' }
+Player class >> checkIsValid: aName [
+	aName = ''
+		ifTrue: [ AssertionFailure signal: 'You can not create a player with no name' ]
 ]
 
-{ #category : #playing }
-Player >> countValueOf: gameDices [
-	^ gameDices sumNumbers: [ :dice | dice roll ]
+{ #category : #'instance creation' }
+Player class >> named: aName [
+	self checkIsValid: aName.
+	^ self new initializeWith: aName
 ]
 
 { #category : #initialize }
@@ -29,5 +31,5 @@ Player >> name [
 
 { #category : #playing }
 Player >> throw: gameDices [
-	^ self countValueOf: gameDices
+	^ gameDices sumNumbers: [ :dice | dice roll ]
 ]
