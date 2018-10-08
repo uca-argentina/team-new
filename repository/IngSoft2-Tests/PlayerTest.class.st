@@ -24,9 +24,16 @@ PlayerTest >> testCreatingPlayerWithName [
 PlayerTest >> testPlayerThrowsDices [
 	| martin dice1 dice2 dice3 |
 	martin := Player named: 'Martin'.
-	dice1 := Dice deterministicWith: 4.
-	dice2 := Dice deterministicWith: 5.
-	dice3 := Dice deterministicWith: 6.
-	self assert: martin name equals: 'Martin';
-	     assert: (martin throw: {dice1.dice2.dice3}) equals: 3
+	dice1 := Dice deterministicWith: 4 throwing: #(1 2 3).
+	dice2 := Dice deterministicWith: 5 throwing: #(1 2 3).
+	dice3 := Dice deterministicWith: 6 throwing: #(1 2 3).
+	self
+		assert: martin name equals: 'Martin';
+		assert:
+			(martin
+				throw:
+					{dice1.
+					dice2.
+					dice3})
+			equals: 3
 ]
