@@ -13,15 +13,9 @@ Player class >> checkIsValid: aName [
 		ifTrue: [ AssertionFailure signal: 'You can not create a player with no name' ]
 ]
 
-{ #category : #'creation validation' }
-Player class >> checkIsValidThrowing: aName [
-	aName = ''
-		ifTrue: [ AssertionFailure signal: 'You can not create a player with no name' ]
-]
-
 { #category : #'instance creation' }
 Player class >> named: aName [
-	self checkIsValidThrowing: aName.
+	self checkIsValid: aName.
 	^ self new initializeWith: aName
 ]
 

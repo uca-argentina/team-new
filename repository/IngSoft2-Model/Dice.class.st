@@ -40,9 +40,9 @@ Dice class >> with: anAmountOfFaces of: aRollingStrategy [
 ]
 
 { #category : #initialize }
-Dice >> initializeWith: anAmountOfFaces of: aDiceType [
+Dice >> initializeWith: anAmountOfFaces of: aStrategyType [
 	amountOfFaces := anAmountOfFaces.
-	rollingStrategy  := aDiceType
+	rollingStrategy := aStrategyType
 ]
 
 { #category : #'game play' }
