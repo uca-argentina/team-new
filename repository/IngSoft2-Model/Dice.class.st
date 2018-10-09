@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'amountOfFaces',
-		'type'
+		'rollingStrategy'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,29 +14,38 @@ Dice class >> checkIsValid: anAmountOfFaces [
 		ifFalse: [ AssertionFailure signal: 'you can not create a dice with less than 1 face' ]
 ]
 
+{ #category : #'creation validation' }
+Dice class >> checkIsValidThrowing: sequence with: anAmountOfFaces [
+	sequence
+		detect: [ :aNumber | aNumber > anAmountOfFaces ]
+		ifFound: [ AssertionFailure signal: 'The sequence can not have a number bigger than amount of faces' ]
+]
+
 { #category : #'instance creation' }
-Dice class >> deterministicWith: anAmountOfFaces [
-	^ self with: anAmountOfFaces of: DeterministicDice new
+Dice class >> deterministicWith: anAmountOfFaces throwing: sequence [
+self checkIsValid: anAmountOfFaces.
+	self checkIsValidThrowing: sequence with: anAmountOfFaces.
+	^ self with: anAmountOfFaces of: (DeterministicStrategy withThrowing: sequence)
 ]
 
 { #category : #'instance creation' }
 Dice class >> randomWith: anAmountOfFaces [
-	^ self with: anAmountOfFaces of: RandomDice new
+self checkIsValid: anAmountOfFaces.
+	^ self with: anAmountOfFaces of: RandomStrategy new
 ]
 
 { #category : #'instance creation' }
-Dice class >> with: anAmountOfFaces of: aDiceType [
-	self checkIsValid: anAmountOfFaces.
-	^ self new initializeWith: anAmountOfFaces of: aDiceType
+Dice class >> with: anAmountOfFaces of: aRollingStrategy [
+	^ self new initializeWith: anAmountOfFaces of: aRollingStrategy
 ]
 
 { #category : #initialize }
-Dice >> initializeWith: anAmountOfFaces of: aDiceType [
+Dice >> initializeWith: anAmountOfFaces of: aStrategyType [
 	amountOfFaces := anAmountOfFaces.
-	type := aDiceType
+	rollingStrategy := aStrategyType
 ]
 
 { #category : #'game play' }
 Dice >> roll [
-	^ type roll: amountOfFaces
+	^ rollingStrategy generateNumberUsing: amountOfFaces
 ]

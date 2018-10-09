@@ -36,6 +36,13 @@ Match >> assertIsPlayerTurn: aPlayer [
 	^ aPlayer = self nextPlayer
 ]
 
+{ #category : #description }
+Match >> ifMatchEndedDo: aMatchEndedBlock ifNot: aMatchNotEndedBlock [
+	(players select: [:player | (self positionOf: player) = board spaces ]) isNotEmpty
+	ifTrue: [ aMatchEndedBlock value]
+	ifFalse: [ aMatchNotEndedBlock value]
+]
+
 { #category : #initialize }
 Match >> initializePlayedBy: thePlayers throwing: theDices on: aBoard [
 	players := thePlayers asOrderedCollection.
@@ -44,11 +51,6 @@ Match >> initializePlayedBy: thePlayers throwing: theDices on: aBoard [
 	board := aBoard.
 	positionOfPlayers := Dictionary new.
 	thePlayers do: [ :player | positionOfPlayers at: player put: 0 ]
-]
-
-{ #category : #description }
-Match >> isThereAWinner [
-	^ (players select: [ :player | (self positionOf: player) = board spaces ]) isNotEmpty 
 ]
 
 { #category : #playing }
@@ -72,9 +74,8 @@ Match >> nextPlayerPosition [
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self isThereAWinner
-		ifTrue: [ AssertionFailure signal: 'The game is over' ]
-		ifFalse: [ self
+	self ifMatchEndedDo: [ AssertionFailure signal: 'The game is over' ] 
+	ifNot: [ self
 				move: aPlayer;
 				alternateTurn ]
 ]
@@ -88,7 +89,7 @@ Match >> positionOf: aPlayer [
 
 { #category : #description }
 Match >> winner [
-	^ self isThereAWinner
-		ifTrue: [ (players select: [ :player | (self positionOf: player) = board spaces ]) first ]
-		ifFalse: [ 'None' ]
+	self
+		ifMatchEndedDo: [ ^ players detect: [ :player | (self positionOf: player) = board spaces ] ]
+		ifNot: [ AssertionFailure signal: 'There is no winner' ] 
 ]

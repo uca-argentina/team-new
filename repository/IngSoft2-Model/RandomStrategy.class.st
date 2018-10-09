@@ -1,11 +1,11 @@
 Class {
-	#name : #RandomDice,
+	#name : #RandomStrategy,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'game play' }
-RandomDice >> roll: anAmountOfFaces [
+RandomStrategy >> generateNumberUsing: anAmountOfFaces [
 	| random |
 	random := Random new.
 	^ random nextInt: anAmountOfFaces
