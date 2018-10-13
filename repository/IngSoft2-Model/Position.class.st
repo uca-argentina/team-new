@@ -18,10 +18,11 @@ Position class >> on: aSpace at: aLap [
 	^ self new initializeOn: aSpace at: aLap 
 ]
 
-{ #category : #updating }
-Position >> change: aSpace [
-
-space:= aSpace.
+{ #category : #comparing }
+Position >> >= aPosition [
+	^ self currentLap = aPosition currentLap
+		ifTrue: [ self currentSpace >= aPosition currentSpace ]
+		ifFalse: [ self currentLap >= aPosition currentLap ]
 ]
 
 { #category : #descriptions }
@@ -38,9 +39,4 @@ Position >> currentSpace [
 Position >> initializeOn: aSpace at: aLap [
 	lap := aLap.
 	space := aSpace
-]
-
-{ #category : #updating }
-Position >> update: aLap [
-lap:= aLap.
 ]

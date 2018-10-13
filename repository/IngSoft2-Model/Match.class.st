@@ -109,6 +109,14 @@ Match >> positionOf: aPlayer [
 ]
 
 { #category : #description }
+Match >> rankingOf: aPlayer [
+	positionOfPlayers sort: [ :a :b | a value >= b value ].
+	^ positionOfPlayers
+		indexOf: aPlayer -> (self positionOf: aPlayer)
+		ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
+]
+
+{ #category : #description }
 Match >> winner [
 	self
 		ifMatchEndedDo: [ ^ players

@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #tests }
+PositionTest >> testComparingPositions [
+	self assert: (Position on: 3 at: 5) >= (Position on: 15 at: 1)
+]
+
+{ #category : #tests }
 PositionTest >> testCreatingPositionWithLapAndSpace [
 	| position |
 	position := Position atStart.

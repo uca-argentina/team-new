@@ -273,6 +273,37 @@ MatchTest >> testPlayerMovesForwardOnBoard [
 ]
 
 { #category : #tests }
+MatchTest >> testPlayersRankings [
+	| luciana micaela carolina victoria match board dices players |
+	dices := Array with: (Dice deterministicWith: 5 throwing: #(1 3 5 4)) with: (Dice deterministicWith: 6 throwing: #(3 2 5 2)).
+	board := Board with: 20.
+	luciana := Player named: 'Luciana'.
+	micaela := Player named: 'Micaela'.
+	carolina := Player named: 'Carolina'.
+	victoria := Player named: 'Victoria'.
+	players := OrderedCollection
+		with: luciana
+		with: micaela
+		with: carolina
+		with: victoria.
+	match := Match
+		playedBy: players
+		throwing: dices
+		during: 2
+		on: board.
+	match
+		playedBy: luciana;
+		playedBy: micaela;
+		playedBy: carolina;
+		playedBy: victoria.
+	self
+		assert: (match rankingOf: luciana) equals: 4;
+		assert: (match rankingOf: micaela) equals: 3;
+		assert: (match rankingOf: carolina) equals: 1;
+		assert: (match rankingOf: victoria) equals: 2
+]
+
+{ #category : #tests }
 MatchTest >> testPlayersSequenceOnMatch [
 	| board martin juan match players dices |
 	board := Board with: 20.
@@ -299,7 +330,7 @@ MatchTest >> testPlayersSequenceOnMatch [
 { #category : #tests }
 MatchTest >> testPositionOfPlayers [
 	| match board martin juan dices players |
-	board := Board with: 30.
+	board := Board with: 20.
 	martin := Player named: 'Martin'.
 	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
@@ -312,14 +343,25 @@ MatchTest >> testPositionOfPlayers [
 	match := Match
 		playedBy: players
 		throwing: dices
-		during: 2
+		during: 9
 		on: board.
 	match
 		playedBy: martin;
 		playedBy: juan;
+		playedBy: martin;
+		playedBy: juan;
+		playedBy: martin;
+		playedBy: juan;
+		playedBy: martin;
+		playedBy: juan;
+		playedBy: martin;
+		playedBy: juan;
 		playedBy: martin.
-	self assert: (match positionOf: juan) currentSpace equals: 17.
-	self assert: (match positionOf: martin) currentSpace equals: 28
+	self
+		assert: (match positionOf: juan) currentSpace equals: 16;
+		assert: (match positionOf: juan) currentLap equals: 4;
+		assert: (match positionOf: martin) currentSpace equals: 10;
+		assert: (match positionOf: martin) currentLap equals: 5
 ]
 
 { #category : #tests }
