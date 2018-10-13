@@ -37,7 +37,7 @@ Match >> alternateTurn [
 ]
 
 { #category : #description }
-Match >> assertGameIncludes: aPlayer [
+Match >> assertMatchIncludes: aPlayer [
 	players
 		detect: [ :player| player = aPlayer ]
 		ifNone: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
@@ -94,7 +94,7 @@ Match >> nextPlayerPosition [
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self assertGameIncludes: aPlayer;
+	self assertMatchIncludes: aPlayer;
 		ifMatchEndedDo: [ AssertionFailure signal: 'The game is over' ]
 		ifNot: [ self
 				move: aPlayer;
