@@ -9,7 +9,7 @@ Class {
 
 { #category : #'creation validation' }
 Player class >> checkIsValid: aName [
-	aName = ''
+	(aName matchesRegex: ' +')
 		ifTrue: [ AssertionFailure signal: 'You can not create a player with no name' ]
 ]
 
