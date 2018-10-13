@@ -7,7 +7,7 @@ Class {
 { #category : #tests }
 PositionTest >> testCreatingPositionWithLapAndSpace [
 	| position |
-	position := Position new.
+	position := Position atStart.
 	self
 		assert: position currentLap equals: 1;
 		assert: position currentSpace equals: 0

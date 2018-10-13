@@ -8,6 +8,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+Position class >> atStart [
+^ self on: 0 at: 1.
+]
+
+{ #category : #'instance creation' }
+Position class >> on: aSpace at: aLap [
+	^ self new initializeOn: aSpace at: aLap 
+]
+
 { #category : #updating }
 Position >> change: aSpace [
 
@@ -25,9 +35,9 @@ Position >> currentSpace [
 ]
 
 { #category : #initialization }
-Position >> initialize [
-	lap := 1.
-	space := 0
+Position >> initializeOn: aSpace at: aLap [
+	lap := aLap.
+	space := aSpace
 ]
 
 { #category : #updating }

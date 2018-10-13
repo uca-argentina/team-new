@@ -48,6 +48,26 @@ MatchTest >> testAPlayerSkipMoreThanOneLapInASingleThrow [
 ]
 
 { #category : #tests }
+MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
+| fabio cristian match board dices players |
+	dices := Array
+		with: (Dice deterministicWith: 5 throwing: #(1 5))
+		with: (Dice deterministicWith: 3 throwing: #(1 3)).
+	board := Board with: 10.
+	fabio := Player named: 'Fabio'.
+	cristian := Player named: 'Cristian'.
+	players := OrderedCollection with: fabio.
+	match := Match
+		playedBy: players
+		throwing: dices
+		during: 2
+		on: board.
+	match playedBy: fabio.
+	self should:[match playedBy: cristian] raise: AssertionFailure
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ' , cristian name , ' is not playing']
+]
+
+{ #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 	| match board martin juan dices players |
 	board := Board with: 20.
@@ -157,13 +177,13 @@ MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 	match := Match
 		playedBy: players
 		throwing: dices
-		during: board
-		on: 2.
+		during: 2
+		on: board.
 	self assert: (match positionOf: fabio) currentSpace equals: 0.
 	self assert: (match positionOf: cristian) currentSpace equals: 0.
-	self
-		assert: (match positionOf: andres)
-		equals: 'Player ' , andres name , ' is not playing'
+	self should:[match positionOf: andres] raise: AssertionFailure
+		withExceptionDo: [ :exception | 
+			self assert: exception messageText equals: 'Player ' , andres name , ' is not playing' ]
 ]
 
 { #category : #tests }
