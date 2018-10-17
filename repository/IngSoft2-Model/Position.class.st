@@ -10,7 +10,7 @@ Class {
 
 { #category : #'instance creation' }
 Position class >> atStart [
-^ self on: 0 at: 1.
+^ self on: 0 at: 0.
 ]
 
 { #category : #'instance creation' }
@@ -35,7 +35,7 @@ Position >> currentSpace [
 	^ space
 ]
 
-{ #category : #initialization }
+{ #category : #initialize }
 Position >> initializeOn: aSpace at: aLap [
 	lap := aLap.
 	space := aSpace

@@ -2,7 +2,8 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'spaces'
+		'spaces',
+		'boardStrategy'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,14 +15,21 @@ Board class >> checkIsValid: anAmountOfSpaces [
 ]
 
 { #category : #'instance creation' }
-Board class >> with: anAmountOfSpaces [
+Board class >> with: anAmountOfSpaces of: aBoardStrategy [
 	self checkIsValid: anAmountOfSpaces.
-	^ self new initializeWith: anAmountOfSpaces
+	^ self new initializeWith: anAmountOfSpaces of: aBoardStrategy 
+]
+
+{ #category : #'game play' }
+Board >> activaEffectOf: aSpace on: aGame activatedBy: aPlayer [
+	^ (boardStrategy effects at: aSpace) turnOnEffectAt: aGame activatedBy: aPlayer
 ]
 
 { #category : #initialize }
-Board >> initializeWith: anAmountOfSpaces [
+Board >> initializeWith: anAmountOfSpaces of: aBoardStrategy [
 	spaces := anAmountOfSpaces.
+	boardStrategy := aBoardStrategy
+	
 ]
 
 { #category : #description }

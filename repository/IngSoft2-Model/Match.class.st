@@ -22,10 +22,10 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 		on: aBoard
 ]
 
-{ #category : #comparing }
+{ #category : #playing }
 Match >> adjust: newSpace with: aPosition [
-	^ newSpace >= board spaces & (aPosition currentLap = totalLaps)
-		ifTrue: [ Position on: board spaces at: totalLaps ]
+	^ newSpace >= board spaces & (aPosition currentLap = (totalLaps-1))
+		ifTrue: [ Position on: board spaces at: (totalLaps-1) ]
 		ifFalse: [ Position
 				on: newSpace % board spaces
 				at: aPosition currentLap + (newSpace / board spaces) asInteger ]
@@ -53,7 +53,7 @@ Match >> ifMatchEndedDo: aMatchEndedBlock ifNot: aMatchNotEndedBlock [
 	(players
 		select: [ :player | 
 			((self positionOf: player) currentSpace = board spaces
-				& (self positionOf: player) currentLap) = totalLaps ]) isNotEmpty
+				& (self positionOf: player) currentLap) = (totalLaps-1)]) isNotEmpty
 		ifTrue: [ aMatchEndedBlock value ]
 		ifFalse: [ aMatchNotEndedBlock value ]
 ]
@@ -94,11 +94,17 @@ Match >> nextPlayerPosition [
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self assertMatchIncludes: aPlayer;
+	self
+		assertMatchIncludes: aPlayer;
 		ifMatchEndedDo: [ AssertionFailure signal: 'The game is over' ]
-		ifNot: [ self
-				move: aPlayer;
-				alternateTurn ]
+			ifNot: [ self move: aPlayer.
+			board activaEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
+			self alternateTurn ]
+]
+
+{ #category : #description }
+Match >> playersPositions [
+	^ positionOfPlayers
 ]
 
 { #category : #description }
@@ -122,6 +128,6 @@ Match >> winner [
 		ifMatchEndedDo: [ ^ players
 				detect: [ :player | 
 					(self positionOf: player) currentSpace = board spaces
-						& ((self positionOf: player) currentLap = totalLaps) ] ]
+						& ((self positionOf: player) currentLap = (totalLaps-1)) ] ]
 		ifNot: [ AssertionFailure signal: 'There is no winner' ]
 ]

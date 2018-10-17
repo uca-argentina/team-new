@@ -14,6 +14,6 @@ PositionTest >> testCreatingPositionWithLapAndSpace [
 	| position |
 	position := Position atStart.
 	self
-		assert: position currentLap equals: 1;
+		assert: position currentLap equals: 0;
 		assert: position currentSpace equals: 0
 ]
