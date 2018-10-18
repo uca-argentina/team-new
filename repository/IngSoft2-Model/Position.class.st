@@ -1,6 +1,6 @@
 Class {
 	#name : #Position,
-	#superclass : #Object,
+	#superclass : #Magnitude,
 	#instVars : [
 		'lap',
 		'space'
@@ -19,10 +19,24 @@ Position class >> on: aSpace at: aLap [
 ]
 
 { #category : #comparing }
+Position >> < aPosition [
+	^ self currentLap = aPosition currentLap
+		ifTrue: [ self currentSpace < aPosition currentSpace ]
+		ifFalse: [ self currentLap < aPosition currentLap ]
+]
+
+{ #category : #comparing }
 Position >> <= aPosition [
 	^ self currentLap = aPosition currentLap
 		ifTrue: [ self currentSpace <= aPosition currentSpace ]
 		ifFalse: [ self currentLap <= aPosition currentLap ]
+]
+
+{ #category : #comparing }
+Position >> = aPosition [
+	^ self currentLap = aPosition currentLap
+		ifTrue: [ self currentSpace = aPosition currentSpace ]
+		ifFalse: [ self currentLap = aPosition currentLap ]
 ]
 
 { #category : #descriptions }

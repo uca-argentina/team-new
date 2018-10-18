@@ -25,6 +25,11 @@ Board >> activateEffectOf: aSpace on: aGame activatedBy: aPlayer [
 	^ (boardStrategy effects at: aSpace) turnOnEffectAt: aGame activatedBy: aPlayer
 ]
 
+{ #category : #description }
+Board >> effects [
+^ boardStrategy effects
+]
+
 { #category : #initialize }
 Board >> initializeWith: anAmountOfSpaces of: aBoardStrategy [
 	spaces := anAmountOfSpaces.

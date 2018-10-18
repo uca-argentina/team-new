@@ -22,7 +22,7 @@ BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
 BoardTest >> testCreatingBoardWithRandomStrategy [
 	| board |
 	board := Board with: 5 of: (RandomBoardStrategy withBoardOf: 5).
-	
+	self assert: (board effects detect:[:effect| (effect respondsTo:#turnOnEffectAt:activatedBy:) not] ifNone:[true]).
 ]
 
 { #category : #tests }

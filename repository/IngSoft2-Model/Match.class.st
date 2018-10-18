@@ -128,11 +128,6 @@ Match >> positionOf: aPlayer [
 Match >> rankingOf: aPlayer [
  ^ (players asSortedCollection:[ :player | self positionOf: player ] descending) detectIndex: aPlayer
 	
-"positionOfPlayers sort: [ :a :b | a value >= b value ].
-	^ positionOfPlayers
-		indexOf: aPlayer -> (self positionOf: aPlayer)
-		ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]"
-	
 ]
 
 { #category : #description }
