@@ -6,8 +6,11 @@ Class {
 
 { #category : #'game play' }
 WormHoleEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	| newPosition |
-	newPosition := (aGame positionOf: aPlayer) currentSpace - 4.
-	(aGame playersPositions detect: [ :playerWithPosition | playerWithPosition key = aPlayer ])
-		value: (aGame adjust: newPosition with: (aGame positionOf: aPlayer))
+	aGame
+		adjustBackWards:
+			((aGame playersPositions detect: [ :playerPosition | playerPosition key = aPlayer ])
+				value:
+					(Position
+						on: (aGame positionOf: aPlayer) currentSpace - 4
+						at: (aGame positionOf: aPlayer) currentLap))
 ]

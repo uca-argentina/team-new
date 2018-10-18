@@ -26,6 +26,8 @@ DeterministicBoardStrategy >> effects [
 
 { #category : #initialze }
 DeterministicBoardStrategy >> initializeWith: effectSuccession withBoardOf: anAmountOfSpaces [
+	"typeOfEffects := OrderedCollection new.
+	typeOfEffects addAll: ((1 to: (anAmountOfSpaces)) collect:[:space| effectSuccession at: space % effectSuccession size + 1])."
 	typeOfEffects := Array new: anAmountOfSpaces.
 	(1 to: anAmountOfSpaces - 1)
 		do: [ :space | typeOfEffects at: space put: (effectSuccession at: space % effectSuccession size + 1) ].

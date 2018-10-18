@@ -10,7 +10,7 @@ Class {
 
 { #category : #'instance creation' }
 Position class >> atStart [
-^ self on: 0 at: 0.
+	^ self on: 1 at: 0
 ]
 
 { #category : #'instance creation' }
@@ -19,10 +19,10 @@ Position class >> on: aSpace at: aLap [
 ]
 
 { #category : #comparing }
-Position >> >= aPosition [
+Position >> <= aPosition [
 	^ self currentLap = aPosition currentLap
-		ifTrue: [ self currentSpace >= aPosition currentSpace ]
-		ifFalse: [ self currentLap >= aPosition currentLap ]
+		ifTrue: [ self currentSpace <= aPosition currentSpace ]
+		ifFalse: [ self currentLap <= aPosition currentLap ]
 ]
 
 { #category : #descriptions }

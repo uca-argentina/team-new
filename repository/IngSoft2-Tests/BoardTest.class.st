@@ -19,6 +19,13 @@ BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
 ]
 
 { #category : #tests }
+BoardTest >> testCreatingBoardWithRandomStrategy [
+	| board |
+	board := Board with: 5 of: (RandomBoardStrategy withBoardOf: 5).
+	
+]
+
+{ #category : #tests }
 BoardTest >> testCreatingBoardWithValidAmountOfSpaces [
 	| board |
 	board := Board

@@ -21,7 +21,7 @@ Board class >> with: anAmountOfSpaces of: aBoardStrategy [
 ]
 
 { #category : #'game play' }
-Board >> activaEffectOf: aSpace on: aGame activatedBy: aPlayer [
+Board >> activateEffectOf: aSpace on: aGame activatedBy: aPlayer [
 	^ (boardStrategy effects at: aSpace) turnOnEffectAt: aGame activatedBy: aPlayer
 ]
 

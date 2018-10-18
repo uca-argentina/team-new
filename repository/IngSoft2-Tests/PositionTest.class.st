@@ -6,7 +6,7 @@ Class {
 
 { #category : #tests }
 PositionTest >> testComparingPositions [
-	self assert: (Position on: 3 at: 5) >= (Position on: 15 at: 1)
+	self assert: (Position on: 15 at: 1) <= (Position on: 20 at: 3)
 ]
 
 { #category : #tests }
@@ -15,5 +15,5 @@ PositionTest >> testCreatingPositionWithLapAndSpace [
 	position := Position atStart.
 	self
 		assert: position currentLap equals: 0;
-		assert: position currentSpace equals: 0
+		assert: position currentSpace equals: 1
 ]
