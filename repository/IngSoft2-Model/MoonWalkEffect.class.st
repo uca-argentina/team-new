@@ -23,8 +23,7 @@ MoonWalkEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
 		do: [ :playerPosition | 
 			playerPosition
 				value:
-					(Position
+					((Position
 						on: (aGame positionOf: playerPosition key) value currentSpace - spacesBackwards
-						at: (aGame positionOf: playerPosition key) value currentLap).
-						aGame adjustBackWards: playerPosition]
+						at: (aGame positionOf: playerPosition key) value currentLap) adjustGoingBackwardsWith: aGame board) ]
 ]

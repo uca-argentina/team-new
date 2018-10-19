@@ -7,7 +7,9 @@ Class {
 { #category : #'game play' }
 SpeedUpEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
 	| newPosition |
-	newPosition := (aGame positionOf: aPlayer) currentSpace + 4.
+	newPosition := Position
+		on: (aGame positionOf: aPlayer) currentSpace + 4
+		at: (aGame positionOf: aPlayer) currentLap.
 	(aGame playersPositions detect: [ :playerWithPosition | playerWithPosition key = aPlayer ])
-		value: (aGame adjust: newPosition with: (aGame positionOf: aPlayer))
+		value: (newPosition adjustWith: aGame board andMatchLast: aGame totalLaps)
 ]

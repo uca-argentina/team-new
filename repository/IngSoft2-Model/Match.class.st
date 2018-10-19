@@ -22,24 +22,6 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 		on: aBoard
 ]
 
-{ #category : #playing }
-Match >> adjust: newSpace with: aPosition [
-	^ newSpace >= board spaces & (aPosition currentLap = (totalLaps - 1))
-		ifTrue: [ Position on: board spaces at: totalLaps - 1 ]
-		ifFalse: [ Position
-				on: (newSpace -1 % board spaces) +1
-				at: aPosition currentLap + (newSpace // board spaces) ]
-]
-
-{ #category : #playing }
-Match >> adjustBackWards: playerPosition [
-	playerPosition
-		value:
-			(Position
-				on: playerPosition value currentSpace % board spaces
-				at: playerPosition value currentLap + (playerPosition value currentSpace // board spaces))
-]
-
 { #category : #description }
 Match >> assertMatchIncludes: aPlayer [
 	(players includes: aPlayer) 
@@ -50,6 +32,11 @@ Match >> assertMatchIncludes: aPlayer [
 Match >> assertTurnBelongsTo: aPlayer [
 	aPlayer = self nextPlayer
 	ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
+]
+
+{ #category : #description }
+Match >> board [
+	^ board
 ]
 
 { #category : #playing }
@@ -97,9 +84,10 @@ Match >> nextPlayer [
 Match >> nextPlayerPosition [
 	| newPosition nextPlayer |
 	nextPlayer := self nextPlayer.
-	newPosition := (self positionOf: nextPlayer) currentSpace
-		+ (nextPlayer throw: dices).
-	^ self adjust: newPosition with: (self positionOf: nextPlayer)
+	newPosition := Position
+		on: (self positionOf: nextPlayer) currentSpace + (nextPlayer throw: dices)
+		at: (self positionOf: nextPlayer) currentLap.
+	^ newPosition adjustWith: board andMatchLast: totalLaps
 ]
 
 { #category : #playing }
@@ -128,6 +116,11 @@ Match >> positionOf: aPlayer [
 Match >> rankingOf: aPlayer [
  ^ (players asSortedCollection:[ :player | self positionOf: player ] descending) detectIndex: aPlayer
 	
+]
+
+{ #category : #description }
+Match >> totalLaps [
+	^ totalLaps
 ]
 
 { #category : #description }

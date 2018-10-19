@@ -2,26 +2,15 @@ Class {
 	#name : #RandomBoardStrategy,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfEffects',
 		'random',
 		'effects'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RandomBoardStrategy class >> withBoardOf: anAmountOfSpaces [
-	^ self new initializeEffectsWith: anAmountOfSpaces 
-]
-
 { #category : #initialize }
 RandomBoardStrategy >> chosenEffect [
 	^ effects at: (random nextInt: 100)
-]
-
-{ #category : #descriptions }
-RandomBoardStrategy >> effects [
-	^ typeOfEffects
 ]
 
 { #category : #initialize }
@@ -36,8 +25,12 @@ RandomBoardStrategy >> generateEffects [
 ]
 
 { #category : #initialize }
-RandomBoardStrategy >> initializeEffectsWith: anAmountOfSpaces [
-	random := Random new.
+RandomBoardStrategy >> generateEffectsWith: effectSuccession andBoardOf: anAmountOfSpaces [
+	^(1 to: anAmountOfSpaces) collect: [:space|self chosenEffect ]
+]
+
+{ #category : #initialize }
+RandomBoardStrategy >> initialize [
+ random := Random new.
 	self generateEffects.
-	typeOfEffects := (1 to: anAmountOfSpaces) collect: [:space|self chosenEffect ]
 ]

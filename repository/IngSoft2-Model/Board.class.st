@@ -3,10 +3,15 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'spaces',
-		'boardStrategy'
+		'effects'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #'instance creation' }
+Board class >> boardOf: anAmountOfSpaces with: effectSuccession [
+^ self new initializeWith: anAmountOfSpaces with: effectSuccession
+]
 
 { #category : #'creation validation' }
 Board class >> checkIsValid: anAmountOfSpaces [
@@ -15,26 +20,36 @@ Board class >> checkIsValid: anAmountOfSpaces [
 ]
 
 { #category : #'instance creation' }
-Board class >> with: anAmountOfSpaces of: aBoardStrategy [
+Board class >> deterministicWith: anAmountOfSpaces with: effectSuccession [
 	self checkIsValid: anAmountOfSpaces.
-	^ self new initializeWith: anAmountOfSpaces of: aBoardStrategy 
+	^ self
+		boardOf: anAmountOfSpaces
+		with:
+			(DeterministicBoardStrategy new
+				generateEffectsWith: effectSuccession
+				andBoardOf: anAmountOfSpaces)
+]
+
+{ #category : #'instance creation' }
+Board class >> randomWith: anAmountOfSpaces [
+	self checkIsValid: anAmountOfSpaces.
+	^ self boardOf: anAmountOfSpaces with: ((RandomBoardStrategy new) generateEffectsWith: {  } andBoardOf: anAmountOfSpaces )
 ]
 
 { #category : #'game play' }
 Board >> activateEffectOf: aSpace on: aGame activatedBy: aPlayer [
-	^ (boardStrategy effects at: aSpace) turnOnEffectAt: aGame activatedBy: aPlayer
+	^ (effects at: aSpace) turnOnEffectAt: aGame activatedBy: aPlayer
 ]
 
 { #category : #description }
 Board >> effects [
-^ boardStrategy effects
+^ effects
 ]
 
 { #category : #initialize }
-Board >> initializeWith: anAmountOfSpaces of: aBoardStrategy [
+Board >> initializeWith: anAmountOfSpaces with: effectSuccession [
 	spaces := anAmountOfSpaces.
-	boardStrategy := aBoardStrategy
-	
+	effects := effectSuccession
 ]
 
 { #category : #description }

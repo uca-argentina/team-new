@@ -8,13 +8,10 @@ Class {
 EffectTest >> testAdjustNegativePositionOfAPlayer [
 	| matias dices board match players |
 	board := Board
-		with: 10
-		of:
-			(DeterministicBoardStrategy
-				with:
-					{NoEffect new.
-					WormHoleEffect new}
-				withBoardOf: 10).
+		deterministicWith: 10
+		with:
+			{NoEffect new.
+			WormHoleEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
 	dices := Array with: (Dice deterministicWith: 5 throwing: #(2)).
@@ -34,13 +31,10 @@ EffectTest >> testAdjustNegativePositionOfAPlayer [
 EffectTest >> testPlayerActivateAtomicBombEffect [
 	| matias fabio dices board match players |
 	board := Board
-		with: 10
-		of:
-			(DeterministicBoardStrategy
-				with:
-					{NoEffect new.
-					AtomicBombEffect new}
-				withBoardOf: 10).
+		deterministicWith: 10
+		with:
+			{NoEffect new.
+			AtomicBombEffect new}.
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
@@ -62,9 +56,7 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 { #category : #tests }
 EffectTest >> testPlayerActivateMoonWalkAndGiveMoreThanOneLap [
 	| matias fabio dices board match players |
-	board := Board
-		with: 5
-		of: (DeterministicBoardStrategy with: {(MoonWalkEffect moving: 7)} withBoardOf: 5).
+	board := Board deterministicWith: 5 with: {(MoonWalkEffect moving: 7)}.
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
@@ -84,13 +76,10 @@ EffectTest >> testPlayerActivateMoonWalkAndGiveMoreThanOneLap [
 EffectTest >> testPlayerActivateMoonWalkEffect [
 	| matias fabio dices board match players |
 	board := Board
-		with: 10
-		of:
-			(DeterministicBoardStrategy
-				with:
-					{NoEffect new.
-					(MoonWalkEffect moving: 1)}
-				withBoardOf: 10).
+		deterministicWith: 10
+		with:
+			{NoEffect new.
+			(MoonWalkEffect moving: 1)}.
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
@@ -113,13 +102,10 @@ EffectTest >> testPlayerActivateMoonWalkEffect [
 EffectTest >> testPlayerActivateSpeedUpEffect [
 	| matias dices board match players |
 	board := Board
-		with: 10
-		of:
-			(DeterministicBoardStrategy
-				with:
-					{NoEffect new.
-					SpeedUpEffect new}
-				withBoardOf: 10).
+		deterministicWith: 10
+		with:
+			{NoEffect new.
+			SpeedUpEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
 	dices := Array with: (Dice deterministicWith: 5 throwing: #(2)).
@@ -137,13 +123,10 @@ EffectTest >> testPlayerActivateSpeedUpEffect [
 EffectTest >> testPlayerActivateWormHoleEffect [
 	| matias dices board match players |
 	board := Board
-		with: 10
-		of:
-			(DeterministicBoardStrategy
-				with:
-					{NoEffect new.
-					WormHoleEffect new}
-				withBoardOf: 10).
+		deterministicWith: 10
+		with:
+			{NoEffect new.
+			WormHoleEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
 	dices := Array with: (Dice deterministicWith: 5 throwing: #(4)).

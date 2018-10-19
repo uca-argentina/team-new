@@ -19,10 +19,6 @@ Player class >> named: aName [
 	^ self new initializeWith: aName
 ]
 
-{ #category : #accesing }
-Player >> as [
-]
-
 { #category : #initialize }
 Player >> initializeWith: aName [
 	name := aName
