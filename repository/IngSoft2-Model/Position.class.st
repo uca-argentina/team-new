@@ -1,6 +1,6 @@
 Class {
 	#name : #Position,
-	#superclass : #Object,
+	#superclass : #Magnitude,
 	#instVars : [
 		'lap',
 		'space'
@@ -10,7 +10,7 @@ Class {
 
 { #category : #'instance creation' }
 Position class >> atStart [
-^ self on: 0 at: 1.
+	^ self on: 1 at: 0
 ]
 
 { #category : #'instance creation' }
@@ -19,10 +19,36 @@ Position class >> on: aSpace at: aLap [
 ]
 
 { #category : #comparing }
-Position >> >= aPosition [
+Position >> < aPosition [
 	^ self currentLap = aPosition currentLap
-		ifTrue: [ self currentSpace >= aPosition currentSpace ]
-		ifFalse: [ self currentLap >= aPosition currentLap ]
+		ifTrue: [ self currentSpace < aPosition currentSpace ]
+		ifFalse: [ self currentLap < aPosition currentLap ]
+]
+
+{ #category : #comparing }
+Position >> <= aPosition [
+	^ self currentLap = aPosition currentLap
+		ifTrue: [ self currentSpace <= aPosition currentSpace ]
+		ifFalse: [ self currentLap <= aPosition currentLap ]
+]
+
+{ #category : #comparing }
+Position >> = aPosition [
+	^ self currentLap = aPosition currentLap
+		ifTrue: [ self currentSpace = aPosition currentSpace ]
+		ifFalse: [ self currentLap = aPosition currentLap ]
+]
+
+{ #category : #playing }
+Position >> adjustGoingBackwardsWith: aBoard [
+	^ Position on: ((space - 1) % aBoard spaces) + 1 at: lap + (space // aBoard spaces)
+]
+
+{ #category : #playing }
+Position >> adjustWith: aBoard andMatchLast: totalLaps [
+	^ space >= aBoard spaces & (lap = (totalLaps - 1))
+		ifTrue: [ Position on: aBoard spaces at: totalLaps - 1 ]
+		ifFalse: [ Position on: (space - 1 rem: aBoard spaces) + 1 at: lap + (space quo: aBoard spaces) ]
 ]
 
 { #category : #descriptions }
@@ -35,7 +61,7 @@ Position >> currentSpace [
 	^ space
 ]
 
-{ #category : #initialization }
+{ #category : #initialize }
 Position >> initializeOn: aSpace at: aLap [
 	lap := aLap.
 	space := aSpace

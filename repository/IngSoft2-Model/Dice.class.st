@@ -25,13 +25,13 @@ Dice class >> checkIsValidThrowing: sequence with: anAmountOfFaces [
 Dice class >> deterministicWith: anAmountOfFaces throwing: sequence [
 self checkIsValid: anAmountOfFaces.
 	self checkIsValidThrowing: sequence with: anAmountOfFaces.
-	^ self with: anAmountOfFaces of: (DeterministicStrategy withThrowing: sequence)
+	^ self with: anAmountOfFaces of: (DeterministicDiceStrategy withThrowing: sequence)
 ]
 
 { #category : #'instance creation' }
 Dice class >> randomWith: anAmountOfFaces [
 self checkIsValid: anAmountOfFaces.
-	^ self with: anAmountOfFaces of: RandomStrategy new
+	^ self with: anAmountOfFaces of: RandomDiceStrategy new
 ]
 
 { #category : #'instance creation' }

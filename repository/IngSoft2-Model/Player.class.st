@@ -31,5 +31,10 @@ Player >> name [
 
 { #category : #playing }
 Player >> throw: gameDices [
-	^ gameDices sumNumbers: [ :dice | dice roll ]
+	^ gameDices sumNumbers: #roll
+]
+
+{ #category : #comparing }
+Player >> value: aPlayer [
+ ^ self =aPlayer
 ]

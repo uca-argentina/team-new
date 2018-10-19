@@ -22,40 +22,37 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 		on: aBoard
 ]
 
-{ #category : #comparing }
-Match >> adjust: newSpace with: aPosition [
-	^ newSpace >= board spaces & (aPosition currentLap = totalLaps)
-		ifTrue: [ Position on: board spaces at: totalLaps ]
-		ifFalse: [ Position
-				on: newSpace % board spaces
-				at: aPosition currentLap + (newSpace / board spaces) asInteger ]
-]
-
-{ #category : #playing }
-Match >> alternateTurn [
-	playerIndex := playerIndex % players size + 1
-]
-
 { #category : #description }
 Match >> assertMatchIncludes: aPlayer [
-	players
-		detect: [ :player| player = aPlayer ]
-		ifNone: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
+	(players includes: aPlayer) 
+		ifFalse: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
 Match >> assertTurnBelongsTo: aPlayer [
-	^ aPlayer = self nextPlayer
+	aPlayer = self nextPlayer
+	ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
+]
+
+{ #category : #description }
+Match >> board [
+	^ board
+]
+
+{ #category : #playing }
+Match >> changeTurn [
+	playerIndex := playerIndex % players size + 1
 ]
 
 { #category : #description }
 Match >> ifMatchEndedDo: aMatchEndedBlock ifNot: aMatchNotEndedBlock [
 	(players
-		select: [ :player | 
-			((self positionOf: player) currentSpace = board spaces
-				& (self positionOf: player) currentLap) = totalLaps ]) isNotEmpty
-		ifTrue: [ aMatchEndedBlock value ]
-		ifFalse: [ aMatchNotEndedBlock value ]
+		noneSatisfy: [ :player | 
+			| position |
+			position := self positionOf: player.
+			position currentSpace = board spaces & (position currentLap = (totalLaps - 1)) ])
+		ifTrue: aMatchNotEndedBlock
+		ifFalse: aMatchEndedBlock 
 ]
 
 { #category : #initialize }
@@ -65,18 +62,17 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 	dices := theDices.
 	totalLaps := aNumberOfLaps.
 	board := aBoard.
-	positionOfPlayers := OrderedCollection new.
-	players do: [ :player | positionOfPlayers add: player -> Position atStart ]
+	positionOfPlayers := players collect:[:player| player -> Position atStart].
+
 ]
 
 { #category : #playing }
 Match >> move: aPlayer [
-	(self assertTurnBelongsTo: aPlayer)
-		ifTrue: [ positionOfPlayers
-				do: [ :positionPlayer | 
-					positionPlayer key = aPlayer
-						ifTrue: [ positionPlayer value: self nextPlayerPosition ] ] ]
-		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
+	self assertTurnBelongsTo: aPlayer.
+	(positionOfPlayers
+		detect: [ :positionPlayer | 
+			positionPlayer key = aPlayer
+				])value: self nextPlayerPosition
 ]
 
 { #category : #description }
@@ -86,19 +82,27 @@ Match >> nextPlayer [
 
 { #category : #playing }
 Match >> nextPlayerPosition [
-	| newPosition |
-	newPosition := (self positionOf: self nextPlayer) currentSpace
-		+ (self nextPlayer throw: dices).
-	^ self adjust: newPosition with: (self positionOf: self nextPlayer)
+	| newPosition nextPlayer |
+	nextPlayer := self nextPlayer.
+	newPosition := Position
+		on: (self positionOf: nextPlayer) currentSpace + (nextPlayer throw: dices)
+		at: (self positionOf: nextPlayer) currentLap.
+	^ newPosition adjustWith: board andMatchLast: totalLaps
 ]
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self assertMatchIncludes: aPlayer;
+	self
+		assertMatchIncludes: aPlayer;
 		ifMatchEndedDo: [ AssertionFailure signal: 'The game is over' ]
-		ifNot: [ self
-				move: aPlayer;
-				alternateTurn ]
+			ifNot: [ self move: aPlayer.
+			board activateEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
+			self changeTurn ]
+]
+
+{ #category : #description }
+Match >> playersPositions [
+	^ positionOfPlayers
 ]
 
 { #category : #description }
@@ -110,10 +114,13 @@ Match >> positionOf: aPlayer [
 
 { #category : #description }
 Match >> rankingOf: aPlayer [
-	positionOfPlayers sort: [ :a :b | a value >= b value ].
-	^ positionOfPlayers
-		indexOf: aPlayer -> (self positionOf: aPlayer)
-		ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
+ ^ (players asSortedCollection:[ :player | self positionOf: player ] descending) detectIndex: aPlayer
+	
+]
+
+{ #category : #description }
+Match >> totalLaps [
+	^ totalLaps
 ]
 
 { #category : #description }
@@ -122,6 +129,6 @@ Match >> winner [
 		ifMatchEndedDo: [ ^ players
 				detect: [ :player | 
 					(self positionOf: player) currentSpace = board spaces
-						& ((self positionOf: player) currentLap = totalLaps) ] ]
+						& ((self positionOf: player) currentLap = (totalLaps-1)) ] ]
 		ifNot: [ AssertionFailure signal: 'There is no winner' ]
 ]
