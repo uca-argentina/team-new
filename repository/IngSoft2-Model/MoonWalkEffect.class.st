@@ -19,11 +19,11 @@ MoonWalkEffect >> initializeWith: spacesToGoBackwards [
 
 { #category : #'game play' }
 MoonWalkEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	(aGame playersPositions reject: [ :playerWithPosition | playerWithPosition key = aPlayer ])
-		do: [ :playerPosition | 
-			playerPosition
-				value:
-					((Position
-						on: (aGame positionOf: playerPosition key) value currentSpace - spacesBackwards
-						at: (aGame positionOf: playerPosition key) value currentLap) adjustGoingBackwardsWith: aGame board) ]
+	(aGame players reject: [ :player | player=aPlayer ])
+		do: [ :player | 
+			aGame playersPositions
+				at: player
+				put:
+					((Position on: (aGame positionOf: player) currentSpace - spacesBackwards at: (aGame positionOf: player) currentLap)
+						adjustGoingBackwardsWith: aGame board) ]
 ]

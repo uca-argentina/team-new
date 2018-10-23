@@ -26,13 +26,6 @@ Position >> < aPosition [
 ]
 
 { #category : #comparing }
-Position >> <= aPosition [
-	^ self currentLap = aPosition currentLap
-		ifTrue: [ self currentSpace <= aPosition currentSpace ]
-		ifFalse: [ self currentLap <= aPosition currentLap ]
-]
-
-{ #category : #comparing }
 Position >> = aPosition [
 	^ self currentLap = aPosition currentLap
 		ifTrue: [ self currentSpace = aPosition currentSpace ]

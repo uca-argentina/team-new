@@ -62,17 +62,15 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 	dices := theDices.
 	totalLaps := aNumberOfLaps.
 	board := aBoard.
-	positionOfPlayers := players collect:[:player| player -> Position atStart].
-
+	positionOfPlayers := (Dictionary new).
+	players do: [ :player | positionOfPlayers at:player put: Position atStart]
 ]
 
 { #category : #playing }
 Match >> move: aPlayer [
 	self assertTurnBelongsTo: aPlayer.
-	(positionOfPlayers
-		detect: [ :positionPlayer | 
-			positionPlayer key = aPlayer
-				])value: self nextPlayerPosition
+	positionOfPlayers at: aPlayer put: self nextPlayerPosition
+	
 ]
 
 { #category : #description }
@@ -101,15 +99,19 @@ Match >> playedBy: aPlayer [
 ]
 
 { #category : #description }
+Match >> players [
+^players
+]
+
+{ #category : #description }
 Match >> playersPositions [
 	^ positionOfPlayers
 ]
 
 { #category : #description }
 Match >> positionOf: aPlayer [
-	^ (positionOfPlayers
-		detect: [ :playerWithPosition | playerWithPosition key = aPlayer ]
-		ifNone: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]) value
+	^ (positionOfPlayers at: aPlayer ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ])
+
 ]
 
 { #category : #description }

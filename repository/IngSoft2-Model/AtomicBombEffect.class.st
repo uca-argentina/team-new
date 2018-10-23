@@ -6,7 +6,6 @@ Class {
 
 { #category : #'game play' }
 AtomicBombEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame playersPositions
-		do:
-			[ :playerPosition | playerPosition value: (Position on: 1 at: (aGame positionOf: aPlayer) currentLap) ]
+	aGame players do:
+			[ :player| aGame playersPositions at:player put: (Position on: 1 at: (aGame playersPositions at:player )currentLap) ]
 ]
