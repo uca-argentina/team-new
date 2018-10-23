@@ -6,9 +6,5 @@ Class {
 
 { #category : #'game play' }
 WormHoleEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame playersPositions
-		at: aPlayer
-		put:
-			((Position on: (aGame positionOf: aPlayer) currentSpace - 4 at: (aGame positionOf: aPlayer) currentLap)
-				adjustGoingBackwardsWith: aGame board)
+	aGame move: aPlayer dueToAnEffect: 4 negated.
 ]

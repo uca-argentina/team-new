@@ -73,6 +73,16 @@ Match >> move: aPlayer [
 	
 ]
 
+{ #category : #playing }
+Match >> move: aPlayer dueToAnEffect: anAmountOfSpaces [
+	positionOfPlayers
+		at: aPlayer
+		put:
+			((Position
+				on: (self positionOf: aPlayer) currentSpace + anAmountOfSpaces
+				at: (self positionOf: aPlayer) currentLap) adjustWith: board andMatchLast: totalLaps)
+]
+
 { #category : #description }
 Match >> nextPlayer [
 	^ players at: playerIndex
@@ -118,6 +128,13 @@ Match >> positionOf: aPlayer [
 Match >> rankingOf: aPlayer [
  ^ (players asSortedCollection:[ :player | self positionOf: player ] descending) detectIndex: aPlayer
 	
+]
+
+{ #category : #playing }
+Match >> resetOnlyPositionOfAllThePlayers [
+	players
+		do:
+			[ :player | positionOfPlayers at: player put: (Position on: 1 at: (self positionOf: player) currentLap) ]
 ]
 
 { #category : #description }
