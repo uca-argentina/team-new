@@ -6,5 +6,5 @@ Class {
 
 { #category : #'game play' }
 WormHoleEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame move: aPlayer dueToAnEffect: 4 negated.
+	aGame move: aPlayer back: 4
 ]

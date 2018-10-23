@@ -74,7 +74,17 @@ Match >> move: aPlayer [
 ]
 
 { #category : #playing }
-Match >> move: aPlayer dueToAnEffect: anAmountOfSpaces [
+Match >> move: aPlayer back: anAmountOfSpaces [
+	positionOfPlayers
+		at: aPlayer
+		put:
+			((Position
+				on: (self positionOf: aPlayer) currentSpace - anAmountOfSpaces
+				at: (self positionOf: aPlayer) currentLap) adjustGoingBackwardsWith: board)
+]
+
+{ #category : #playing }
+Match >> move: aPlayer forward: anAmountOfSpaces [
 	positionOfPlayers
 		at: aPlayer
 		put:

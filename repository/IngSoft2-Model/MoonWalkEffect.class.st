@@ -20,7 +20,5 @@ MoonWalkEffect >> initializeWith: spacesToGoBackwards [
 { #category : #'game play' }
 MoonWalkEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
 	(aGame players copyWithout: aPlayer)
-		do: [ :player | 
-			aGame move: player dueToAnEffect: spacesBackwards negated ]
-
+		do: [ :player | aGame move: player back: spacesBackwards ]
 ]
