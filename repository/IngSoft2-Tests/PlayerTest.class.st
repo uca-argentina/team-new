@@ -25,9 +25,9 @@ PlayerTest >> testPlayerThrowsDices [
 	| martin dices |
 	martin := Player named: 'Martin'.
 	dices := Array
-		with: (Dice deterministicWith: 4 throwing: #(1 1 3))
-		with: (Dice deterministicWith: 5 throwing: #(3 2 3))
-		with: (Dice deterministicWith: 6 throwing: #(4 5 3)).
+		with: (Dice deterministicWithSpaces: 4 throwing: #(1 1 3))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(3 2 3))
+		with: (Dice deterministicWithSpaces: 6 throwing: #(4 5 3)).
 	self
 		assert: martin name equals: 'Martin';
 		assert: (martin throw: dices) equals: 8

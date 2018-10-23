@@ -24,73 +24,62 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 
 { #category : #description }
 Match >> assertMatchIncludes: aPlayer [
-	(players includes: aPlayer) 
+	(players includes: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
 Match >> assertTurnBelongsTo: aPlayer [
 	aPlayer = self nextPlayer
-	ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
-]
-
-{ #category : #description }
-Match >> board [
-	^ board
+		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
 { #category : #playing }
 Match >> changeTurn [
-	playerIndex := playerIndex % players size + 1
+	playerIndex := (playerIndex rem: players size) + 1
 ]
 
-{ #category : #description }
+{ #category : #playing }
 Match >> ifMatchEndedDo: aMatchEndedBlock ifNot: aMatchNotEndedBlock [
-	(players
-		noneSatisfy: [ :player | 
-			| position |
-			position := self positionOf: player.
-			position currentSpace = board spaces & (position currentLap = (totalLaps - 1)) ])
+	(players noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ])
 		ifTrue: aMatchNotEndedBlock
-		ifFalse: aMatchEndedBlock 
+		ifFalse: aMatchEndedBlock
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps on: aBoard [
 	players := thePlayers asOrderedCollection.
 	playerIndex := 1.
 	dices := theDices.
 	totalLaps := aNumberOfLaps.
 	board := aBoard.
-	positionOfPlayers := (Dictionary new).
-	players do: [ :player | positionOfPlayers at:player put: Position atStart]
+	positionOfPlayers := Dictionary new.
+	players do: [ :player | positionOfPlayers at: player put: Position atStart ]
+]
+
+{ #category : #description }
+Match >> isTheLastSpaceWithFinalLapOccupiedBy: aPlayer [
+	| position |
+	position := self positionOf: aPlayer.
+	^ position currentSpace = board spaces & (position currentLap = (totalLaps - 1))
 ]
 
 { #category : #playing }
 Match >> move: aPlayer [
 	self assertTurnBelongsTo: aPlayer.
 	positionOfPlayers at: aPlayer put: self nextPlayerPosition
-	
 ]
 
 { #category : #playing }
-Match >> move: aPlayer back: anAmountOfSpaces [
+Match >> moveByEffectTo: aPlayer spaces: anAmountOfSpaces [
+	| position |
+	position := self positionOf: aPlayer.
 	positionOfPlayers
 		at: aPlayer
 		put:
-			((Position
-				on: (self positionOf: aPlayer) currentSpace - anAmountOfSpaces
-				at: (self positionOf: aPlayer) currentLap) adjustGoingBackwardsWith: board)
-]
-
-{ #category : #playing }
-Match >> move: aPlayer forward: anAmountOfSpaces [
-	positionOfPlayers
-		at: aPlayer
-		put:
-			((Position
-				on: (self positionOf: aPlayer) currentSpace + anAmountOfSpaces
-				at: (self positionOf: aPlayer) currentLap) adjustWith: board andMatchLast: totalLaps)
+			((Position on: position currentSpace + anAmountOfSpaces at: position currentLap)
+				adjustWith: board
+				andMatchLast: totalLaps)
 ]
 
 { #category : #description }
@@ -124,11 +113,6 @@ Match >> players [
 ]
 
 { #category : #description }
-Match >> playersPositions [
-	^ positionOfPlayers
-]
-
-{ #category : #description }
 Match >> positionOf: aPlayer [
 	^ (positionOfPlayers at: aPlayer ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ])
 
@@ -141,23 +125,17 @@ Match >> rankingOf: aPlayer [
 ]
 
 { #category : #playing }
-Match >> resetOnlyPositionOfAllThePlayers [
+Match >> resetPlayersSpaces [
 	players
 		do:
 			[ :player | positionOfPlayers at: player put: (Position on: 1 at: (self positionOf: player) currentLap) ]
 ]
 
 { #category : #description }
-Match >> totalLaps [
-	^ totalLaps
-]
-
-{ #category : #description }
 Match >> winner [
 	self
 		ifMatchEndedDo: [ ^ players
-				detect: [ :player | 
-					(self positionOf: player) currentSpace = board spaces
-						& ((self positionOf: player) currentLap = (totalLaps-1)) ] ]
+				detect:
+					[ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ] ]
 		ifNot: [ AssertionFailure signal: 'There is no winner' ]
 ]

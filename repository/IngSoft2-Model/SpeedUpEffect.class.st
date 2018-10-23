@@ -6,6 +6,6 @@ Class {
 
 { #category : #'game play' }
 SpeedUpEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame move: aPlayer forward: 4.
+	aGame moveByEffectTo: aPlayer spaces: 4.
 	
 ]

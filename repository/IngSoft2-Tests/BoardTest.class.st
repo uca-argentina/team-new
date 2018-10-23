@@ -9,8 +9,8 @@ BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
 	| board |
 	self
 		should: [ board := Board
-				deterministicWith: -30
-				with:
+				deterministicWithSpaces: -30
+				andEffectsGeneratedFrom:
 					{NoEffect new.
 					AtomicBombEffect new} ]
 		raise: AssertionFailure
@@ -20,7 +20,7 @@ BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
 { #category : #tests }
 BoardTest >> testCreatingBoardWithRandomStrategy [
 	| board |
-	board := Board randomWith: 50.
+	board := Board randomWithSpaces: 50.
 	self assert: (board effects detect:[:effect| (effect respondsTo:#turnOnEffectAt:activatedBy:) not] ifNone:[true]).
 ]
 
@@ -28,8 +28,8 @@ BoardTest >> testCreatingBoardWithRandomStrategy [
 BoardTest >> testCreatingBoardWithValidAmountOfSpaces [
 	| board |
 	board := Board
-		deterministicWith: 30
-		with:
+		deterministicWithSpaces: 30
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	self assert: board spaces equals: 30

@@ -29,12 +29,12 @@ Class {
 { #category : #tests }
 MatchTest >> testAPlayerSkipMoreThanOneLapInASingleThrow [
 	| fabio match dices board players |
-	board := Board deterministicWith: 10 with: {NoEffect new}.
+	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect new}.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: fabio.
 	dices := Array
-		with: (Dice deterministicWith: 13 throwing: #(13))
-		with: (Dice deterministicWith: 12 throwing: #(10)).
+		with: (Dice deterministicWithSpaces: 13 throwing: #(13))
+		with: (Dice deterministicWithSpaces: 12 throwing: #(10)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -49,11 +49,11 @@ MatchTest >> testAPlayerSkipMoreThanOneLapInASingleThrow [
 MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
 	| fabio cristian match board dices players |
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(1 5))
-		with: (Dice deterministicWith: 3 throwing: #(1 3)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5))
+		with: (Dice deterministicWithSpaces: 3 throwing: #(1 3)).
 	board := Board
-		deterministicWith: 10
-		with:
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	fabio := Player named: 'Fabio'.
@@ -75,16 +75,16 @@ MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
 MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 	| match board martin juan dices players |
 	board := Board
-		deterministicWith: 20
-		with:
+		deterministicWithSpaces: 20
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	martin := Player named: 'Martin'.
 	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
 	dices := Array
-		with: (Dice deterministicWith: 6 throwing: #(1 3 4))
-		with: (Dice deterministicWith: 5 throwing: #(4 5 1)).
+		with: (Dice deterministicWithSpaces: 6 throwing: #(1 3 4))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(4 5 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -104,12 +104,12 @@ MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 { #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 	| fabio match board players dices |
-	board := Board deterministicWith: 20 with: {NoEffect new}.
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: fabio.
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(4 5 3))
-		with: (Dice deterministicWith: 6 throwing: #(6 5 4)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(4 5 3))
+		with: (Dice deterministicWithSpaces: 6 throwing: #(6 5 4)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -118,7 +118,6 @@ MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 	match
 		playedBy: fabio;
 		playedBy: fabio.
-	match.
 	self should: [ match playedBy: fabio ]
 			raise: AssertionFailure
 			withExceptionDo: [ :exception | self assert: exception messageText equals: 'The game is over' ]
@@ -127,13 +126,13 @@ MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 { #category : #tests }
 MatchTest >> testAPlayerWins [
 	| match board martin juan dices players |
-	board := Board deterministicWith: 15 with: { NoEffect new }.
+	board := Board deterministicWithSpaces: 15 andEffectsGeneratedFrom: { NoEffect new }.
 	martin := Player named: 'Martin'.
 	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
 	dices := Array
-		with: (Dice deterministicWith: 6 throwing: #(6 3 3))
-		with: (Dice deterministicWith: 5 throwing: #(4 3 5)).
+		with: (Dice deterministicWithSpaces: 6 throwing: #(6 3 3))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(4 3 5)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -149,12 +148,12 @@ MatchTest >> testAPlayerWins [
 { #category : #tests }
 MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 	| fabio match dices board players |
-	board := Board deterministicWith: 10 with: {NoEffect new}.
+	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect new}.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: fabio.
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(4))
-		with: (Dice deterministicWith: 3 throwing: #(3)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(4))
+		with: (Dice deterministicWithSpaces: 3 throwing: #(3)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -173,11 +172,11 @@ MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 MatchTest >> testAllRandomEffectsInOneMatch [
 	| fabio cristian juan match board dices players |
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(1 5 2 3 1))
-		with: (Dice deterministicWith: 3 throwing: #(1 3 2 2 2)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5 2 3 1))
+		with: (Dice deterministicWithSpaces: 3 throwing: #(1 3 2 2 2)).
 	board := Board
-		deterministicWith: 20
-		with:
+		deterministicWithSpaces: 20
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new.
 			(MoonWalkEffect moving: 2).
@@ -214,11 +213,11 @@ MatchTest >> testAllRandomEffectsInOneMatch [
 MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 	| fabio cristian andres match board dices players |
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(1 5))
-		with: (Dice deterministicWith: 3 throwing: #(1 3)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5))
+		with: (Dice deterministicWithSpaces: 3 throwing: #(1 3)).
 	board := Board
-		deterministicWith: 10
-		with:
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	fabio := Player named: 'Fabio'.
@@ -243,9 +242,9 @@ MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace0 [
 	| fabio cristian match board dices players |
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(1 2))
-		with: (Dice deterministicWith: 3 throwing: #(1 3)).
-	board := Board deterministicWith: 10 with: {NoEffect new.
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 2))
+		with: (Dice deterministicWithSpaces: 3 throwing: #(1 3)).
+	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect new.
 					AtomicBombEffect new}.
 	fabio := Player named: 'Fabio'.
 	cristian := Player named: 'Cristian'.
@@ -263,16 +262,16 @@ MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace0 [
 MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 	| match board mateo marcos players dices |
 	board := Board
-		deterministicWith: 30
-		with:
+		deterministicWithSpaces: 30
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	mateo := Player named: 'Mateo'.
 	marcos := Player named: 'Marcos'.
 	players := OrderedCollection with: mateo with: marcos.
 	dices := Array
-		with: (Dice deterministicWith: 6 throwing: #(1 2 3))
-		with: (Dice deterministicWith: 10 throwing: #(1 2 3)).
+		with: (Dice deterministicWithSpaces: 6 throwing: #(1 2 3))
+		with: (Dice deterministicWithSpaces: 10 throwing: #(1 2 3)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -287,16 +286,16 @@ MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 { #category : #tests }
 MatchTest >> testPlayerDoNotExceedLastSpace [
 	| match board martin juan dices players |
-	board := Board deterministicWith: 50 with: {NoEffect new}.
+	board := Board deterministicWithSpaces: 50 andEffectsGeneratedFrom: {NoEffect new}.
 	martin := Player named: 'Martin'.
 	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
 	dices := Array
-		with: (Dice deterministicWith: 6 throwing: #(5 2 1 1 4))
-		with: (Dice deterministicWith: 5 throwing: #(3 4 3 2 2))
-		with: (Dice deterministicWith: 5 throwing: #(4 2 5 3 3))
-		with: (Dice deterministicWith: 8 throwing: #(8 4 3 4 8))
-		with: (Dice deterministicWith: 2 throwing: #(1 2 1 2 1)).
+		with: (Dice deterministicWithSpaces: 6 throwing: #(5 2 1 1 4))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(3 4 3 2 2))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(4 2 5 3 3))
+		with: (Dice deterministicWithSpaces: 8 throwing: #(8 4 3 4 8))
+		with: (Dice deterministicWithSpaces: 2 throwing: #(1 2 1 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -314,12 +313,12 @@ MatchTest >> testPlayerDoNotExceedLastSpace [
 { #category : #tests }
 MatchTest >> testPlayerMovesForwardOnBoard [
 	| fabio match dices board players |
-	board := Board deterministicWith: 20 with: {NoEffect new}.
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: fabio.
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(4))
-		with: (Dice deterministicWith: 3 throwing: #(3)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(4))
+		with: (Dice deterministicWithSpaces: 3 throwing: #(3)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -333,9 +332,9 @@ MatchTest >> testPlayerMovesForwardOnBoard [
 MatchTest >> testPlayersRankings [
 	| luciana micaela carolina victoria match board dices players |
 	dices := Array
-		with: (Dice deterministicWith: 5 throwing: #(1 3 5 4))
-		with: (Dice deterministicWith: 6 throwing: #(3 2 5 2)).
-	board := Board deterministicWith: 20 with: {NoEffect new}.
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 3 5 4))
+		with: (Dice deterministicWithSpaces: 6 throwing: #(3 2 5 2)).
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
 	luciana := Player named: 'Luciana'.
 	micaela := Player named: 'Micaela'.
 	carolina := Player named: 'Carolina'.
@@ -366,13 +365,13 @@ MatchTest >> testPlayersRankings [
 MatchTest >> testPlayersSequenceOnMatch [
 	| board martin juan match players dices |
 	board := Board
-		deterministicWith: 20
-		with:
+		deterministicWithSpaces: 20
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	martin := Player named: 'Martin'.
 	juan := Player named: 'Juan'.
-	dices := Array with: (Dice deterministicWith: 6 throwing: #(1 2 3 4)).
+	dices := Array with: (Dice deterministicWithSpaces: 6 throwing: #(1 2 3 4)).
 	players := OrderedCollection with: martin with: juan.
 	match := Match
 		playedBy: players
@@ -393,16 +392,16 @@ MatchTest >> testPlayersSequenceOnMatch [
 { #category : #tests }
 MatchTest >> testPositionOfPlayers [
 	| match board martin juan dices players |
-	board := Board deterministicWith: 20 with: {NoEffect new}.
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
 	martin := Player named: 'Martin'.
 	juan := Player named: 'Juan'.
 	players := OrderedCollection with: martin with: juan.
 	dices := Array
-		with: (Dice deterministicWith: 6 throwing: #(3 2 5))
-		with: (Dice deterministicWith: 5 throwing: #(2 5 4))
-		with: (Dice deterministicWith: 5 throwing: #(1 2 3))
-		with: (Dice deterministicWith: 8 throwing: #(7 6 1))
-		with: (Dice deterministicWith: 2 throwing: #(1 2 1)).
+		with: (Dice deterministicWithSpaces: 6 throwing: #(3 2 5))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(2 5 4))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 2 3))
+		with: (Dice deterministicWithSpaces: 8 throwing: #(7 6 1))
+		with: (Dice deterministicWithSpaces: 2 throwing: #(1 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -414,27 +413,26 @@ MatchTest >> testPositionOfPlayers [
 		playedBy: martin;
 		playedBy: juan;
 		playedBy: martin;
-		playedBy: juan.
-	match.
-	match playedBy: martin	";
+		playedBy: juan;
+	   playedBy: martin;
 		playedBy: juan;
 		playedBy: martin;
 		playedBy: juan;
 		playedBy: martin.
 	self
-		assert: (match positionOf: juan) currentSpace equals: 16;
+		assert: (match positionOf: juan) currentSpace equals: 17;
 		assert: (match positionOf: juan) currentLap equals: 3;
-		assert: (match positionOf: martin) currentSpace equals: 10;
-		assert: (match positionOf: martin) currentLap equals: 4"
+		assert: (match positionOf: martin) currentSpace equals: 11;
+		assert: (match positionOf: martin) currentLap equals: 5.
 ]
 
 { #category : #tests }
 MatchTest >> testWhenMatchIsCreatedWithOnePlayerItIsHisTurn [
 	| matias match dices board players |
-	dices := Array with: (Dice deterministicWith: 5 throwing: #(1 3 3)).
+	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(1 3 3)).
 	board := Board
-		deterministicWith: 10
-		with:
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	matias := Player named: 'Matias'.
@@ -442,7 +440,7 @@ MatchTest >> testWhenMatchIsCreatedWithOnePlayerItIsHisTurn [
 	match := Match
 		playedBy: players
 		throwing: dices
-		during: board
-		on: 2.
+		during: 2
+		on: board.
 	self assert: match nextPlayer name equals: 'Matias'
 ]

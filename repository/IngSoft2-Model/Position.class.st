@@ -33,15 +33,10 @@ Position >> = aPosition [
 ]
 
 { #category : #playing }
-Position >> adjustGoingBackwardsWith: aBoard [
-	^ Position on: ((space - 1) % aBoard spaces) + 1 at: lap + (space // aBoard spaces)
-]
-
-{ #category : #playing }
 Position >> adjustWith: aBoard andMatchLast: totalLaps [
 	^ space >= aBoard spaces & (lap = (totalLaps - 1))
 		ifTrue: [ Position on: aBoard spaces at: totalLaps - 1 ]
-		ifFalse: [ Position on: (space - 1 rem: aBoard spaces) + 1 at: lap + (space quo: aBoard spaces) ]
+		ifFalse: [ Position on: (space - 1) % aBoard spaces + 1 at: lap + ((space - space sign) // aBoard spaces) ]
 ]
 
 { #category : #descriptions }
