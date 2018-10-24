@@ -5,11 +5,11 @@ Class {
 }
 
 { #category : #initialze }
-DeterministicBoardStrategy >> generateEffectsWith: effectSuccession andBoardOf: anAmountOfSpaces [
+DeterministicBoardStrategy >> generateEffectsWith: anEffectSuccession andBoardOf: anAmountOfSpaces [
 	| typeOfEffects |
 	typeOfEffects := OrderedCollection new.
 	typeOfEffects
-		addAll: ((1 to: anAmountOfSpaces - 1) collect: [ :space | effectSuccession at: space % effectSuccession size + 1 ]);
+		addAll: ((1 to: anAmountOfSpaces - 1) collect: [ :space | anEffectSuccession at: space % anEffectSuccession size + 1 ]);
 		add: NoEffect new.
 	^ typeOfEffects
 ]

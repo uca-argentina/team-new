@@ -7,8 +7,15 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'creation validation' }
+MoonWalkEffect class >> checkIsValid: spacesBackwards [
+	spacesBackwards > 0
+		ifFalse: [ AssertionFailure signal: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
+]
+
 { #category : #'instance creation' }
 MoonWalkEffect class >> moving: spacesBackwards [
+	self checkIsValid: spacesBackwards.
 	^ self new initializeWith: spacesBackwards
 ]
 
@@ -18,6 +25,6 @@ MoonWalkEffect >> initializeWith: spacesToGoBackwards [
 ]
 
 { #category : #'game play' }
-MoonWalkEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	(aGame players copyWithout: aPlayer) do: [ :player | aGame moveByEffectTo: player spaces: spacesBackwards negated ]
+MoonWalkEffect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
+	(aMatch players copyWithout: aPlayer) do: [ :player | aMatch moveByEffectTo: player spaces: spacesBackwards negated ]
 ]

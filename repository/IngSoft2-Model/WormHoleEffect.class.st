@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'game play' }
-WormHoleEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame moveByEffectTo: aPlayer spaces: 4 negated
+WormHoleEffect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
+	aMatch moveByEffectTo: aPlayer spaces: 4 negated
 ]

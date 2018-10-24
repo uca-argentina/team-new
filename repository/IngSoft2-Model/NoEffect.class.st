@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'game play' }
-NoEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
+NoEffect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
 	
 ]

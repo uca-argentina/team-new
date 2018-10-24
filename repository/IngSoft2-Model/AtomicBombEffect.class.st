@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'game play' }
-AtomicBombEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame resetPlayersSpaces
+AtomicBombEffect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
+	aMatch resetPlayersSpaces
 ]

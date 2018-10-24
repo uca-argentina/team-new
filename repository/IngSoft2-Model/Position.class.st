@@ -13,8 +13,15 @@ Position class >> atStart [
 	^ self onSpace: 1 ofLap: 0
 ]
 
+{ #category : #'creation validation' }
+Position class >> checkIsValid: aSpace [
+	aSpace = 0
+		ifTrue: [ AssertionFailure signal: 'you can not create a Position of space 0' ]
+]
+
 { #category : #'instance creation' }
 Position class >> onSpace: aSpace ofLap: aLap [
+	self checkIsValid: aSpace.
 	^ self new initializeOnSpace: aSpace ofLap: aLap
 ]
 

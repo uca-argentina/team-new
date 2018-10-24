@@ -27,6 +27,37 @@ EffectTest >> testAdjustNegativePositionCausedByEffect [
 ]
 
 { #category : #tests }
+EffectTest >> testAdjustPositionWhenChangingLapCausedBySpeedUpEffect [
+	| matias dices board match players |
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom:
+			{NoEffect new.
+			SpeedUpEffect new}.
+	matias := Player named: 'Matias'.
+	players := OrderedCollection with: matias.
+	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(5)) with: (Dice deterministicWithSpaces: 5 throwing: #(3)).
+	match := Match
+		playedBy: players
+		throwing: dices
+		during: 3
+		on: board.
+	match playedBy: matias.
+	self
+		assert: (match positionOf: matias) currentSpace equals: 3;
+		assert: (match positionOf: matias) currentLap equals: 1
+]
+
+{ #category : #tests }
+EffectTest >> testCreatingMoonWalkEffectWithInvalidSpacesBackwards [
+	| moonWalkEffect |
+	self
+		should: [ moonWalkEffect := MoonWalkEffect moving: -5 ]
+		raise: AssertionFailure
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
+]
+
+{ #category : #tests }
 EffectTest >> testPlayerActivateAtomicBombEffect [
 	| matias fabio dices board match players |
 	board := Board
@@ -53,7 +84,7 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 ]
 
 { #category : #tests }
-EffectTest >> testPlayerActivateMoonWalkAndGiveMoreThanOneLap [
+EffectTest >> testPlayerActivatesMoonWalkAndGiveMoreThanOneLap [
 	| matias fabio dices board match players |
 	board := Board deterministicWithSpaces: 5 andEffectsGeneratedFrom: {(MoonWalkEffect moving: 7)}.
 	matias := Player named: 'Matias'.
@@ -72,7 +103,7 @@ EffectTest >> testPlayerActivateMoonWalkAndGiveMoreThanOneLap [
 ]
 
 { #category : #tests }
-EffectTest >> testPlayerActivateMoonWalkEffect [
+EffectTest >> testPlayerActivatesMoonWalkEffect [
 	| matias fabio dices board match players |
 	board := Board
 		deterministicWithSpaces: 10
@@ -98,7 +129,7 @@ EffectTest >> testPlayerActivateMoonWalkEffect [
 ]
 
 { #category : #tests }
-EffectTest >> testPlayerActivateSpeedUpEffect [
+EffectTest >> testPlayerActivatesSpeedUpEffect [
 	| matias dices board match players |
 	board := Board
 		deterministicWithSpaces: 10
@@ -118,7 +149,7 @@ EffectTest >> testPlayerActivateSpeedUpEffect [
 ]
 
 { #category : #tests }
-EffectTest >> testPlayerActivateWormHoleEffect [
+EffectTest >> testPlayerActivatesWormHoleEffect [
 	| matias dices board match players |
 	board := Board
 		deterministicWithSpaces: 10

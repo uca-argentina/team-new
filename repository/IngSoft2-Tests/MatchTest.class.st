@@ -120,7 +120,7 @@ MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 		playedBy: fabio.
 	self should: [ match playedBy: fabio ]
 			raise: AssertionFailure
-			withExceptionDo: [ :exception | self assert: exception messageText equals: 'The game is over' ]
+			withExceptionDo: [ :exception | self assert: exception messageText equals: 'The match is over' ]
 ]
 
 { #category : #tests }
@@ -169,7 +169,7 @@ MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 ]
 
 { #category : #tests }
-MatchTest >> testAllRandomEffectsInOneMatch [
+MatchTest >> testAllEffectsInOneMatch [
 	| fabio cristian juan match board dices players |
 	dices := Array
 		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5 2 3 1))

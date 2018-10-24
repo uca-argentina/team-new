@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #tests }
-BoardTest >> testCreatingBoardWithAmountOfSpacesNoValid [
+BoardTest >> testCreatingBoardWithInvalidAmountOfSpaces [
 	| board |
 	self
 		should: [ board := Board

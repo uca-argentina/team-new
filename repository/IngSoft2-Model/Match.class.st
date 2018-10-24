@@ -101,9 +101,9 @@ Match >> nextPlayerPosition [
 Match >> playedBy: aPlayer [
 	self
 		assertMatchIncludes: aPlayer;
-		ifMatchEndedDo: [ AssertionFailure signal: 'The game is over' ]
+		ifMatchEndedDo: [ AssertionFailure signal: 'The match is over' ]
 			ifNot: [ self move: aPlayer.
-			board activateEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
+			board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
 			self changeTurn ]
 ]
 

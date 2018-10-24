@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #tests }
-PositionTest >> testAdjustNegativePositionOfAPlayerWithMoreThanOneLap [
+PositionTest >> testAdjustPositionGoingBackwardsMoreThanOneLap [
 	| board position |
 	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
 	position := Position onSpace: -16 ofLap: 1.
@@ -16,7 +16,7 @@ PositionTest >> testAdjustNegativePositionOfAPlayerWithMoreThanOneLap [
 ]
 
 { #category : #tests }
-PositionTest >> testAdjustNegativePositionOfAPlayerWithOneLap [
+PositionTest >> testAdjustPositionGoingBackwardsOneLap [
 	| board position |
 	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
 	position := Position onSpace: -4 ofLap: 2.
@@ -27,7 +27,7 @@ PositionTest >> testAdjustNegativePositionOfAPlayerWithOneLap [
 ]
 
 { #category : #tests }
-PositionTest >> testAdjustPositionWhenPlayerCrossTheBoardAndGiveAllTheLaps [
+PositionTest >> testAdjustPositionWhenPlayerFinishesTheMatch [
 	| position board |
 	position := Position onSpace: 15 ofLap: 1.
 	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
@@ -38,7 +38,7 @@ PositionTest >> testAdjustPositionWhenPlayerCrossTheBoardAndGiveAllTheLaps [
 ]
 
 { #category : #tests }
-PositionTest >> testAdjustPositionWhenPlayerGiveMoreThanOneLap [
+PositionTest >> testAdjustPositionWhenPlayerMovesForwardMoreThanOneLap [
 	| position board |
 	position := Position onSpace: 25 ofLap: 1.
 	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
@@ -49,7 +49,7 @@ PositionTest >> testAdjustPositionWhenPlayerGiveMoreThanOneLap [
 ]
 
 { #category : #tests }
-PositionTest >> testAdjustPositionWhenPlayerGiveOneLap [
+PositionTest >> testAdjustPositionWhenPlayerMovesForwardOneLap [
 	| position board |
 	position := Position onSpace: 14 ofLap: 1.
 	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
@@ -60,25 +60,38 @@ PositionTest >> testAdjustPositionWhenPlayerGiveOneLap [
 ]
 
 { #category : #tests }
-PositionTest >> testComparingPositions [
-	self assert: (Position onSpace: 15 ofLap: 1) <= (Position onSpace: 20 ofLap: 3)
-]
-
-{ #category : #tests }
-PositionTest >> testComparingPositionsEquals [
+PositionTest >> testComparingPositionsWithEqualsOperator [
 	self assert: (Position onSpace: 17 ofLap: 3) = (Position onSpace: 17 ofLap: 3)
 ]
 
 { #category : #tests }
-PositionTest >> testComparingPositionsLowerThan [
+PositionTest >> testComparingPositionsWithLowerThanOperator [
 	self assert: (Position onSpace: 15 ofLap: 1) < (Position onSpace: 20 ofLap: 3)
 ]
 
 { #category : #tests }
-PositionTest >> testCreatingPositionWithLapAndSpace [
+PositionTest >> testCreatingPositionAtStartOfTheMatch [
 	| position |
 	position := Position atStart.
 	self
 		assert: position currentLap equals: 0;
 		assert: position currentSpace equals: 1
+]
+
+{ #category : #tests }
+PositionTest >> testCreatingPositionWithInvalidSpace [
+	| position |
+	self
+		should: [ position := Position onSpace: 0 ofLap: 12 ]
+		raise: AssertionFailure
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a Position of space 0' ]
+]
+
+{ #category : #tests }
+PositionTest >> testCreatingPositionWithLapAndSpace [
+	| position |
+	position := Position onSpace: 26 ofLap: 12.
+	self
+		assert: position currentLap equals: 12;
+		assert: position currentSpace equals: 26
 ]

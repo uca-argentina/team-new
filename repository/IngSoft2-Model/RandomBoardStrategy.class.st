@@ -25,7 +25,7 @@ RandomBoardStrategy >> generateEffectsDistribution [
 ]
 
 { #category : #generating }
-RandomBoardStrategy >> generateEffectsWith: effectSuccession andBoardOf: anAmountOfSpaces [
+RandomBoardStrategy >> generateEffectsWith: anEffectSuccession andBoardOf: anAmountOfSpaces [
 	^ (1 to: anAmountOfSpaces) collect: [ :space | self chosenEffect ]
 ]
 

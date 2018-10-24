@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'game play' }
-SpeedUpEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame moveByEffectTo: aPlayer spaces: 4
+SpeedUpEffect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
+	aMatch moveByEffectTo: aPlayer spaces: 4
 ]

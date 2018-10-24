@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'game play' }
-Effect >> turnOnEffectAt: aGame activatedBy: aPlayer [
+Effect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
 	self subclassResponsibility
 ]
