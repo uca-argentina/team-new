@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #tests }
-DiceTest >> testCreateDeterministDiceWithInvalidSequenceNumber [
+DiceTest >> testCreatingDeterministDiceWithInvalidSequenceNumber [
 	| dice |
 	self
 		should: [ dice := Dice deterministicWithSpaces: 3 throwing: #(1 2 5) ]

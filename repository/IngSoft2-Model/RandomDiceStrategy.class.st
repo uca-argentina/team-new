@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'game play' }
+{ #category : #generating }
 RandomDiceStrategy >> generateNumberUsing: anAmountOfFaces [
 	| random |
 	random := Random new.

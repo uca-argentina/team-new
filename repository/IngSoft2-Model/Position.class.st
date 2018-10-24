@@ -46,12 +46,12 @@ Position >> adjustWith: aBoard andMatchLengthOf: totalLaps [
 		ifFalse: [ Position onSpace: (space - 1) % aBoard spaces + 1 ofLap: lap + ((space - 1) // aBoard spaces) ]
 ]
 
-{ #category : #descriptions }
+{ #category : #accesing }
 Position >> currentLap [
 	^ lap
 ]
 
-{ #category : #descriptions }
+{ #category : #accesing }
 Position >> currentSpace [
 	^ space
 ]

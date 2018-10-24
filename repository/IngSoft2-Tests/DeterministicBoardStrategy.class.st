@@ -4,12 +4,11 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #initialze }
+{ #category : #generating }
 DeterministicBoardStrategy >> generateEffectsWith: anEffectSuccession andBoardOf: anAmountOfSpaces [
 	| typeOfEffects |
 	typeOfEffects := OrderedCollection new.
 	typeOfEffects
-		addAll: ((1 to: anAmountOfSpaces - 1) collect: [ :space | anEffectSuccession at: space % anEffectSuccession size + 1 ]);
-		add: NoEffect new.
+		addAll: ((1 to: anAmountOfSpaces) collect: [ :space | anEffectSuccession at: space % anEffectSuccession size + 1 ]).
 	^ typeOfEffects
 ]

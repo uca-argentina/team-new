@@ -80,7 +80,9 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 		playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 1;
-		assert: (match positionOf: matias) currentSpace equals: 1
+		assert: (match positionOf: fabio) currentLap equals: 0;
+		assert: (match positionOf: matias) currentSpace equals: 1;
+		assert: (match positionOf: fabio) currentLap equals: 0
 ]
 
 { #category : #tests }

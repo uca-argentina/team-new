@@ -22,6 +22,12 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 		on: aBoard
 ]
 
+{ #category : #playing }
+Match >> assertMatchHasEnded [
+	self matchEnded
+		ifFalse: [ AssertionFailure signal: 'The match is over' ]
+]
+
 { #category : #description }
 Match >> assertMatchIncludes: aPlayer [
 	(players includes: aPlayer)
@@ -37,13 +43,6 @@ Match >> assertTurnBelongsTo: aPlayer [
 { #category : #playing }
 Match >> changeTurn [
 	playerIndex := (playerIndex rem: players size) + 1
-]
-
-{ #category : #playing }
-Match >> ifMatchEndedDo: aMatchEndedBlock ifNot: aMatchNotEndedBlock [
-	(players noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ])
-		ifTrue: aMatchNotEndedBlock
-		ifFalse: aMatchEndedBlock
 ]
 
 { #category : #initialization }
@@ -62,6 +61,12 @@ Match >> isTheLastSpaceWithFinalLapOccupiedBy: aPlayer [
 	| position |
 	position := self positionOf: aPlayer.
 	^ position currentSpace = board spaces and: (position currentLap = (totalLaps - 1))
+]
+
+{ #category : #playing }
+Match >> matchEnded [
+	^ players
+		noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ]
 ]
 
 { #category : #playing }
@@ -99,15 +104,15 @@ Match >> nextPlayerPosition [
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self
-		assertMatchIncludes: aPlayer;
-		ifMatchEndedDo: [ AssertionFailure signal: 'The match is over' ]
-			ifNot: [ self move: aPlayer.
-			board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
-			self changeTurn ]
+	self assertMatchIncludes: aPlayer.
+	self assertMatchHasEnded.
+	self move: aPlayer.
+	self matchEnded
+		ifTrue: [ board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer ].
+	self changeTurn
 ]
 
-{ #category : #description }
+{ #category : #accesing }
 Match >> players [
 	^ players
 ]
@@ -130,7 +135,7 @@ Match >> resetPlayersSpaces [
 
 { #category : #description }
 Match >> winner [
-	self
-		ifMatchEndedDo: [ ^ players detect: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ] ]
-		ifNot: [ AssertionFailure signal: 'There is no winner' ]
+	self matchEnded
+		ifTrue: [ AssertionFailure signal: 'There is no winner' ].
+	^ players detect: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ]
 ]

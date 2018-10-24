@@ -21,7 +21,8 @@ BoardTest >> testCreatingBoardWithInvalidAmountOfSpaces [
 BoardTest >> testCreatingBoardWithRandomStrategy [
 	| board |
 	board := Board randomWithSpaces: 50.
-	self assert: (board effects detect:[:effect| (effect respondsTo:#turnOnEffectAt:activatedBy:) not] ifNone:[true]).
+	self
+		assert: (board effects allSatisfy: [ :effect | effect respondsTo: #turnOnEffectAt:activatedBy: ])
 ]
 
 { #category : #tests }

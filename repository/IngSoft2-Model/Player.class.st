@@ -30,8 +30,8 @@ Player >> name [
 ]
 
 { #category : #playing }
-Player >> throw: gameDices [
-	^ gameDices sumNumbers: #roll
+Player >> throw: matchDices [
+	^ matchDices sumNumbers: #roll
 ]
 
 { #category : #comparing }
