@@ -1,6 +1,6 @@
 Class {
 	#name : #WormHoleEffect,
-	#superclass : #Object,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 

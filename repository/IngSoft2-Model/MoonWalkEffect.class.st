@@ -1,6 +1,6 @@
 Class {
 	#name : #MoonWalkEffect,
-	#superclass : #Object,
+	#superclass : #Effect,
 	#instVars : [
 		'spacesBackwards'
 	],
@@ -8,17 +8,16 @@ Class {
 }
 
 { #category : #'instance creation' }
-MoonWalkEffect class >> moving: spacesToGoBackwards [
-	^ self new initializeWith: spacesToGoBackwards
+MoonWalkEffect class >> moving: spacesBackwards [
+	^ self new initializeWith: spacesBackwards
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 MoonWalkEffect >> initializeWith: spacesToGoBackwards [
 	spacesBackwards := spacesToGoBackwards
 ]
 
 { #category : #'game play' }
 MoonWalkEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	(aGame players copyWithout: aPlayer)
-		do: [ :player | aGame moveByEffectTo: player spaces: spacesBackwards negated]
+	(aGame players copyWithout: aPlayer) do: [ :player | aGame moveByEffectTo: player spaces: spacesBackwards negated ]
 ]

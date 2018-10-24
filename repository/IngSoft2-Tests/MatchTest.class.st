@@ -423,7 +423,7 @@ MatchTest >> testPositionOfPlayers [
 		assert: (match positionOf: juan) currentSpace equals: 17;
 		assert: (match positionOf: juan) currentLap equals: 3;
 		assert: (match positionOf: martin) currentSpace equals: 11;
-		assert: (match positionOf: martin) currentLap equals: 5.
+		assert: (match positionOf: martin) currentLap equals: 4.
 ]
 
 { #category : #tests }

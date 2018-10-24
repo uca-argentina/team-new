@@ -19,7 +19,7 @@ Player class >> named: aName [
 	^ self new initializeWith: aName
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 Player >> initializeWith: aName [
 	name := aName
 ]
@@ -36,5 +36,5 @@ Player >> throw: gameDices [
 
 { #category : #comparing }
 Player >> value: aPlayer [
- ^ self =aPlayer
+	^ self = aPlayer
 ]

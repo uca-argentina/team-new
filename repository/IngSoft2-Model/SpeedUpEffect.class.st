@@ -1,11 +1,10 @@
 Class {
 	#name : #SpeedUpEffect,
-	#superclass : #Object,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'game play' }
 SpeedUpEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	aGame moveByEffectTo: aPlayer spaces: 4.
-	
+	aGame moveByEffectTo: aPlayer spaces: 4
 ]

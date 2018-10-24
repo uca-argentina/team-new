@@ -20,7 +20,6 @@ EffectTest >> testAdjustNegativePositionCausedByEffect [
 		throwing: dices
 		during: 2
 		on: board.
-	match.
 	match playedBy: matias.
 	self
 		assert: (match positionOf: matias) currentSpace equals: 9;
@@ -69,7 +68,7 @@ EffectTest >> testPlayerActivateMoonWalkAndGiveMoreThanOneLap [
 	match playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 4;
-		assert: (match positionOf: fabio) currentLap equals: -1
+		assert: (match positionOf: fabio) currentLap equals: -2
 ]
 
 { #category : #tests }
@@ -114,7 +113,6 @@ EffectTest >> testPlayerActivateSpeedUpEffect [
 		throwing: dices
 		during: 2
 		on: board.
-	board.
 	match playedBy: matias.
 	self assert: (match positionOf: matias) currentSpace equals: 7
 ]

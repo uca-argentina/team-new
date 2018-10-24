@@ -9,7 +9,7 @@ DeterministicBoardStrategy >> generateEffectsWith: effectSuccession andBoardOf: 
 	| typeOfEffects |
 	typeOfEffects := OrderedCollection new.
 	typeOfEffects
-		addAll: ((1 to: anAmountOfSpaces - 1) collect: [ :space | effectSuccession at: space % effectSuccession size + 1 ]).
-	typeOfEffects add: NoEffect new.
+		addAll: ((1 to: anAmountOfSpaces - 1) collect: [ :space | effectSuccession at: space % effectSuccession size + 1 ]);
+		add: NoEffect new.
 	^ typeOfEffects
 ]
