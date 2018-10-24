@@ -16,21 +16,19 @@ Dice class >> checkIsValid: anAmountOfFaces [
 
 { #category : #'creation validation' }
 Dice class >> checkIsValidThrowing: sequence with: anAmountOfFaces [
-	sequence
-		detect: [ :aNumber | aNumber > anAmountOfFaces ]
-		ifFound: [ AssertionFailure signal: 'The sequence can not have a number bigger than amount of faces' ]
+	sequence detect: [ :aNumber | aNumber > anAmountOfFaces ] ifFound: [ AssertionFailure signal: 'The sequence can not have a number bigger than amount of faces' ]
 ]
 
 { #category : #'instance creation' }
-Dice class >> deterministicWith: anAmountOfFaces throwing: sequence [
-self checkIsValid: anAmountOfFaces.
+Dice class >> deterministicWithSpaces: anAmountOfFaces throwing: sequence [
+	self checkIsValid: anAmountOfFaces.
 	self checkIsValidThrowing: sequence with: anAmountOfFaces.
 	^ self with: anAmountOfFaces of: (DeterministicDiceStrategy withThrowing: sequence)
 ]
 
 { #category : #'instance creation' }
-Dice class >> randomWith: anAmountOfFaces [
-self checkIsValid: anAmountOfFaces.
+Dice class >> randomWithSpaces: anAmountOfFaces [
+	self checkIsValid: anAmountOfFaces.
 	^ self with: anAmountOfFaces of: RandomDiceStrategy new
 ]
 
@@ -39,7 +37,7 @@ Dice class >> with: anAmountOfFaces of: aRollingStrategy [
 	^ self new initializeWith: anAmountOfFaces of: aRollingStrategy
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 Dice >> initializeWith: anAmountOfFaces of: aStrategyType [
 	amountOfFaces := anAmountOfFaces.
 	rollingStrategy := aStrategyType

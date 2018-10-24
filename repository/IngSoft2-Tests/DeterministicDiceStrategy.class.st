@@ -13,7 +13,7 @@ DeterministicDiceStrategy class >> withThrowing: sequence [
 	^ self new initializeThrowing: sequence
 ]
 
-{ #category : #'game play' }
+{ #category : #generating }
 DeterministicDiceStrategy >> generateNumberUsing: anAmountOfFaces [
 	value := value % numberSequence size + 1.
 	^ numberSequence at: value

@@ -1,29 +1,30 @@
 Class {
 	#name : #MoonWalkEffect,
-	#superclass : #Object,
+	#superclass : #Effect,
 	#instVars : [
 		'spacesBackwards'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-MoonWalkEffect class >> moving: spacesToGoBackwards [
-	^ self new initializeWith: spacesToGoBackwards
+{ #category : #'creation validation' }
+MoonWalkEffect class >> checkIsValid: spacesBackwards [
+	spacesBackwards > 0
+		ifFalse: [ AssertionFailure signal: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
 ]
 
-{ #category : #initialize }
+{ #category : #'instance creation' }
+MoonWalkEffect class >> moving: spacesBackwards [
+	self checkIsValid: spacesBackwards.
+	^ self new initializeWith: spacesBackwards
+]
+
+{ #category : #initialization }
 MoonWalkEffect >> initializeWith: spacesToGoBackwards [
 	spacesBackwards := spacesToGoBackwards
 ]
 
 { #category : #'game play' }
-MoonWalkEffect >> turnOnEffectAt: aGame activatedBy: aPlayer [
-	(aGame playersPositions reject: [ :playerWithPosition | playerWithPosition key = aPlayer ])
-		do: [ :playerPosition | 
-			playerPosition
-				value:
-					((Position
-						on: (aGame positionOf: playerPosition key) value currentSpace - spacesBackwards
-						at: (aGame positionOf: playerPosition key) value currentLap) adjustGoingBackwardsWith: aGame board) ]
+MoonWalkEffect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
+	(aMatch players copyWithout: aPlayer) do: [ :player | aMatch moveByEffectTo: player spaces: spacesBackwards negated ]
 ]

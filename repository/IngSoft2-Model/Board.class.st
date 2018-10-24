@@ -10,7 +10,7 @@ Class {
 
 { #category : #'instance creation' }
 Board class >> boardOf: anAmountOfSpaces with: effectSuccession [
-^ self new initializeWith: anAmountOfSpaces with: effectSuccession
+^ self new initializeWith: anAmountOfSpaces and: effectSuccession
 ]
 
 { #category : #'creation validation' }
@@ -20,39 +20,40 @@ Board class >> checkIsValid: anAmountOfSpaces [
 ]
 
 { #category : #'instance creation' }
-Board class >> deterministicWith: anAmountOfSpaces with: effectSuccession [
+Board class >> deterministicWithSpaces: anAmountOfSpaces andEffectsGeneratedFrom: effectSuccession [
 	self checkIsValid: anAmountOfSpaces.
 	^ self
 		boardOf: anAmountOfSpaces
 		with:
-			(DeterministicBoardStrategy new
-				generateEffectsWith: effectSuccession
-				andBoardOf: anAmountOfSpaces)
+			(DeterministicBoardStrategy new generateEffectsWith: effectSuccession  andBoardOf: anAmountOfSpaces )
 ]
 
 { #category : #'instance creation' }
-Board class >> randomWith: anAmountOfSpaces [
+Board class >> randomWithSpaces: anAmountOfSpaces [
 	self checkIsValid: anAmountOfSpaces.
-	^ self boardOf: anAmountOfSpaces with: ((RandomBoardStrategy new) generateEffectsWith: {  } andBoardOf: anAmountOfSpaces )
+	^ self
+		boardOf: anAmountOfSpaces
+		with:
+			(RandomBoardStrategy new generateEffectsWithBoardOf: anAmountOfSpaces)
 ]
 
 { #category : #'game play' }
-Board >> activateEffectOf: aSpace on: aGame activatedBy: aPlayer [
-	^ (effects at: aSpace) turnOnEffectAt: aGame activatedBy: aPlayer
+Board >> applyEffectOf: aSpace on: aMatch activatedBy: aPlayer [
+	^ (effects at: aSpace) turnOnEffectAt: aMatch activatedBy: aPlayer
 ]
 
-{ #category : #description }
+{ #category : #accesing }
 Board >> effects [
-^ effects
+	^ effects
 ]
 
-{ #category : #initialize }
-Board >> initializeWith: anAmountOfSpaces with: effectSuccession [
+{ #category : #initialization }
+Board >> initializeWith: anAmountOfSpaces and: effectSuccession [
 	spaces := anAmountOfSpaces.
 	effects := effectSuccession
 ]
 
-{ #category : #description }
+{ #category : #accesing }
 Board >> spaces [
 	^ spaces
 ]

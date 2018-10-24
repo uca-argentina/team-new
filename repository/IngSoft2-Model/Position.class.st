@@ -10,12 +10,19 @@ Class {
 
 { #category : #'instance creation' }
 Position class >> atStart [
-	^ self on: 1 at: 0
+	^ self onSpace: 1 ofLap: 0
+]
+
+{ #category : #'creation validation' }
+Position class >> checkIsValid: aSpace [
+	aSpace = 0
+		ifTrue: [ AssertionFailure signal: 'you can not create a Position of space 0' ]
 ]
 
 { #category : #'instance creation' }
-Position class >> on: aSpace at: aLap [
-	^ self new initializeOn: aSpace at: aLap 
+Position class >> onSpace: aSpace ofLap: aLap [
+	self checkIsValid: aSpace.
+	^ self new initializeOnSpace: aSpace ofLap: aLap
 ]
 
 { #category : #comparing }
@@ -26,13 +33,6 @@ Position >> < aPosition [
 ]
 
 { #category : #comparing }
-Position >> <= aPosition [
-	^ self currentLap = aPosition currentLap
-		ifTrue: [ self currentSpace <= aPosition currentSpace ]
-		ifFalse: [ self currentLap <= aPosition currentLap ]
-]
-
-{ #category : #comparing }
 Position >> = aPosition [
 	^ self currentLap = aPosition currentLap
 		ifTrue: [ self currentSpace = aPosition currentSpace ]
@@ -40,29 +40,24 @@ Position >> = aPosition [
 ]
 
 { #category : #playing }
-Position >> adjustGoingBackwardsWith: aBoard [
-	^ Position on: ((space - 1) % aBoard spaces) + 1 at: lap + (space // aBoard spaces)
+Position >> adjustWith: aBoard andMatchLengthOf: totalLaps [
+	^ (space >= aBoard spaces and: lap = (totalLaps - 1))
+		ifTrue: [ Position onSpace: aBoard spaces ofLap: totalLaps - 1 ]
+		ifFalse: [ Position onSpace: (space - 1) % aBoard spaces + 1 ofLap: lap + ((space - 1) // aBoard spaces) ]
 ]
 
-{ #category : #playing }
-Position >> adjustWith: aBoard andMatchLast: totalLaps [
-	^ space >= aBoard spaces & (lap = (totalLaps - 1))
-		ifTrue: [ Position on: aBoard spaces at: totalLaps - 1 ]
-		ifFalse: [ Position on: (space - 1 rem: aBoard spaces) + 1 at: lap + (space quo: aBoard spaces) ]
-]
-
-{ #category : #descriptions }
+{ #category : #accesing }
 Position >> currentLap [
 	^ lap
 ]
 
-{ #category : #descriptions }
+{ #category : #accesing }
 Position >> currentSpace [
 	^ space
 ]
 
-{ #category : #initialize }
-Position >> initializeOn: aSpace at: aLap [
+{ #category : #initialization }
+Position >> initializeOnSpace: aSpace ofLap: aLap [
 	lap := aLap.
 	space := aSpace
 ]

@@ -22,57 +22,69 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 		on: aBoard
 ]
 
+{ #category : #playing }
+Match >> assertMatchHasEnded [
+	self matchEnded
+		ifFalse: [ AssertionFailure signal: 'The match is over' ]
+]
+
 { #category : #description }
 Match >> assertMatchIncludes: aPlayer [
-	(players includes: aPlayer) 
+	(players includes: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
 Match >> assertTurnBelongsTo: aPlayer [
 	aPlayer = self nextPlayer
-	ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
-]
-
-{ #category : #description }
-Match >> board [
-	^ board
+		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
 { #category : #playing }
 Match >> changeTurn [
-	playerIndex := playerIndex % players size + 1
+	playerIndex := (playerIndex rem: players size) + 1
 ]
 
-{ #category : #description }
-Match >> ifMatchEndedDo: aMatchEndedBlock ifNot: aMatchNotEndedBlock [
-	(players
-		noneSatisfy: [ :player | 
-			| position |
-			position := self positionOf: player.
-			position currentSpace = board spaces & (position currentLap = (totalLaps - 1)) ])
-		ifTrue: aMatchNotEndedBlock
-		ifFalse: aMatchEndedBlock 
-]
-
-{ #category : #initialize }
+{ #category : #initialization }
 Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps on: aBoard [
 	players := thePlayers asOrderedCollection.
 	playerIndex := 1.
 	dices := theDices.
 	totalLaps := aNumberOfLaps.
 	board := aBoard.
-	positionOfPlayers := players collect:[:player| player -> Position atStart].
+	positionOfPlayers := Dictionary new.
+	players do: [ :player | positionOfPlayers at: player put: Position atStart ]
+]
 
+{ #category : #description }
+Match >> isTheLastSpaceWithFinalLapOccupiedBy: aPlayer [
+	| position |
+	position := self positionOf: aPlayer.
+	^ position currentSpace = board spaces and: (position currentLap = (totalLaps - 1))
+]
+
+{ #category : #playing }
+Match >> matchEnded [
+	^ players
+		noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ]
 ]
 
 { #category : #playing }
 Match >> move: aPlayer [
 	self assertTurnBelongsTo: aPlayer.
-	(positionOfPlayers
-		detect: [ :positionPlayer | 
-			positionPlayer key = aPlayer
-				])value: self nextPlayerPosition
+	positionOfPlayers at: aPlayer put: self nextPlayerPosition
+]
+
+{ #category : #playing }
+Match >> moveByEffectTo: aPlayer spaces: anAmountOfSpaces [
+	| position |
+	position := self positionOf: aPlayer.
+	positionOfPlayers
+		at: aPlayer
+		put:
+			((Position onSpace: position currentSpace + anAmountOfSpaces ofLap: position currentLap)
+				adjustWith: board
+				andMatchLengthOf: totalLaps)
 ]
 
 { #category : #description }
@@ -85,50 +97,45 @@ Match >> nextPlayerPosition [
 	| newPosition nextPlayer |
 	nextPlayer := self nextPlayer.
 	newPosition := Position
-		on: (self positionOf: nextPlayer) currentSpace + (nextPlayer throw: dices)
-		at: (self positionOf: nextPlayer) currentLap.
-	^ newPosition adjustWith: board andMatchLast: totalLaps
+		onSpace: (self positionOf: nextPlayer) currentSpace + (nextPlayer throw: dices)
+		ofLap: (self positionOf: nextPlayer) currentLap.
+	^ newPosition adjustWith: board andMatchLengthOf: totalLaps
 ]
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self
-		assertMatchIncludes: aPlayer;
-		ifMatchEndedDo: [ AssertionFailure signal: 'The game is over' ]
-			ifNot: [ self move: aPlayer.
-			board activateEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
-			self changeTurn ]
+	self assertMatchIncludes: aPlayer.
+	self assertMatchHasEnded.
+	self move: aPlayer.
+	self matchEnded
+		ifTrue: [ board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer ].
+	self changeTurn
 ]
 
-{ #category : #description }
-Match >> playersPositions [
-	^ positionOfPlayers
+{ #category : #accesing }
+Match >> players [
+	^ players
 ]
 
 { #category : #description }
 Match >> positionOf: aPlayer [
-	^ (positionOfPlayers
-		detect: [ :playerWithPosition | playerWithPosition key = aPlayer ]
-		ifNone: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]) value
+	^ positionOfPlayers at: aPlayer ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
 Match >> rankingOf: aPlayer [
- ^ (players asSortedCollection:[ :player | self positionOf: player ] descending) detectIndex: aPlayer
-	
+	^ (players asSortedCollection: [ :player | self positionOf: player ] descending) detectIndex: aPlayer
 ]
 
-{ #category : #description }
-Match >> totalLaps [
-	^ totalLaps
+{ #category : #playing }
+Match >> resetPlayersSpaces [
+	players
+		do: [ :player | positionOfPlayers at: player put: (Position onSpace: 1 ofLap: (self positionOf: player) currentLap) ]
 ]
 
 { #category : #description }
 Match >> winner [
-	self
-		ifMatchEndedDo: [ ^ players
-				detect: [ :player | 
-					(self positionOf: player) currentSpace = board spaces
-						& ((self positionOf: player) currentLap = (totalLaps-1)) ] ]
-		ifNot: [ AssertionFailure signal: 'There is no winner' ]
+	self matchEnded
+		ifTrue: [ AssertionFailure signal: 'There is no winner' ].
+	^ players detect: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ]
 ]
