@@ -24,7 +24,7 @@ PlayerTest >> testCreatingPlayerWithName [
 PlayerTest >> testPlayerThrowsDices [
 	| martin dices |
 	martin := Player named: 'Martin'.
-	dices := Array
+	dices := OrderedCollection 
 		with: (Dice deterministicWithSpaces: 4 throwing: #(1))
 		with: (Dice deterministicWithSpaces: 5 throwing: #(3))
 		with: (Dice deterministicWithSpaces: 6 throwing: #(4)).

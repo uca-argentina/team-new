@@ -33,8 +33,8 @@ PositionTest >> testAdjustPositionWhenPlayerFinishesTheMatch [
 	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
 	position := position adjustWith: board andMatchLengthOf: 2.
 	self
-		assert: position currentSpace equals: 10;
-		assert: position currentLap equals: 1
+		assert: position currentSpace equals: 5;
+		assert: position currentLap equals: 2
 ]
 
 { #category : #tests }

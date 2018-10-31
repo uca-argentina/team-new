@@ -14,7 +14,7 @@ EffectTest >> testAdjustNegativePositionCausedByEffect [
 			WormHoleEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(2)).
+	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(2)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -36,7 +36,9 @@ EffectTest >> testAdjustPositionWhenChangingLapCausedBySpeedUpEffect [
 			SpeedUpEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(5)) with: (Dice deterministicWithSpaces: 5 throwing: #(3)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithSpaces: 5 throwing: #(5))
+		with: (Dice deterministicWithSpaces: 5 throwing: #(3)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -68,21 +70,30 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(3 3 1)).
+	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(3 3 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
 		on: board.
-	match
-		playedBy: matias;
-		playedBy: fabio;
-		playedBy: matias.
+	match playedBy: matias.
+	self
+		assert: (match positionOf: fabio) currentSpace equals: 1;
+		assert: (match positionOf: fabio) currentLap equals: 0;
+		assert: (match positionOf: matias) currentSpace equals: 4;
+		assert: (match positionOf: matias) currentLap equals: 0.
+	match playedBy: fabio.
+	self
+		assert: (match positionOf: fabio) currentSpace equals: 4;
+		assert: (match positionOf: fabio) currentLap equals: 0;
+		assert: (match positionOf: matias) currentSpace equals: 4;
+		assert: (match positionOf: matias) currentLap equals: 0.
+	match playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 1;
 		assert: (match positionOf: fabio) currentLap equals: 0;
 		assert: (match positionOf: matias) currentSpace equals: 1;
-		assert: (match positionOf: fabio) currentLap equals: 0
+		assert: (match positionOf: matias) currentLap equals: 0
 ]
 
 { #category : #tests }
@@ -92,7 +103,7 @@ EffectTest >> testPlayerActivatesMoonWalkAndGiveMoreThanOneLap [
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(1)).
+	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -115,16 +126,21 @@ EffectTest >> testPlayerActivatesMoonWalkEffect [
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(3 3 1)).
+	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(3 3 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
 		on: board.
-	match
-		playedBy: matias;
-		playedBy: fabio;
-		playedBy: matias.
+	match playedBy: matias.
+	self
+		assert: (match positionOf: fabio) currentSpace equals: 1;
+		assert: (match positionOf: matias) currentSpace equals: 4.
+	match playedBy: fabio.
+	self
+		assert: (match positionOf: fabio) currentSpace equals: 4;
+		assert: (match positionOf: matias) currentSpace equals: 4.
+	match playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 3;
 		assert: (match positionOf: matias) currentSpace equals: 5
@@ -140,7 +156,7 @@ EffectTest >> testPlayerActivatesSpeedUpEffect [
 			SpeedUpEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(2)).
+	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(2)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -160,7 +176,7 @@ EffectTest >> testPlayerActivatesWormHoleEffect [
 			WormHoleEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := Array with: (Dice deterministicWithSpaces: 5 throwing: #(4)).
+	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(4)).
 	match := Match
 		playedBy: players
 		throwing: dices

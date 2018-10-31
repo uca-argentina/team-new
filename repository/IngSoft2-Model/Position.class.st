@@ -41,9 +41,7 @@ Position >> = aPosition [
 
 { #category : #playing }
 Position >> adjustWith: aBoard andMatchLengthOf: totalLaps [
-	^ (space >= aBoard spaces and: lap = (totalLaps - 1))
-		ifTrue: [ Position onSpace: aBoard spaces ofLap: totalLaps - 1 ]
-		ifFalse: [ Position onSpace: (space - 1) % aBoard spaces + 1 ofLap: lap + ((space - 1) // aBoard spaces) ]
+	^ Position onSpace: (space - 1) % aBoard spaces + 1 ofLap: lap + ((space - 1) // aBoard spaces)
 ]
 
 { #category : #accesing }
