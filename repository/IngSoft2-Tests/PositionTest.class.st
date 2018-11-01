@@ -7,9 +7,11 @@ Class {
 { #category : #tests }
 PositionTest >> testAdjustPositionGoingBackwardsMoreThanOneLap [
 	| board position |
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom: {NoEffect}.
 	position := Position onSpace: -16 ofLap: 1.
-	position := position adjustWith: board andMatchLengthOf: 5.
+	position := position adjustWith: board.
 	self
 		assert: position currentSpace equals: 4;
 		assert: position currentLap equals: -1
@@ -18,9 +20,11 @@ PositionTest >> testAdjustPositionGoingBackwardsMoreThanOneLap [
 { #category : #tests }
 PositionTest >> testAdjustPositionGoingBackwardsOneLap [
 	| board position |
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom: {NoEffect}.
 	position := Position onSpace: -4 ofLap: 2.
-	position := position adjustWith: board andMatchLengthOf: 5.
+	position := position adjustWith: board.
 	self
 		assert: position currentSpace equals: 6;
 		assert: position currentLap equals: 1
@@ -30,8 +34,10 @@ PositionTest >> testAdjustPositionGoingBackwardsOneLap [
 PositionTest >> testAdjustPositionWhenPlayerFinishesTheMatch [
 	| position board |
 	position := Position onSpace: 15 ofLap: 1.
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
-	position := position adjustWith: board andMatchLengthOf: 2.
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom: {NoEffect}.
+	position := position adjustWith: board.
 	self
 		assert: position currentSpace equals: 5;
 		assert: position currentLap equals: 2
@@ -41,8 +47,10 @@ PositionTest >> testAdjustPositionWhenPlayerFinishesTheMatch [
 PositionTest >> testAdjustPositionWhenPlayerMovesForwardMoreThanOneLap [
 	| position board |
 	position := Position onSpace: 25 ofLap: 1.
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
-	position := position adjustWith: board andMatchLengthOf: 5.
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom: {NoEffect}.
+	position := position adjustWith: board.
 	self
 		assert: position currentSpace equals: 5;
 		assert: position currentLap equals: 3
@@ -52,8 +60,10 @@ PositionTest >> testAdjustPositionWhenPlayerMovesForwardMoreThanOneLap [
 PositionTest >> testAdjustPositionWhenPlayerMovesForwardOneLap [
 	| position board |
 	position := Position onSpace: 14 ofLap: 1.
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect}.
-	position := position adjustWith: board andMatchLengthOf: 3.
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom: {NoEffect}.
+	position := position adjustWith: board.
 	self
 		assert: position currentSpace equals: 4;
 		assert: position currentLap equals: 2

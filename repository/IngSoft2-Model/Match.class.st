@@ -40,6 +40,11 @@ Match >> assertTurnBelongsTo: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
+{ #category : #accessing }
+Match >> board [
+	^ board
+]
+
 { #category : #playing }
 Match >> changeTurn [
 	playerIndex := (playerIndex rem: players size) + 1
@@ -77,14 +82,13 @@ Match >> move: aPlayer [
 
 { #category : #playing }
 Match >> moveByEffectTo: aPlayer spaces: anAmountOfSpaces [
-	| position |
-	position := self positionOf: aPlayer.
 	positionOfPlayers
 		at: aPlayer
 		put:
-			((Position onSpace: position currentSpace + anAmountOfSpaces ofLap: position currentLap)
-				adjustWith: board
-				andMatchLengthOf: totalLaps)
+			(Position
+				whenMoving: anAmountOfSpaces
+				from: (self positionOf: aPlayer)
+				onBoardOfSize: board spaces)
 ]
 
 { #category : #description }
@@ -96,10 +100,10 @@ Match >> nextPlayer [
 Match >> nextPlayerPosition [
 	| newPosition nextPlayer |
 	nextPlayer := self nextPlayer.
-	newPosition := Position
-		onSpace: (self positionOf: nextPlayer) currentSpace + (nextPlayer throw: dices)
-		ofLap: (self positionOf: nextPlayer) currentLap.
-	^ newPosition adjustWith: board andMatchLengthOf: totalLaps
+	^ Position
+		whenMoving: (nextPlayer throw: dices)
+		from: (self positionOf: nextPlayer)
+		onBoardOfSize: board spaces
 ]
 
 { #category : #playing }
@@ -124,6 +128,11 @@ Match >> positionOf: aPlayer [
 { #category : #description }
 Match >> rankingOf: aPlayer [
 	^ (players asSortedCollection: [ :player | self positionOf: player ] descending) detectIndex: aPlayer
+]
+
+{ #category : #accessing }
+Match >> totalLaps [
+	^ totalLaps
 ]
 
 { #category : #description }
