@@ -81,7 +81,7 @@ PositionTest >> testCreatingValidPositionMovingForwardOneLap [
 ]
 
 { #category : #tests }
-PositionTest >> testSpaceOfPositionCanNotBe0WhenGoingBackwards [
+PositionTest >> testSpaceWillNotBe0IfGoingBackwards [
 | position |
 	position := Position whenMoving: -7 from: (Position onSpace: 7 ofLap: 2 ) onBoardOfSize: 10.
 	self

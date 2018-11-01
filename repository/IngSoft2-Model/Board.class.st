@@ -9,8 +9,8 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> boardOf: anAmountOfSpaces with: effectSuccession [
-^ self new initializeWith: anAmountOfSpaces and: effectSuccession
+Board class >> boardOf: anAmountOfSpaces with: aBoardStrategy [
+	^ self new initializeWith: anAmountOfSpaces and: aBoardStrategy
 ]
 
 { #category : #'creation validation' }
@@ -25,16 +25,13 @@ Board class >> deterministicWithSpaces: anAmountOfSpaces andEffectsGeneratedFrom
 	^ self
 		boardOf: anAmountOfSpaces
 		with:
-			(DeterministicBoardStrategy new generateEffectsWith: effectSuccession  andBoardOf: anAmountOfSpaces )
+			(DeterministicBoardStrategy using: effectSuccession  )
 ]
 
 { #category : #'instance creation' }
 Board class >> randomWithSpaces: anAmountOfSpaces [
 	self checkIsValid: anAmountOfSpaces.
-	^ self
-		boardOf: anAmountOfSpaces
-		with:
-			(RandomBoardStrategy new generateEffectsWithBoardOf: anAmountOfSpaces)
+	^ self boardOf: anAmountOfSpaces with: RandomBoardStrategy new
 ]
 
 { #category : #'game play' }
@@ -48,9 +45,9 @@ Board >> effects [
 ]
 
 { #category : #initialization }
-Board >> initializeWith: anAmountOfSpaces and: effectSuccession [
+Board >> initializeWith: anAmountOfSpaces and: aBoardStrategy [
 	spaces := anAmountOfSpaces.
-	effects := effectSuccession
+	effects := (1 to: anAmountOfSpaces) collect: [ :i | aBoardStrategy nextEffect ]
 ]
 
 { #category : #accesing }
