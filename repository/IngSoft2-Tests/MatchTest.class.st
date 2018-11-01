@@ -69,8 +69,6 @@ MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
 
 { #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
-"Ver si aca tambien poner assert"
-"Otro comentario para hacer algo mas"
 	| match board martin juan dices players |
 	board := Board
 		deterministicWithSpaces: 20
@@ -87,6 +85,7 @@ MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 		during: 1
 		on: board.
 	match playedBy: martin.
+	self assert: match nextPlayer equals: juan.
 	match playedBy: juan.
 	self
 		should: [ match playedBy: juan ]
@@ -360,7 +359,6 @@ MatchTest >> testPlayersSequenceOnMatch [
 
 { #category : #tests }
 MatchTest >> testPositionOfPlayers [
-"Poner todos los self assert para verificar la posicion en varias instancias"
 	| match board martin juan dices players |
 	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
 	martin := Player named: 'Martin'.
@@ -377,23 +375,52 @@ MatchTest >> testPositionOfPlayers [
 		throwing: dices
 		during: 9
 		on: board.
-	match
-		playedBy: martin;
-		playedBy: juan.
-	match	playedBy: martin;
-		playedBy: juan.
-	match	playedBy: martin;
-		playedBy: juan.
-	match   playedBy: martin;
-		playedBy: juan.
-	match	playedBy: martin;
-		playedBy: juan.
-	match	playedBy: martin.
+	match playedBy: martin.
+	self
+		assert: (match positionOf: martin) currentSpace equals: 15;
+		assert: (match positionOf: martin) currentLap equals: 0.
+	match playedBy: juan.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 18;
+		assert: (match positionOf: juan) currentLap equals: 0.
+	match playedBy: martin.
+	self
+		assert: (match positionOf: martin) currentSpace equals: 9;
+		assert: (match positionOf: martin) currentLap equals: 1.
+	match playedBy: juan.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 12;
+		assert: (match positionOf: juan) currentLap equals: 1.
+	match playedBy: martin.
+	self
+		assert: (match positionOf: martin) currentSpace equals: 6;
+		assert: (match positionOf: martin) currentLap equals: 2.
+	match playedBy: juan.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 6;
+		assert: (match positionOf: juan) currentLap equals: 2.
+	match playedBy: martin.
+	self
+		assert: (match positionOf: martin) currentSpace equals: 20;
+		assert: (match positionOf: martin) currentLap equals: 2.
+	match playedBy: juan.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 3;
+		assert: (match positionOf: juan) currentLap equals: 3.
+	match playedBy: martin.
+	self
+		assert: (match positionOf: martin) currentSpace equals: 14;
+		assert: (match positionOf: martin) currentLap equals: 3.
+	match playedBy: juan.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 17;
+		assert: (match positionOf: juan) currentLap equals: 3.
+	match playedBy: martin.
 	self
 		assert: (match positionOf: juan) currentSpace equals: 17;
 		assert: (match positionOf: juan) currentLap equals: 3;
 		assert: (match positionOf: martin) currentSpace equals: 11;
-		assert: (match positionOf: martin) currentLap equals: 4.
+		assert: (match positionOf: martin) currentLap equals: 4
 ]
 
 { #category : #tests }

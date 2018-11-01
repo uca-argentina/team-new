@@ -79,3 +79,12 @@ PositionTest >> testCreatingValidPositionMovingForwardOneLap [
 		assert: position currentSpace equals: 4;
 		assert: position currentLap equals: 1
 ]
+
+{ #category : #tests }
+PositionTest >> testSpaceOfPositionCanNotBe0WhenGoingBackwards [
+| position |
+	position := Position whenMoving: -7 from: (Position onSpace: 7 ofLap: 2 ) onBoardOfSize: 10.
+	self
+		assert: position currentSpace equals: 10;
+		assert: position currentLap equals: 1
+]
