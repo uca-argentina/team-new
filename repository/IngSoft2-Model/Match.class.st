@@ -40,11 +40,6 @@ Match >> assertTurnBelongsTo: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
-{ #category : #accessing }
-Match >> board [
-	^ board
-]
-
 { #category : #playing }
 Match >> changeTurn [
 	playerIndex := (playerIndex rem: players size) + 1
@@ -128,11 +123,6 @@ Match >> positionOf: aPlayer [
 { #category : #description }
 Match >> rankingOf: aPlayer [
 	^ (players asSortedCollection: [ :player | self positionOf: player ] descending) detectIndex: aPlayer
-]
-
-{ #category : #accessing }
-Match >> totalLaps [
-	^ totalLaps
 ]
 
 { #category : #description }
