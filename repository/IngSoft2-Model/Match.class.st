@@ -24,7 +24,7 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 
 { #category : #playing }
 Match >> assertMatchHasEnded [
-	self matchEnded
+	self matchNotEnded
 		ifFalse: [ AssertionFailure signal: 'The match is over' ]
 ]
 
@@ -57,16 +57,16 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 ]
 
 { #category : #description }
-Match >> isTheLastSpaceWithFinalLapOccupiedBy: aPlayer [
+Match >> isTheLastSpaceWithFinalLapCrossedBy: aPlayer [
 	| position |
 	position := self positionOf: aPlayer.
-	^ position currentSpace = board spaces and: (position currentLap = (totalLaps - 1))
+	^ position currentLap > (totalLaps - 1)
 ]
 
 { #category : #playing }
-Match >> matchEnded [
+Match >> matchNotEnded [
 	^ players
-		noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ]
+		noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapCrossedBy: player ]
 ]
 
 { #category : #playing }
@@ -77,14 +77,13 @@ Match >> move: aPlayer [
 
 { #category : #playing }
 Match >> moveByEffectTo: aPlayer spaces: anAmountOfSpaces [
-	| position |
-	position := self positionOf: aPlayer.
 	positionOfPlayers
 		at: aPlayer
 		put:
-			((Position onSpace: position currentSpace + anAmountOfSpaces ofLap: position currentLap)
-				adjustWith: board
-				andMatchLengthOf: totalLaps)
+			(Position
+				whenMoving: anAmountOfSpaces
+				from: (self positionOf: aPlayer)
+				onBoardOfSize: board spaces)
 ]
 
 { #category : #description }
@@ -96,10 +95,10 @@ Match >> nextPlayer [
 Match >> nextPlayerPosition [
 	| newPosition nextPlayer |
 	nextPlayer := self nextPlayer.
-	newPosition := Position
-		onSpace: (self positionOf: nextPlayer) currentSpace + (nextPlayer throw: dices)
-		ofLap: (self positionOf: nextPlayer) currentLap.
-	^ newPosition adjustWith: board andMatchLengthOf: totalLaps
+	^ Position
+		whenMoving: (nextPlayer throw: dices)
+		from: (self positionOf: nextPlayer)
+		onBoardOfSize: board spaces
 ]
 
 { #category : #playing }
@@ -107,8 +106,7 @@ Match >> playedBy: aPlayer [
 	self assertMatchIncludes: aPlayer.
 	self assertMatchHasEnded.
 	self move: aPlayer.
-	self matchEnded
-		ifTrue: [ board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer ].
+	board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
 	self changeTurn
 ]
 
@@ -127,15 +125,9 @@ Match >> rankingOf: aPlayer [
 	^ (players asSortedCollection: [ :player | self positionOf: player ] descending) detectIndex: aPlayer
 ]
 
-{ #category : #playing }
-Match >> resetPlayersSpaces [
-	players
-		do: [ :player | positionOfPlayers at: player put: (Position onSpace: 1 ofLap: (self positionOf: player) currentLap) ]
-]
-
 { #category : #description }
 Match >> winner [
-	self matchEnded
+	self matchNotEnded
 		ifTrue: [ AssertionFailure signal: 'There is no winner' ].
-	^ players detect: [ :player | self isTheLastSpaceWithFinalLapOccupiedBy: player ]
+	^ players detect: [ :player | self isTheLastSpaceWithFinalLapCrossedBy: player ]
 ]

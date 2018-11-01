@@ -25,6 +25,14 @@ Position class >> onSpace: aSpace ofLap: aLap [
 	^ self new initializeOnSpace: aSpace ofLap: aLap
 ]
 
+{ #category : #'instance creation' }
+Position class >> whenMoving: anAmountOfSpaces from: aPosition onBoardOfSize: aBoardSize [
+	| newSpaces newLap |
+	newSpaces := (aPosition currentSpace + anAmountOfSpaces - 1) % aBoardSize + 1.
+	newLap := aPosition currentLap + ((aPosition currentSpace + anAmountOfSpaces - 1) // aBoardSize).
+	^ self onSpace: newSpaces ofLap: newLap
+]
+
 { #category : #comparing }
 Position >> < aPosition [
 	^ self currentLap = aPosition currentLap
@@ -37,13 +45,6 @@ Position >> = aPosition [
 	^ self currentLap = aPosition currentLap
 		ifTrue: [ self currentSpace = aPosition currentSpace ]
 		ifFalse: [ self currentLap = aPosition currentLap ]
-]
-
-{ #category : #playing }
-Position >> adjustWith: aBoard andMatchLengthOf: totalLaps [
-	^ (space >= aBoard spaces and: lap = (totalLaps - 1))
-		ifTrue: [ Position onSpace: aBoard spaces ofLap: totalLaps - 1 ]
-		ifFalse: [ Position onSpace: (space - 1) % aBoard spaces + 1 ofLap: lap + ((space - 1) // aBoard spaces) ]
 ]
 
 { #category : #accesing }

@@ -15,6 +15,7 @@ RandomBoardStrategy >> chosenEffect [
 
 { #category : #generating }
 RandomBoardStrategy >> generateEffectsDistribution [
+"La distribucion para el nuevo efecto es 10% para las cartas sin efecto y le sacamos 10 al NoEffect, pasa del 48% al 38%"
 	effects := OrderedCollection new.
 	effects
 		addAll: ((1 to: 2) collect: [ :i | AtomicBombEffect new ]);
