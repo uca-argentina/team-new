@@ -23,7 +23,7 @@ Dice class >> checkIsValidThrowing: sequence with: anAmountOfFaces [
 Dice class >> deterministicWithSpaces: anAmountOfFaces throwing: sequence [
 	self checkIsValid: anAmountOfFaces.
 	self checkIsValidThrowing: sequence with: anAmountOfFaces.
-	^ self with: anAmountOfFaces of: (DeterministicDiceStrategy withThrowing: sequence)
+	^ self with: anAmountOfFaces of: (DeterministicDiceStrategy using: sequence)
 ]
 
 { #category : #'instance creation' }
@@ -45,5 +45,5 @@ Dice >> initializeWith: anAmountOfFaces of: aStrategyType [
 
 { #category : #'game play' }
 Dice >> roll [
-	^ rollingStrategy generateNumberUsing: amountOfFaces
+	^ rollingStrategy nextNumberUsing: amountOfFaces
 ]

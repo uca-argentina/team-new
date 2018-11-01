@@ -168,8 +168,8 @@ MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 MatchTest >> testAllEffectsInOneMatch [
 	| fabio cristian juan match board dices players |
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5 2 3 1))
-		with: (Dice deterministicWithSpaces: 3 throwing: #(1 3 2 2 2)).
+		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5 3 4 1))
+		with: (Dice deterministicWithSpaces: 4 throwing: #(2 4 2 1 2)).
 	board := Board
 		deterministicWithSpaces: 20
 		andEffectsGeneratedFrom:
@@ -188,16 +188,16 @@ MatchTest >> testAllEffectsInOneMatch [
 		during: 2
 		on: board.
 	match playedBy: fabio.
-	self assert: (match positionOf: fabio) currentSpace equals: 7.
+	self assert: (match positionOf: fabio) currentSpace equals: 8.
 	match playedBy: cristian.
-	self assert: (match positionOf: cristian) currentSpace equals: 5.
+	self assert: (match positionOf: cristian) currentSpace equals: 6.
 	match playedBy: juan.
-	self assert: (match positionOf: juan) currentSpace equals: 5.
+	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match playedBy: fabio.
 	self
-		assert: (match positionOf: fabio) currentSpace equals: 12;
-		assert: (match positionOf: cristian) currentSpace equals: 3;
-		assert: (match positionOf: juan) currentSpace equals: 3.
+		assert: (match positionOf: fabio) currentSpace equals: 13;
+		assert: (match positionOf: cristian) currentSpace equals: 4;
+		assert: (match positionOf: juan) currentSpace equals: 4.
 	match playedBy: cristian.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 1;
