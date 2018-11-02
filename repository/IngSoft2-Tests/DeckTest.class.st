@@ -15,3 +15,15 @@ DeckTest >> testDealingCardFromDeckWithDeterministicStrategy [
 			speedCard}.
 	self assert: deck dealCard equals: overloadCard
 ]
+
+{ #category : #tests }
+DeckTest >> testDealingCardFromDeckWithRandomStrategy [
+	| deck card |
+	deck := Deck random.
+	card := deck dealCard class.
+	self
+		assert:
+			(card = OverloadCard
+				or: [ card = SpeedCard
+						or: [ card = RepeatCard or: [ card = RedoCard or: [ card = CancellationCard or: [ card = AccelerationCard ] ] ] ] ])
+]

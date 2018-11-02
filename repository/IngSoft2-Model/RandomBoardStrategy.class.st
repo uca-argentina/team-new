@@ -2,8 +2,8 @@ Class {
 	#name : #RandomBoardStrategy,
 	#superclass : #Object,
 	#instVars : [
-		'random',
-		'effects'
+		'effects',
+		'random'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -27,5 +27,5 @@ RandomBoardStrategy >> initialize [
 
 { #category : #generating }
 RandomBoardStrategy >> nextEffect [
-	^ effects at: (random nextInt: 100)
+	^ effects at: (random nextInt: 100).
 ]
