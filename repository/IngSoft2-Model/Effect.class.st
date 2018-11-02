@@ -6,5 +6,5 @@ Class {
 
 { #category : #'game play' }
 Effect >> turnOnEffectAt: aMatch activatedBy: aPlayer [
-	self subclassResponsibility
+	aMatch dealCardTo: aPlayer
 ]

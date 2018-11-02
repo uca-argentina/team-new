@@ -8,18 +8,22 @@ Class {
 		'orderOfPlayers',
 		'positionOfPlayers',
 		'playerIndex',
-		'totalLaps'
+		'totalLaps',
+		'cardsActivated',
+		'cardsAtHands',
+		'deck'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on: aBoard [
+Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on: aBoard dealingFrom: aDeck [
 	^ self new
 		initializePlayedBy: thePlayers
 		throwing: gameDices
 		during: aNumberOfLaps
 		on: aBoard
+		dealingFrom: aDeck
 ]
 
 { #category : #playing }
@@ -40,20 +44,38 @@ Match >> assertTurnBelongsTo: aPlayer [
 		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
+{ #category : #description }
+Match >> cardsAtHandOf: aPlayer [ 
+	^ cardsAtHands at: aPlayer
+]
+
 { #category : #playing }
 Match >> changeTurn [
 	playerIndex := (playerIndex rem: players size) + 1
 ]
 
+{ #category : #'as yet unclassified' }
+Match >> dealCardTo: aPlayer [ 
+	(cardsAtHands at:aPlayer) add: deck dealCard.
+]
+
 { #category : #initialization }
-Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps on: aBoard [
+Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps on: aBoard dealingFrom: aDeck [
 	players := thePlayers asOrderedCollection.
 	playerIndex := 1.
 	dices := theDices.
 	totalLaps := aNumberOfLaps.
 	board := aBoard.
+	deck := aDeck.
 	positionOfPlayers := Dictionary new.
-	players do: [ :player | positionOfPlayers at: player put: Position atStart ]
+	cardsActivated := Dictionary new.
+	cardsAtHands := Dictionary new.
+	players
+		do: [ :player | 
+			positionOfPlayers at: player put: Position atStart.
+			cardsAtHands
+				at: player
+				put: (OrderedCollection with: deck dealCard with: deck dealCard) ]
 ]
 
 { #category : #description }

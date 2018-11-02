@@ -13,7 +13,10 @@ DeckTest >> testDealingCardFromDeckWithDeterministicStrategy [
 		deterministicWithCardSequence:
 			{overloadCard.
 			speedCard}.
-	self assert: deck dealCard equals: overloadCard
+	self
+		assert: deck dealCard equals: overloadCard;
+		assert: deck dealCard equals: speedCard;
+		assert: deck dealCard equals: overloadCard
 ]
 
 { #category : #tests }
