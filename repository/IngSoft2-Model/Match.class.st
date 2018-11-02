@@ -27,6 +27,15 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 ]
 
 { #category : #playing }
+Match >> apply: aCard to: anAffectedPlayer by: anAffecterPlayer [
+	self assertPlayerOwns: aCard.
+	self assertMatchIncludes: anAffectedPlayer.
+	self assertMatchIncludes: anAffecterPlayer.
+	aCard applyTo: anAffectedPlayer  by: anAffecterPlayer  considering: self nextPlayer  
+	
+]
+
+{ #category : #playing }
 Match >> assertMatchHasEnded [
 	self matchNotEnded
 		ifFalse: [ AssertionFailure signal: 'The match is over' ]
@@ -36,6 +45,11 @@ Match >> assertMatchHasEnded [
 Match >> assertMatchIncludes: aPlayer [
 	(players includes: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
+]
+
+{ #category : #description }
+Match >> assertPlayerOwns: aCard [
+	^ cardsAtHands includes: aCard 
 ]
 
 { #category : #description }
@@ -54,7 +68,7 @@ Match >> changeTurn [
 	playerIndex := (playerIndex rem: players size) + 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #playing }
 Match >> dealCardTo: aPlayer [ 
 	(cardsAtHands at:aPlayer) add: deck dealCard.
 ]
