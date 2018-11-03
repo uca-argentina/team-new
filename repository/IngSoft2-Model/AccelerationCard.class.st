@@ -1,5 +1,5 @@
 Class {
 	#name : #AccelerationCard,
-	#superclass : #Card,
+	#superclass : #PermanentCard,
 	#category : #'IngSoft2-Model'
 }

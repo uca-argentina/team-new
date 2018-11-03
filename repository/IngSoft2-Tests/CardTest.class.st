@@ -21,9 +21,9 @@ CardTest >> testPlayerPlaysOverloadCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match apply: overloadCard to: juan by: jose.
+	match play: overloadCard to: jose by: juan.
 	self assert: (match cardsAtHandOf: juan) equals: {overloadCard} asOrderedCollection.
 	match playedBy: juan.
 	match playedBy: jose.
-	self assert: (match positionOf: jose) equals: 4
+	self assert: (match positionOf: jose) currentSpace equals: 5
 ]

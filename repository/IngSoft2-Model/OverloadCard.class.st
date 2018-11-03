@@ -1,5 +1,10 @@
 Class {
 	#name : #OverloadCard,
-	#superclass : #Card,
+	#superclass : #PermanentCard,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #applying }
+OverloadCard >> spacesToMove [
+	^ -2
+]

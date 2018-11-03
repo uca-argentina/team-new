@@ -89,7 +89,12 @@ EffectTest >> testPlayerActivatesGetCardEffect [
 			{overloadCard.
 			speedCard} asOrderedCollection.
 	match playedBy: matias.
-	self assert: (match cardsAtHandOf: matias) equals: { overloadCard . speedCard . redoCard } asOrderedCollection  
+	self
+		assert: (match cardsAtHandOf: matias)
+		equals:
+			{overloadCard.
+			speedCard.
+			redoCard} asOrderedCollection
 ]
 
 { #category : #tests }

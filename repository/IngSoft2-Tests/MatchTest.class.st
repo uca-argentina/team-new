@@ -51,6 +51,35 @@ MatchTest >> testAPlayerSkipsMoreThanOneLapInASingleThrow [
 ]
 
 { #category : #tests }
+MatchTest >> testAPlayerWantsToPlayACardHeDoesNotHave [
+	| juan jose board dice deck match speedCard overloadCard |
+	juan := Player named: 'Juan'.
+	jose := Player named: 'Jose'.
+	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect new}.
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {overloadCard}.
+	dice := Dice deterministicWithSpaces: 6 throwing: {2 . 6}.
+	match := Match
+		playedBy:
+			{juan.
+			jose}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		assert: (match cardsAtHandOf: juan)
+		equals:
+			{overloadCard.
+			overloadCard} asOrderedCollection.
+	self
+		should: [ match play: speedCard to: jose by: juan ]
+		raise: AssertionFailure
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'The player Juan do not own SpeedCard' ]
+]
+
+{ #category : #tests }
 MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
 	| fabio cristian match board dices players deck |
 	deck := self deckWithOverloadCard.

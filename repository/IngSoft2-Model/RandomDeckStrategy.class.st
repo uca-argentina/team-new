@@ -24,5 +24,5 @@ RandomDeckStrategy >> initialize [
 
 { #category : #generating }
 RandomDeckStrategy >> nextCard [
-^ cards atRandom
+	^ cards atRandom
 ]
