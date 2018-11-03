@@ -25,9 +25,9 @@ PlayerTest >> testPlayerThrowsDices [
 	| martin dices |
 	martin := Player named: 'Martin'.
 	dices := OrderedCollection 
-		with: (Dice deterministicWithSpaces: 4 throwing: #(1))
-		with: (Dice deterministicWithSpaces: 5 throwing: #(3))
-		with: (Dice deterministicWithSpaces: 6 throwing: #(4)).
+		with: (Dice deterministicWithFaces: 4 throwing: #(1))
+		with: (Dice deterministicWithFaces: 5 throwing: #(3))
+		with: (Dice deterministicWithFaces: 6 throwing: #(4)).
 	self
 		assert: martin name equals: 'Martin';
 		assert: (martin throw: dices) equals: 8

@@ -31,7 +31,7 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(2 2 1)).
+		with: (Dice deterministicWithFaces: 5 throwing: #(2 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -76,7 +76,7 @@ EffectTest >> testPlayerActivatesGetCardEffect [
 			DealCardEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(5)).
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -108,7 +108,7 @@ EffectTest >> testPlayerActivatesMoonWalkAndLosesMoreThanOneLap [
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(1)).
+		with: (Dice deterministicWithFaces: 5 throwing: #(1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -134,7 +134,7 @@ EffectTest >> testPlayerActivatesMoonWalkEffect [
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(2 2 1)).
+		with: (Dice deterministicWithFaces: 5 throwing: #(2 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -167,7 +167,7 @@ EffectTest >> testPlayerActivatesSpeedUpEffect [
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(3)).
+		with: (Dice deterministicWithFaces: 5 throwing: #(3)).
 	match := Match
 		playedBy: players
 		throwing: dices
@@ -190,7 +190,7 @@ EffectTest >> testPlayerActivatesWormHoleEffect [
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(5)).
+		with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	match := Match
 		playedBy: players
 		throwing: dices

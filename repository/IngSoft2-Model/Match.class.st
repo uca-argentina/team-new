@@ -27,7 +27,7 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 ]
 
 { #category : #playing }
-Match >> add: aCard toBeAppliedTo: aPlayer [ 
+Match >> activate: aCard toBeAppliedTo: aPlayer [ 
 	(cardsActivated at: aPlayer) add: aCard
 ]
 
@@ -135,12 +135,21 @@ Match >> nextPlayerPosition [
 ]
 
 { #category : #playing }
+Match >> play: aCard by: aPlayer [
+	self assert: aPlayer owns: aCard.
+	self assertMatchIncludes: aPlayer.
+	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
+	players do: [ :player | self activate: aCard toBeAppliedTo: player ].
+	self remove: aCard from: aPlayer
+]
+
+{ #category : #playing }
 Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertMatchIncludes: anAffectedPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: anAffecterPlayer.
-	aCard playedTo: anAffectedPlayer in: self.
+	self activate: aCard toBeAppliedTo: anAffectedPlayer.
 	self remove: aCard from: anAffecterPlayer
 ]
 
