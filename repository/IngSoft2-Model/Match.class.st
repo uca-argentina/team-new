@@ -11,7 +11,8 @@ Class {
 		'totalLaps',
 		'cardsActivated',
 		'cardsAtHands',
-		'deck'
+		'deck',
+		'lastInstantCard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -29,6 +30,17 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 { #category : #playing }
 Match >> activate: aCard toBeAppliedTo: aPlayer [ 
 	(cardsActivated at: aPlayer) add: aCard
+]
+
+{ #category : #'as yet unclassified' }
+Match >> activateInstant: aCancellationCard toBeAppliedoTo: aPlayer [
+	lastInstantCard := aCancellationCard -> aPlayer
+]
+
+{ #category : #'as yet unclassified' }
+Match >> anulate: aCard affecting: aPlayer [
+	(cardsActivated at: aPlayer) remove: aCard.
+	"cardsActivated removeKey: aPlayer"
 ]
 
 { #category : #description }
@@ -87,6 +99,22 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 			positionOfPlayers at: player put: Position atStart.
 			cardsAtHands at: player put: (OrderedCollection with: deck dealCard with: deck dealCard).
 			cardsActivated at: player put: OrderedCollection new ]
+]
+
+{ #category : #'as yet unclassified' }
+Match >> instantPlay: aCard by: anAffecterPlayer withEffect: anEffectOrCard affecting: anAffectedPlayer [
+	self assert: anAffecterPlayer owns: aCard.
+	self assertMatchIncludes: anAffecterPlayer.
+	self assertMatchIncludes: anAffectedPlayer.
+	aCard activateOne: anEffectOrCard affecting: anAffecterPlayer on: self.
+	self activateInstant: aCard toBeAppliedoTo: anAffectedPlayer.
+	self remove: aCard from: anAffecterPlayer
+]
+
+{ #category : #'as yet unclassified' }
+Match >> instantRepeat: aRepeatCard by: aPlayer [
+"Para repetir necesito saber cual fue el ultimo casillero activado y saber quien fue el ultimo afectado o puedo activarlo sobre mi o puedo elegir a quien afectar?" 
+	aRepeatCard applyCardEffectOn: self.
 ]
 
 { #category : #description }

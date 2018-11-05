@@ -55,6 +55,36 @@ CardTest >> testPlayerPlaysAccelerationCard [
 ]
 
 { #category : #tests }
+CardTest >> testPlayerPlaysCancelllationCard [
+"Si hago debug y ctrl + i en activatedCard me muestra dos claves en el diccionario que no se porque son. Tengo que ver la forma de eliminar la key tambien"
+	| juan board dice deck match speedCard cancellationCard |
+	juan := self playerNamedJuan.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	cancellationCard := CancellationCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{speedCard.
+			cancellationCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3}.
+	match := Match
+		playedBy:
+			{juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: speedCard to: juan by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 3.
+	match instantPlay: cancellationCard by: juan withEffect: speedCard affecting: juan.
+	self assert: (match cardsAtHandOf: juan) equals: { } asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 5 
+]
+
+{ #category : #tests }
 CardTest >> testPlayerPlaysOverloadCard [
 	| juan jose board dice deck match overloadCard |
 	juan := self playerNamedJuan.
@@ -81,24 +111,46 @@ CardTest >> testPlayerPlaysOverloadCard [
 ]
 
 { #category : #tests }
+CardTest >> testPlayerPlaysRepeatCard [
+	| juan board dice deck match speedCard repeatCard |
+	juan := self playerNamedJuan.
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {SpeedUpEffect new}.
+	speedCard := SpeedCard new.
+	repeatCard := RepeatCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{speedCard.
+			repeatCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1}.
+	match := Match
+		playedBy:
+			{juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 6.
+	match instantRepeat: repeatCard by: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 10.
+]
+
+{ #category : #tests }
 CardTest >> testPlayerPlaysSpeedCard [
-	| juan  board dice deck match speedCard |
+	| juan board dice deck match speedCard |
 	juan := self playerNamedJuan.
 	board := self boardWith10SpacesWithoutEffects.
 	speedCard := SpeedCard new.
 	deck := Deck deterministicWithCardSequence: {speedCard}.
 	dice := Dice deterministicWithFaces: 6 throwing: {5}.
 	match := Match
-		playedBy:
-			{juan.}
+		playedBy: {juan}
 		throwing: {dice}
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard  to: juan by: juan.
-	self
-		assert: (match cardsAtHandOf: juan)
-		equals: {speedCard} asOrderedCollection.
+	match play: speedCard to: juan by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: {speedCard} asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 7
 ]
