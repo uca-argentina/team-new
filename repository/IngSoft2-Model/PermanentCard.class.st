@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #applying }
+PermanentCard >> cancelAffecting: aPlayer on: aMatch [
+	self subclassResponsibility
+]
+
+{ #category : #applying }
 PermanentCard >> needs: aNextPlayer ToBeTurnOf: anAffecterPlayer [
 	aNextPlayer = anAffecterPlayer
 		ifFalse: [ AssertionFailure signal: 'A player only can play a permanent card in his turn' ]

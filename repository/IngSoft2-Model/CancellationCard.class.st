@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #applying }
 CancellationCard >> activate: aCard affecting: aPlayer on: aMatch [
 	aCard cancelAffecting: aPlayer on: aMatch
 ]

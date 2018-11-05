@@ -47,12 +47,12 @@ Position >> = aPosition [
 		ifFalse: [ self currentLap = aPosition currentLap ]
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Position >> currentLap [
 	^ lap
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Position >> currentSpace [
 	^ space
 ]

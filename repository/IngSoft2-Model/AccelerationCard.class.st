@@ -5,8 +5,13 @@ Class {
 }
 
 { #category : #applying }
-AccelerationCard >> applyBy: aPlayer in: aMatch [ 
+AccelerationCard >> applyIn: aMatch [ 
 	aMatch players do: [ :player | aMatch activate: self toBeAppliedTo: player ].
+]
+
+{ #category : #applying }
+AccelerationCard >> cancelAffecting: aPlayer on: aMatch [
+	aMatch players do: [ :player | aMatch remove: self affecting: player ]
 ]
 
 { #category : #applying }

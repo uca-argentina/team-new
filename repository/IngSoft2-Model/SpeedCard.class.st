@@ -6,7 +6,7 @@ Class {
 
 { #category : #applying }
 SpeedCard >> cancelAffecting: aPlayer on: aMatch [ 
-	aMatch anulate: self  affecting: aPlayer. 
+	aMatch remove: self  affecting: aPlayer. 
 ]
 
 { #category : #applying }

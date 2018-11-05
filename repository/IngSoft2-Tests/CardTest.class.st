@@ -55,46 +55,78 @@ CardTest >> testPlayerPlaysAccelerationCard [
 ]
 
 { #category : #tests }
-CardTest >> testPlayerPlaysCancellationCardAnulatingAccelerationCard [
+CardTest >> testPlayerPlaysCancellationCardAnulatingCancellatingCard [
 	| juan board dice deck match accelerationCard cancellationCard jose |
 	juan := self playerNamedJuan.
 	jose := self playerNamedJose.
 	board := self boardWith10SpacesWithoutEffects.
-	accelerationCard := AccelerationCard  new.
+	accelerationCard := AccelerationCard new.
 	cancellationCard := CancellationCard new.
 	deck := Deck
 		deterministicWithCardSequence:
 			{accelerationCard.
 			cancellationCard}.
-	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3 . 4}.
 	match := Match
-		playedBy: {juan . jose }
+		playedBy:
+			{juan.
+			jose}
 		throwing: {dice}
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: accelerationCard to: juan by: juan.
-	self
-		assert: (match cardsAtHandOf: juan)
-		equals: {cancellationCard} asOrderedCollection.
+	match play: accelerationCard by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match playedBy: jose.
-	self assert: (match positionOf: juan) currentSpace equals: 4.
+	self assert: (match positionOf: jose) currentSpace equals: 4.
 	match
 		play: cancellationCard
 		by: juan
 		affecting: juan
 		andHis: accelerationCard.
-	self
-		assert: (match cardsAtHandOf: juan)
-		equals: {} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) equals: {} asOrderedCollection.
 	match playedBy: juan.
-	self assert: (match positionOf: juan) currentSpace equals: 5
+	self assert: (match positionOf: juan) currentSpace equals: 6.
+	match playedBy: jose.
+	self assert: (match positionOf: jose) currentSpace equals: 8
 ]
 
 { #category : #tests }
-CardTest >> testPlayerPlaysCancellationCardAnulatingSpeedCard [
+CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
+	| juan board dice deck match overloadCard cancellationCard |
+	juan := self playerNamedJuan.
+	board := self boardWith10SpacesWithoutEffects.
+	overloadCard := OverloadCard new.
+	cancellationCard := CancellationCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{overloadCard.
+			cancellationCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: overloadCard to: juan by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 10.
+	match
+		play: cancellationCard
+		by: juan
+		affecting: juan
+		andHis: overloadCard.
+	self assert: (match cardsAtHandOf: juan) equals: {} asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 2
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 	| juan board dice deck match speedCard cancellationCard |
 	juan := self playerNamedJuan.
 	board := self boardWith10SpacesWithoutEffects.
@@ -178,6 +210,23 @@ CardTest >> testPlayerPlaysRepeatCard [
 	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match play: repeatCard by: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 10.
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRepeatCardButNoOneThrowedDices [
+	| juan board dice deck match repeatCard |
+	juan := self playerNamedJuan.
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {SpeedUpEffect new}.
+	repeatCard := RepeatCard new.
+	deck := Deck deterministicWithCardSequence: {repeatCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: repeatCard by: juan
 ]
 
 { #category : #tests }

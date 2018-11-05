@@ -26,29 +26,29 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #accesing }
+{ #category : #accessing }
 MatchTest >> boardWith10SpacesWithoutEffect [
 	^ Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom: {NoEffect new}
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 MatchTest >> deckWithOverloadCard [
 	^ Deck deterministicWithCardSequence: { OverloadCard new }
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 MatchTest >> playerNamedFabio [
 	^ Player named: 'Fabio'
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 MatchTest >> playerNamedJuan [
 	^ Player named: 'Juan'
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 MatchTest >> playerNamedMartin [
 	^ Player named: 'Martin'
 ]

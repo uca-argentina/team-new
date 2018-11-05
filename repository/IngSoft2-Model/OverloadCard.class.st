@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #applying }
+OverloadCard >> cancelAffecting: aPlayer on: aMatch [ 
+	aMatch remove: self affecting: aPlayer
+]
+
+{ #category : #applying }
 OverloadCard >> spacesToMove [
 	^ -2
 ]
