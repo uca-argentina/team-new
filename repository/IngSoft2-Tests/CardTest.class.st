@@ -94,6 +94,72 @@ CardTest >> testPlayerPlaysCancellationCardAnulatingCancellatingCard [
 ]
 
 { #category : #tests }
+CardTest >> testPlayerPlaysCancellationCardCancellatingAPermanentCardButNoOnePlayedOne [
+	| juan board dice deck match accelerationCard cancellationCard jose |
+	juan := self playerNamedJuan.
+	jose := self playerNamedJose.
+	board := self boardWith10SpacesWithoutEffects.
+	accelerationCard := AccelerationCard new.
+	cancellationCard := CancellationCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{accelerationCard.
+			cancellationCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3 . 4}.
+	match := Match
+		playedBy:
+			{juan.
+			jose}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match
+		play: cancellationCard
+		by: juan
+		affecting: juan
+		andHis: accelerationCard
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysCancellationCardCancellatingAccelerationCard [
+	| juan board dice deck match accelerationCard cancellationCard jose |
+	juan := self playerNamedJuan.
+	jose := self playerNamedJose.
+	board := self boardWith10SpacesWithoutEffects.
+	accelerationCard := AccelerationCard new.
+	cancellationCard := CancellationCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{accelerationCard.
+			cancellationCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3 . 4}.
+	match := Match
+		playedBy:
+			{juan.
+			jose}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: accelerationCard by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 3.
+	match playedBy: jose.
+	self assert: (match positionOf: jose) currentSpace equals: 4.
+	match
+		play: cancellationCard
+		by: juan
+		affecting: accelerationCard.
+	self assert: (match cardsAtHandOf: juan) equals: {} asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 6.
+	match playedBy: jose.
+	self assert: (match positionOf: jose) currentSpace equals: 8
+]
+
+{ #category : #tests }
 CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 	| juan board dice deck match overloadCard cancellationCard |
 	juan := self playerNamedJuan.
