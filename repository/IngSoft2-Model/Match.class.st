@@ -12,7 +12,8 @@ Class {
 		'cardsActivated',
 		'cardsAtHands',
 		'deck',
-		'lastInstantCard'
+		'lastInstantCard',
+		'lastEffect'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -102,19 +103,12 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 ]
 
 { #category : #'as yet unclassified' }
-Match >> instantPlay: aCard by: anAffecterPlayer withEffect: anEffectOrCard affecting: anAffectedPlayer [
-	self assert: anAffecterPlayer owns: aCard.
-	self assertMatchIncludes: anAffecterPlayer.
-	self assertMatchIncludes: anAffectedPlayer.
-	aCard activateOne: anEffectOrCard affecting: anAffecterPlayer on: self.
-	self activateInstant: aCard toBeAppliedoTo: anAffectedPlayer.
-	self remove: aCard from: anAffecterPlayer
-]
-
-{ #category : #'as yet unclassified' }
 Match >> instantRepeat: aRepeatCard by: aPlayer [
 "Para repetir necesito saber cual fue el ultimo casillero activado y saber quien fue el ultimo afectado o puedo activarlo sobre mi o puedo elegir a quien afectar?" 
+	self assert: aPlayer owns: aRepeatCard.
+	self assertMatchIncludes: aPlayer.
 	aRepeatCard applyCardEffectOn: self.
+	self remove: aRepeatCard from: aPlayer
 ]
 
 { #category : #description }
@@ -122,6 +116,11 @@ Match >> isTheLastSpaceWithFinalLapCrossedBy: aPlayer [
 	| position |
 	position := self positionOf: aPlayer.
 	^ position currentLap > (totalLaps - 1)
+]
+
+{ #category : #accessing }
+Match >> lastEffect [
+	^ lastEffect
 ]
 
 { #category : #playing }
@@ -167,8 +166,18 @@ Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
 	self assertMatchIncludes: aPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
-	players do: [ :player | self activate: aCard toBeAppliedTo: player ].
+	aCard applyBy:aPlayer in: self.
 	self remove: aCard from: aPlayer
+]
+
+{ #category : #'as yet unclassified' }
+Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: activatedCard [
+	self assert: anAffecterPlayer owns: aCard.
+	self assertMatchIncludes: anAffecterPlayer.
+	self assertMatchIncludes: anAffectedPlayer.
+	aCard activate: activatedCard affecting: anAffecterPlayer on: self.
+	self activateInstant: aCard toBeAppliedoTo: anAffectedPlayer.
+	self remove: aCard from: anAffecterPlayer
 ]
 
 { #category : #playing }
@@ -213,6 +222,11 @@ Match >> remove: aCard from: aPlayer [
 { #category : #playing }
 Match >> throwDicesAndApplyCardsBy: nextPlayer [
 	^ (nextPlayer throw: dices) + ((cardsActivated at: nextPlayer) sumNumbers: [ :card | card spacesToMove ])
+]
+
+{ #category : #updating }
+Match >> updateLastEffect: anEffect [
+	lastEffect := anEffect
 ]
 
 { #category : #description }

@@ -36,6 +36,7 @@ Board class >> randomWithSpaces: anAmountOfSpaces [
 
 { #category : #'game play' }
 Board >> applyEffectOf: aSpace on: aMatch activatedBy: aPlayer [
+	aMatch updateLastEffect: (effects at: aSpace).
 	^ (effects at: aSpace) turnOnEffectAt: aMatch activatedBy: aPlayer
 ]
 

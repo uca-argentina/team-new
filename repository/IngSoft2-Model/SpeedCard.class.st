@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #applying }
+SpeedCard >> cancelAffecting: aPlayer on: aMatch [ 
+	aMatch anulate: self  affecting: aPlayer. 
+]
+
+{ #category : #applying }
 SpeedCard >> spacesToMove [
 	^1
 ]

@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CancellationCard >> activateOne: aCard affecting: aPlayer on: aMatch [
-	aMatch anulate: aCard affecting: aPlayer
+CancellationCard >> activate: aCard affecting: aPlayer on: aMatch [
+	aCard cancelAffecting: aPlayer on: aMatch
 ]
