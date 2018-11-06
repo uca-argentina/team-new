@@ -16,7 +16,7 @@ Position class >> atStart [
 { #category : #'creation validation' }
 Position class >> checkIsValid: aSpace [
 	aSpace = 0
-		ifTrue: [ AssertionFailure signal: 'you can not create a Position of space 0' ]
+		ifTrue: [ MatchException signal: 'you can not create a Position of space 0' ]
 ]
 
 { #category : #'instance creation' }

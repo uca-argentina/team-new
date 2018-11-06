@@ -10,7 +10,7 @@ Class {
 { #category : #'creation validation' }
 MoonWalkEffect class >> checkIsValid: spacesBackwards [
 	spacesBackwards > 0
-		ifFalse: [ AssertionFailure signal: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
+		ifFalse: [ MatchException signal: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
 ]
 
 { #category : #'instance creation' }

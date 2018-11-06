@@ -14,7 +14,7 @@ EffectTest >> testCreatingMoonWalkEffectWithInvalidSpacesBackwards [
 	| moonWalkEffect |
 	self
 		should: [ moonWalkEffect := MoonWalkEffect moving: -5 ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
 ]
 

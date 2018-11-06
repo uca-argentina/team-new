@@ -23,10 +23,11 @@ DeckTest >> testDealingCardFromDeckWithDeterministicStrategy [
 DeckTest >> testDealingCardFromDeckWithRandomStrategy [
 	| deck card |
 	deck := Deck random.
-	card := deck dealCard class.
+	card := deck dealCard.
 	self
 		assert:
-			(card = OverloadCard
-				or: [ card = SpeedCard
-						or: [ card = RepeatCard or: [ card = RedoCard or: [ card = CancellationCard or: [ card = AccelerationCard ] ] ] ] ])
+			(card class = OverloadCard
+				or: [ card class = SpeedCard
+						or: [ card class = RepeatCard
+								or: [ card class = RedoCard or: [ card class = CancellationCard or: [ card class = AccelerationCard ] ] ] ] ])
 ]

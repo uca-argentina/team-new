@@ -9,7 +9,7 @@ DiceTest >> testCreatingDeterministDiceWithInvalidSequenceNumber [
 	| dice |
 	self
 		should: [ dice := Dice deterministicWithFaces: 3 throwing: #(1 2 5) ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | 
 			self assert: exception messageText equals: 'The sequence can not have a number bigger than amount of faces' ]
 ]
@@ -19,7 +19,7 @@ DiceTest >> testCreatingRandomDiceWithAmountOfFacesNoValid [
 	| dice |
 	self
 		should: [ dice := Dice randomWithFaces: -3 ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a dice with less than 1 face' ]
 ]
 

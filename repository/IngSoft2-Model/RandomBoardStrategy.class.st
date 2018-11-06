@@ -28,5 +28,5 @@ RandomBoardStrategy >> initialize [
 
 { #category : #generating }
 RandomBoardStrategy >> nextEffect [
-	^ effects at: (random nextInt: 100).
+	^ effects at: (random nextInt: 100)
 ]

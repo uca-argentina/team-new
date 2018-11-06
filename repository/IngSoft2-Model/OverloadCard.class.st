@@ -10,7 +10,7 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-OverloadCard >> cancelAffecting: aPlayer on: aMatch [ 
+OverloadCard >> cancelAffecting: aPlayer on: aMatch [
 	aMatch remove: self affecting: aPlayer
 ]
 

@@ -42,32 +42,32 @@ Match >> activateInstant: aCard toBeAppliedoTo: aPlayer [
 Match >> assert: aCard isAffecting: aPlayer [
 	(cardsAffectingPlayers at: aPlayer)
 		detect: [ :card | card = aCard ]
-		ifNone: [ AssertionFailure signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
+		ifNone: [ MatchException signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
 ]
 
 { #category : #description }
 Match >> assert: aPlayer owns: aCard [
 	(cardsAtHands at: aPlayer)
 		detect: [ :card | card = aCard ]
-		ifNone: [ AssertionFailure signal: 'The player ', aPlayer name ,' do not own ', aCard className ]
+		ifNone: [ MatchException signal: 'The player ' , aPlayer name , ' do not own ' , aCard className ]
 ]
 
 { #category : #description }
 Match >> assertMatchHasEnded [
 	self matchNotEnded
-		ifFalse: [ AssertionFailure signal: 'The match is over' ]
+		ifFalse: [ MatchException signal: 'The match is over' ]
 ]
 
 { #category : #description }
 Match >> assertMatchIncludes: aPlayer [
 	(players includes: aPlayer)
-		ifFalse: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
+		ifFalse: [ MatchException signal: 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
 Match >> assertTurnBelongsTo: aPlayer [
 	aPlayer = self nextPlayer
-		ifFalse: [ AssertionFailure signal: 'It is not ' , aPlayer name , ' turn' ]
+		ifFalse: [ MatchException signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
 { #category : #description }
@@ -248,6 +248,6 @@ Match >> updateLastEffect: anEffect [
 { #category : #description }
 Match >> winner [
 	self matchNotEnded
-		ifTrue: [ AssertionFailure signal: 'There is no winner' ].
+		ifTrue: [ MatchException signal: 'There is no winner' ].
 	^ players detect: [ :player | self isTheLastSpaceWithFinalLapCrossedBy: player ]
 ]

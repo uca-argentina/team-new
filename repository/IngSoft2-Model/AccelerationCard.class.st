@@ -6,7 +6,7 @@ Class {
 
 { #category : #applying }
 AccelerationCard >> applyIn: aMatch to: aPlayer [
-	aMatch players do: [ :player | aMatch activate: self toBeAppliedTo: player ].
+	aMatch players do: [ :player | aMatch activate: self toBeAppliedTo: player ]
 ]
 
 { #category : #applying }
@@ -16,5 +16,5 @@ AccelerationCard >> cancelAffecting: aPlayer on: aMatch [
 
 { #category : #applying }
 AccelerationCard >> spacesToMove [
-	^1
+	^ 1
 ]

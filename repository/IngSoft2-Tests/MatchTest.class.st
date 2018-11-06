@@ -98,11 +98,9 @@ MatchTest >> testAPlayerWantsToPlayACardHeDoesNotHave [
 			overloadCard} asOrderedCollection.
 	self
 		should: [ match play: speedCard to: jose by: juan ]
-		raise: AssertionFailure
-		withExceptionDo: [ :exception | 
-			self
-				assert: exception messageText
-				equals: 'The player Juan do not own SpeedCard' ]
+		raise: MatchException
+		withExceptionDo:
+			[ :exception | self assert: exception messageText equals: 'The player Juan do not own SpeedCard' ]
 ]
 
 { #category : #tests }
@@ -127,7 +125,7 @@ MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
 	match playedBy: fabio.
 	self
 		should: [ match playedBy: cristian ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ' , cristian name , ' is not playing' ]
 ]
 
@@ -156,7 +154,7 @@ MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 	match playedBy: juan.
 	self
 		should: [ match playedBy: juan ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo:
 			[ :exception | self assert: exception messageText equals: 'It is not Juan turn' ]
 ]
@@ -182,7 +180,7 @@ MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 	match playedBy: fabio.
 	self
 		should: [ match playedBy: fabio ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'The match is over' ]
 ]
 
@@ -385,7 +383,7 @@ MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 		assert: (match positionOf: marcos) currentLap equals: 0.
 	self
 		should: [ match winner ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'There is no winner' ]
 ]
 

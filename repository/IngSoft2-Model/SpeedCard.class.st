@@ -10,11 +10,11 @@ SpeedCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-SpeedCard >> cancelAffecting: aPlayer on: aMatch [ 
-	aMatch remove: self  affecting: aPlayer. 
+SpeedCard >> cancelAffecting: aPlayer on: aMatch [
+	aMatch remove: self affecting: aPlayer
 ]
 
 { #category : #applying }
 SpeedCard >> spacesToMove [
-	^1
+	^ 1
 ]
