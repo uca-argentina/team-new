@@ -11,9 +11,9 @@ Class {
 		'totalLaps',
 		'cardsAtHands',
 		'deck',
-		'lastInstantCard',
 		'lastEffect',
-		'cardsAffectingPlayers'
+		'cardsAffectingPlayers',
+		'lastCard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -35,7 +35,7 @@ Match >> activate: aCard toBeAppliedTo: aPlayer [
 
 { #category : #'as yet unclassified' }
 Match >> activateInstant: aCard toBeAppliedoTo: aPlayer [
-	lastInstantCard := aPlayer -> aCard
+	lastCard := aPlayer -> aCard
 ]
 
 { #category : #description }
@@ -166,7 +166,7 @@ Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
 	self assertMatchIncludes: aPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
-	aCard applyIn: self to: anAffectedPlayer.
+	aCard applyIn: self to: aPlayer.
 	self remove: aCard atHandfrom: aPlayer
 ]
 
@@ -241,8 +241,8 @@ Match >> throwDicesAndApplyCardsBy: nextPlayer [
 ]
 
 { #category : #updating }
-Match >> updateLastEffect: anEffect [
-	lastEffect := anEffect
+Match >> updateLastEffect: anEffectToPlayer [
+	lastEffect := anEffectToPlayer
 ]
 
 { #category : #description }

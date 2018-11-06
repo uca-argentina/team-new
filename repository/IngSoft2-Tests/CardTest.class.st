@@ -116,7 +116,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellatingAPermanentCardButNoOnePla
 		dealingFrom: deck.
 	self
 		should: [ match play: cancellationCard by: juan affecting: accelerationCard ]
-		raise: AssertionFailure
+		raise: MatchException 
 		withExceptionDo: [ :exception | 
 			self
 				assert: exception messageText
