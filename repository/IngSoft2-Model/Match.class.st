@@ -119,6 +119,11 @@ Match >> isTheLastSpaceWithFinalLapCrossedBy: aPlayer [
 ]
 
 { #category : #accessing }
+Match >> lastCard [
+	^ lastCard
+]
+
+{ #category : #accessing }
 Match >> lastEffect [
 	^ lastEffect
 ]
@@ -167,6 +172,7 @@ Match >> play: aCard by: aPlayer [
 	self assertMatchIncludes: aPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
 	aCard applyIn: self to: aPlayer.
+	self updateLastCard: aCard.
 	self remove: aCard atHandfrom: aPlayer
 ]
 
@@ -176,6 +182,7 @@ Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
 	self assert: anActivatedCard isAffecting: anAffecterPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
 	aCard activate: anActivatedCard affecting: anAffecterPlayer in: self.
+	self updateLastCard: aCard.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
@@ -186,6 +193,7 @@ Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: ac
 	self assertMatchIncludes: anAffecterPlayer.
 	self assertMatchIncludes: anAffectedPlayer.
 	aCard activate: activatedCard affecting: anAffecterPlayer in: self.
+	self updateLastCard: aCard.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
@@ -196,6 +204,7 @@ Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
 	self assertMatchIncludes: anAffecterPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
+	self updateLastCard: aCard.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
@@ -238,6 +247,11 @@ Match >> remove: aCard atHandfrom: aPlayer [
 Match >> throwDicesAndApplyCardsBy: nextPlayer [
 	^ (nextPlayer throw: dices)
 		+ ((cardsAffectingPlayers at: nextPlayer) sumNumbers: [ :card | card spacesToMove ])
+]
+
+{ #category : #updating }
+Match >> updateLastCard: aCard [
+	lastCard := aCard
 ]
 
 { #category : #updating }
