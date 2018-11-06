@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #applying }
+OverloadCard >> applyIn: aMatch to: aPlayer [
+	aMatch activate: self toBeAppliedTo: aPlayer
+]
+
+{ #category : #applying }
 OverloadCard >> cancelAffecting: aPlayer on: aMatch [ 
 	aMatch remove: self affecting: aPlayer
 ]

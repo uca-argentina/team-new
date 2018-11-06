@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #applying }
+Card >> applyIn: aMatch to: aPlayer [
+	self subclassResponsibility
+]
+
+{ #category : #applying }
 Card >> needs: aNextPlayer ToBeTurnOf: anAffecterPlayer [
 	self subclassResponsibility
 ]

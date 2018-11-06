@@ -114,11 +114,13 @@ CardTest >> testPlayerPlaysCancellationCardCancellatingAPermanentCardButNoOnePla
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match
-		play: cancellationCard
-		by: juan
-		affecting: juan
-		andHis: accelerationCard
+	self
+		should: [ match play: cancellationCard by: juan affecting: accelerationCard ]
+		raise: AssertionFailure
+		withExceptionDo: [ :exception | 
+			self
+				assert: exception messageText
+				equals: 'There is not a card ' , accelerationCard className , ' affecting ' , juan name ]
 ]
 
 { #category : #tests }

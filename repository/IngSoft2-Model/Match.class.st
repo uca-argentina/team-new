@@ -39,6 +39,13 @@ Match >> activateInstant: aCard toBeAppliedoTo: aPlayer [
 ]
 
 { #category : #description }
+Match >> assert: aCard isAffecting: aPlayer [
+	(cardsAffectingPlayers at: aPlayer)
+		detect: [ :card | card = aCard ]
+		ifNone: [ AssertionFailure signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
+]
+
+{ #category : #description }
 Match >> assert: aPlayer owns: aCard [
 	(cardsAtHands at: aPlayer)
 		detect: [ :card | card = aCard ]
@@ -159,25 +166,26 @@ Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
 	self assertMatchIncludes: aPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
-	aCard applyIn: self.
+	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard atHandfrom: aPlayer
 ]
 
 { #category : #playing }
 Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
 	self assert: anAffecterPlayer owns: aCard.
+	self assert: anActivatedCard isAffecting: anAffecterPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
-	aCard activate: anActivatedCard affecting: anAffecterPlayer on: self.
+	aCard activate: anActivatedCard affecting: anAffecterPlayer in: self.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
 { #category : #playing }
 Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: activatedCard [
 	self assert: anAffecterPlayer owns: aCard.
+	self assert: activatedCard isAffecting: anAffectedPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
 	self assertMatchIncludes: anAffectedPlayer.
-	aCard activate: activatedCard affecting: anAffecterPlayer on: self.
-	self activateInstant: aCard toBeAppliedoTo: anAffectedPlayer.
+	aCard activate: activatedCard affecting: anAffecterPlayer in: self.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
@@ -187,7 +195,7 @@ Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
 	self assertMatchIncludes: anAffectedPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: anAffecterPlayer.
-	self activate: aCard toBeAppliedTo: anAffectedPlayer.
+	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 

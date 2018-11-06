@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #applying }
-AccelerationCard >> applyIn: aMatch [ 
+AccelerationCard >> applyIn: aMatch to: aPlayer [
 	aMatch players do: [ :player | aMatch activate: self toBeAppliedTo: player ].
 ]
 

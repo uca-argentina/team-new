@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #applying }
-CancellationCard >> activate: aCard affecting: aPlayer on: aMatch [
+CancellationCard >> activate: aCard affecting: aPlayer in: aMatch [
 	aCard cancelAffecting: aPlayer on: aMatch
 ]

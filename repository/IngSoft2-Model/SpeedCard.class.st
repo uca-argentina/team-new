@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #applying }
+SpeedCard >> applyIn: aMatch to: aPlayer [
+	aMatch activate: self toBeAppliedTo: aPlayer
+]
+
+{ #category : #applying }
 SpeedCard >> cancelAffecting: aPlayer on: aMatch [ 
 	aMatch remove: self  affecting: aPlayer. 
 ]
