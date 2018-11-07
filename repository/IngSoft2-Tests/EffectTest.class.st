@@ -4,18 +4,24 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #accessing }
+EffectTest >> deckWithOverloadCard [
+	^ Deck deterministicWithCardSequence: { OverloadCard new }
+]
+
 { #category : #tests }
 EffectTest >> testCreatingMoonWalkEffectWithInvalidSpacesBackwards [
 	| moonWalkEffect |
 	self
 		should: [ moonWalkEffect := MoonWalkEffect moving: -5 ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a moon walk effect with spaces backwards lower than 1' ]
 ]
 
 { #category : #tests }
 EffectTest >> testPlayerActivateAtomicBombEffect [
-	| matias fabio dices board match players |
+	| matias fabio dices board match players deck|
+	deck:= self deckWithOverloadCard.
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
@@ -24,12 +30,14 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(2 2 1)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 5 throwing: #(2 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 1;
@@ -51,18 +59,62 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 ]
 
 { #category : #tests }
-EffectTest >> testPlayerActivatesMoonWalkAndLosesMoreThanOneLap [
-	| matias fabio dices board match players |
-	board := Board deterministicWithSpaces: 5 andEffectsGeneratedFrom: {(MoonWalkEffect moving: 7)}.
+EffectTest >> testPlayerActivatesGetCardEffect [
+	| matias dices board match players deck overloadCard speedCard redoCard |
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	redoCard := RedoCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{overloadCard.
+			speedCard.
+			redoCard}.
+	board := Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom:
+			{NoEffect new.
+			DealCardEffect new}.
 	matias := Player named: 'Matias'.
-	fabio := Player named: 'Fabio'.
-	players := OrderedCollection with: matias with: fabio.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(1)).
+	players := OrderedCollection with: matias.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
+	self
+		assert: (match cardsAtHandOf: matias)
+		equals:
+			{overloadCard.
+			speedCard} asOrderedCollection.
+	match playedBy: matias.
+	self
+		assert: (match cardsAtHandOf: matias)
+		equals:
+			{overloadCard.
+			speedCard.
+			redoCard} asOrderedCollection
+]
+
+{ #category : #tests }
+EffectTest >> testPlayerActivatesMoonWalkAndLosesMoreThanOneLap [
+	| matias fabio dices board match players deck|
+	deck:= self deckWithOverloadCard.
+	board := Board
+		deterministicWithSpaces: 5
+		andEffectsGeneratedFrom: {(MoonWalkEffect moving: 7)}.
+	matias := Player named: 'Matias'.
+	fabio := Player named: 'Fabio'.
+	players := OrderedCollection with: matias with: fabio.
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 5 throwing: #(1)).
+	match := Match
+		playedBy: players
+		throwing: dices
+		during: 2
+		on: board
+		dealingFrom: deck.
 	match playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 4;
@@ -71,7 +123,8 @@ EffectTest >> testPlayerActivatesMoonWalkAndLosesMoreThanOneLap [
 
 { #category : #tests }
 EffectTest >> testPlayerActivatesMoonWalkEffect [
-	| matias fabio dices board match players |
+	| matias fabio dices board match players deck|
+	deck:= self deckWithOverloadCard.
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
@@ -80,12 +133,14 @@ EffectTest >> testPlayerActivatesMoonWalkEffect [
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(2 2 1)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 5 throwing: #(2 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: matias.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 1;
@@ -102,7 +157,8 @@ EffectTest >> testPlayerActivatesMoonWalkEffect [
 
 { #category : #tests }
 EffectTest >> testPlayerActivatesSpeedUpEffect [
-	| matias dices board match players |
+	| matias dices board match players deck|
+	deck:= self deckWithOverloadCard.
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
@@ -110,19 +166,22 @@ EffectTest >> testPlayerActivatesSpeedUpEffect [
 			SpeedUpEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(3)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 5 throwing: #(3)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: matias.
 	self assert: (match positionOf: matias) currentSpace equals: 8
 ]
 
 { #category : #tests }
 EffectTest >> testPlayerActivatesWormHoleEffect [
-	| matias dices board match players |
+	| matias dices board match players deck|
+	deck:= self deckWithOverloadCard.
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
@@ -130,12 +189,14 @@ EffectTest >> testPlayerActivatesWormHoleEffect [
 			WormHoleEffect new}.
 	matias := Player named: 'Matias'.
 	players := OrderedCollection with: matias.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(5)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: matias.
 	self assert: (match positionOf: matias) currentSpace equals: 2
 ]

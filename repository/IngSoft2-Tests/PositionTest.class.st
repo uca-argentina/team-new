@@ -28,8 +28,9 @@ PositionTest >> testCreatingPositionWithInvalidSpace [
 	| position |
 	self
 		should: [ position := Position onSpace: 0 ofLap: 12 ]
-		raise: AssertionFailure
-		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a Position of space 0' ]
+		raise: MatchException
+		withExceptionDo:
+			[ :exception | self assert: exception messageText equals: 'you can not create a Position of space 0' ]
 ]
 
 { #category : #tests }

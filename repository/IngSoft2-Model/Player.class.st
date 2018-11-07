@@ -10,7 +10,7 @@ Class {
 { #category : #'creation validation' }
 Player class >> checkIsValid: aName [
 	(aName matchesRegex: ' +')
-		ifTrue: [ AssertionFailure signal: 'You can not create a player with no name' ]
+		ifTrue: [ MatchException signal: 'You can not create a player with no name' ]
 ]
 
 { #category : #'instance creation' }
@@ -24,7 +24,7 @@ Player >> initializeWith: aName [
 	name := aName
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Player >> name [
 	^ name
 ]

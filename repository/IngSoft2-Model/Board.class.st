@@ -16,7 +16,7 @@ Board class >> boardOf: anAmountOfSpaces with: aBoardStrategy [
 { #category : #'creation validation' }
 Board class >> checkIsValid: anAmountOfSpaces [
 	anAmountOfSpaces > 0
-		ifFalse: [ AssertionFailure signal: 'you can not create a board with less than 1 space' ]
+		ifFalse: [ MatchException signal: 'you can not create a board with less than 1 space' ]
 ]
 
 { #category : #'instance creation' }
@@ -36,10 +36,11 @@ Board class >> randomWithSpaces: anAmountOfSpaces [
 
 { #category : #'game play' }
 Board >> applyEffectOf: aSpace on: aMatch activatedBy: aPlayer [
+	aMatch updateLastEffect: aPlayer -> (effects at: aSpace).
 	^ (effects at: aSpace) turnOnEffectAt: aMatch activatedBy: aPlayer
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Board >> effects [
 	^ effects
 ]
@@ -50,7 +51,7 @@ Board >> initializeWith: anAmountOfSpaces and: aBoardStrategy [
 	effects := (1 to: anAmountOfSpaces) collect: [ :i | aBoardStrategy nextEffect ]
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 Board >> spaces [
 	^ spaces
 ]

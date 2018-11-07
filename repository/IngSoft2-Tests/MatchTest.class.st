@@ -26,138 +26,212 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #accessing }
+MatchTest >> boardWith10SpacesWithoutEffects [
+	^ Board
+		deterministicWithSpaces: 10
+		andEffectsGeneratedFrom: {NoEffect new}
+]
+
+{ #category : #accessing }
+MatchTest >> deckWithOverloadCard [
+	^ Deck deterministicWithCardSequence: { OverloadCard new }
+]
+
+{ #category : #accessing }
+MatchTest >> playerNamedFabio [
+	^ Player named: 'Fabio'
+]
+
+{ #category : #accessing }
+MatchTest >> playerNamedJuan [
+	^ Player named: 'Juan'
+]
+
+{ #category : #accessing }
+MatchTest >> playerNamedMartin [
+	^ Player named: 'Martin'
+]
+
 { #category : #tests }
 MatchTest >> testAPlayerSkipsMoreThanOneLapInASingleThrow [
-	| fabio match dices board players |
-	board := Board deterministicWithSpaces: 5 andEffectsGeneratedFrom: {NoEffect new}.
-	fabio := Player named: 'Fabio'.
+	| fabio match dices board players deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 13 throwing: #(13)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 20 throwing: #(20)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 4
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: fabio.
-	self assert: (match positionOf: fabio) currentSpace equals: 4.
+	self assert: (match positionOf: fabio) currentSpace equals: 1.
 	self assert: (match positionOf: fabio) currentLap equals: 2
 ]
 
 { #category : #tests }
+MatchTest >> testAPlayerWantsToPlayACardHeDoesNotHave [
+	| juan jose board dice deck match speedCard overloadCard |
+	juan := self playerNamedJuan.
+	jose := Player named: 'Jose'.
+	board := self boardWith10SpacesWithoutEffects.
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {overloadCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {2 . 6}.
+	match := Match
+		playedBy:
+			{juan.
+			jose}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		assert: (match cardsAtHandOf: juan)
+		equals:
+			{overloadCard.
+			overloadCard} asOrderedCollection.
+	self
+		should: [ match play: speedCard to: jose by: juan ]
+		raise: MatchException
+		withExceptionDo:
+			[ :exception | self assert: exception messageText equals: 'The player Juan do not own SpeedCard' ]
+]
+
+{ #category : #tests }
 MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
-	| fabio cristian match board dices players |
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(5)).
+	| fabio cristian match board dices players deck |
+	deck := self deckWithOverloadCard.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
-	fabio := Player named: 'Fabio'.
+	fabio := self playerNamedFabio.
 	cristian := Player named: 'Cristian'.
 	players := OrderedCollection with: fabio.
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: fabio.
 	self
 		should: [ match playedBy: cristian ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ' , cristian name , ' is not playing' ]
 ]
 
 { #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
-	| match board martin juan dices players |
+	| match board martin juan dices players deck |
+	deck := self deckWithOverloadCard.
 	board := Board
 		deterministicWithSpaces: 20
 		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
-	martin := Player named: 'Martin'.
-	juan := Player named: 'Juan'.
+	martin := self playerNamedMartin.
+	juan := self playerNamedJuan.
 	players := OrderedCollection with: martin with: juan.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 6 throwing: #(1 3)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 6 throwing: #(1 3)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 1
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: martin.
 	self assert: match nextPlayer equals: juan.
 	match playedBy: juan.
 	self
 		should: [ match playedBy: juan ]
-		raise: AssertionFailure
-		withExceptionDo: [ :exception | self assert: exception messageText equals: 'It is not Juan turn' ]
+		raise: MatchException
+		withExceptionDo:
+			[ :exception | self assert: exception messageText equals: 'It is not Juan turn' ]
 ]
 
 { #category : #tests }
 MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
-	| fabio match board players dices |
-	board := Board deterministicWithSpaces: 8 andEffectsGeneratedFrom: {NoEffect new}.
-	fabio := Player named: 'Fabio'.
+	| fabio match board players dices deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(4 5)).
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 7 throwing: #(4 7)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 1
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: fabio.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 5;
 		assert: (match positionOf: fabio) currentLap equals: 0.
-	match	playedBy: fabio.
+	match playedBy: fabio.
 	self
 		should: [ match playedBy: fabio ]
-		raise: AssertionFailure
-		withExceptionDo: [ :exception | self assert: exception messageText equals: 'The match is over' ].
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'The match is over' ]
 ]
 
 { #category : #tests }
 MatchTest >> testAPlayerWins [
-	| match board martin dices players |
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect new}.
-	martin := Player named: 'Martin'.
+	| match board martin dices players deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	martin := self playerNamedMartin.
 	players := OrderedCollection with: martin.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 6 throwing: #(6 4)).
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 6 throwing: #(6 4)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 1
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: martin.
 	self
 		assert: (match positionOf: martin) currentSpace equals: 7;
 		assert: (match positionOf: martin) currentLap equals: 0.
-	match	playedBy: martin.
+	match playedBy: martin.
 	match.
 	self assert: match winner name equals: 'Martin'
 ]
 
 { #category : #tests }
 MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
-	| fabio match dices board players |
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {NoEffect new}.
-	fabio := Player named: 'Fabio'.
+	| fabio match dices board players deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(4 2 5)) with: (Dice deterministicWithSpaces: 6 throwing: #(3 6 1)).
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 5 throwing: #(4 2 5))
+		with: (Dice deterministicWithFaces: 6 throwing: #(3 6 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: fabio.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 8;
 		assert: (match positionOf: fabio) currentLap equals: 0.
-	match 	playedBy: fabio.
+	match playedBy: fabio.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 6;
 		assert: (match positionOf: fabio) currentLap equals: 1.
-	match	playedBy: fabio.
+	match playedBy: fabio.
 	self
 		assert: (match positionOf: fabio) currentSpace equals: 2;
 		assert: (match positionOf: fabio) currentLap equals: 2;
@@ -166,10 +240,11 @@ MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 
 { #category : #tests }
 MatchTest >> testAllEffectsInOneMatch [
-	| fabio cristian juan match board dices players |
+	| fabio cristian juan match board dices players deck |
+	deck := self deckWithOverloadCard.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(1 5 3 4 1))
-		with: (Dice deterministicWithSpaces: 4 throwing: #(2 4 2 1 2)).
+		with: (Dice deterministicWithFaces: 5 throwing: #(1 5 3 4 1))
+		with: (Dice deterministicWithFaces: 4 throwing: #(2 4 2 1 2)).
 	board := Board
 		deterministicWithSpaces: 20
 		andEffectsGeneratedFrom:
@@ -178,15 +253,16 @@ MatchTest >> testAllEffectsInOneMatch [
 			(MoonWalkEffect moving: 2).
 			SpeedUpEffect new.
 			WormHoleEffect new}.
-	fabio := Player named: 'Fabio'.
+	fabio := self playerNamedFabio.
 	cristian := Player named: 'Cristian'.
-	juan := Player named: 'Juan'.
+	juan := self playerNamedJuan .
 	players := OrderedCollection with: fabio with: cristian with: juan.
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: fabio.
 	self assert: (match positionOf: fabio) currentSpace equals: 8.
 	match playedBy: cristian.
@@ -207,21 +283,23 @@ MatchTest >> testAllEffectsInOneMatch [
 
 { #category : #tests }
 MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
-	| fabio andres match board dices players |
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(5)).
+	| fabio andres match board dices players deck |
+	deck := self deckWithOverloadCard.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
-	fabio := Player named: 'Fabio'.
+	fabio := self playerNamedFabio.
 	andres := Player named: 'Andres'.
 	players := OrderedCollection with: fabio.
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	self assert: (match positionOf: fabio) currentSpace equals: 1.
 	self
 		should: [ match positionOf: andres ]
@@ -231,28 +309,58 @@ MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 
 { #category : #tests }
 MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace1 [
-	| fabio cristian match board dices players |
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(1)).
+	| fabio cristian match board dices players deck |
+	deck := self deckWithOverloadCard.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(1)).
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
-	fabio := Player named: 'Fabio'.
+	fabio := self playerNamedFabio.
 	cristian := Player named: 'Cristian'.
 	players := OrderedCollection with: fabio with: cristian.
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 1
-		on: board.
+		on: board
+		dealingFrom: deck.
 	self assert: (match positionOf: fabio) currentSpace equals: 1.
 	self assert: (match positionOf: cristian) currentSpace equals: 1
 ]
 
 { #category : #tests }
+MatchTest >> testDealingInitialHandToPlayer [
+	| juan match board dice deck overloadCard speedCard redoCard |
+	juan := self playerNamedJuan.
+	board := self boardWith10SpacesWithoutEffects.
+	dice := Dice deterministicWithFaces: 5 throwing: {1}.
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	redoCard := RedoCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{speedCard.
+			overloadCard.
+			redoCard}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		assert: (match cardsAtHandOf: juan)
+		equals:
+			{speedCard.
+			overloadCard} asOrderedCollection
+]
+
+{ #category : #tests }
 MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
-	| match board mateo marcos players dices |
+	| match board mateo marcos players dices deck |
+	deck := self deckWithOverloadCard.
 	board := Board
 		deterministicWithSpaces: 30
 		andEffectsGeneratedFrom:
@@ -261,12 +369,13 @@ MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 	mateo := Player named: 'Mateo'.
 	marcos := Player named: 'Marcos'.
 	players := OrderedCollection with: mateo with: marcos.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 6 throwing: #(1)).
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 6 throwing: #(1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 1
-		on: board.
+		on: board
+		dealingFrom: deck.
 	self
 		assert: (match positionOf: mateo) currentSpace equals: 1;
 		assert: (match positionOf: mateo) currentLap equals: 0;
@@ -274,35 +383,80 @@ MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 		assert: (match positionOf: marcos) currentLap equals: 0.
 	self
 		should: [ match winner ]
-		raise: AssertionFailure
+		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'There is no winner' ]
 ]
 
 { #category : #tests }
 MatchTest >> testPlayerMovesForwardOnBoard [
-	| fabio match dices board players |
-	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
-	fabio := Player named: 'Fabio'.
+	| fabio match dices board players deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
-	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(4))
-		with: (Dice deterministicWithSpaces: 3 throwing: #(3)).
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(4)) with: (Dice deterministicWithFaces: 3 throwing: #(3)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 1
-		on: board.
+		on: board
+		dealingFrom: deck.
 	self assert: (match positionOf: fabio) currentSpace equals: 1.
 	match playedBy: fabio.
 	self assert: (match positionOf: fabio) currentSpace equals: 8
 ]
 
 { #category : #tests }
+MatchTest >> testPlayerWantsToPlayAPermanentCardButItIsNotHisTurn [
+	| juan martin board dice deck match speedCard |
+	juan := self playerNamedJuan.
+	martin := self playerNamedMartin.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy:
+			{juan.
+			martin}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		should: [ match play: speedCard to: juan by: martin ]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'A player can only play a permanent card in his turn' ]
+]
+
+{ #category : #tests }
+MatchTest >> testPlayerWantsToPlayAPermanentCardToAPlayerThatIsNotPlaying [
+	| juan martin board dice deck match speedCard |
+	juan := self playerNamedJuan.
+	martin := self playerNamedMartin.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy:
+			{juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		should: [ match play: speedCard to: martin by: juan]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ',martin name,' is not playing' ]
+]
+
+{ #category : #tests }
 MatchTest >> testPlayersRankings [
-	| luciana micaela carolina victoria match board dices players |
-	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 5 throwing: #(1 3 5 4)).
-	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
+	| luciana micaela carolina victoria match board dices players deck |
+	deck := self deckWithOverloadCard.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(1 3 5 4)).
+	board := self boardWith10SpacesWithoutEffects.
 	luciana := Player named: 'Luciana'.
 	micaela := Player named: 'Micaela'.
 	carolina := Player named: 'Carolina'.
@@ -316,7 +470,8 @@ MatchTest >> testPlayersRankings [
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match
 		playedBy: luciana;
 		playedBy: micaela;
@@ -331,21 +486,19 @@ MatchTest >> testPlayersRankings [
 
 { #category : #tests }
 MatchTest >> testPlayersSequenceOnMatch [
-	| board martin juan match players dices |
-	board := Board
-		deterministicWithSpaces: 20
-		andEffectsGeneratedFrom:
-			{NoEffect new.
-			AtomicBombEffect new}.
-	martin := Player named: 'Martin'.
-	juan := Player named: 'Juan'.
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 6 throwing: #(1 2 3 4)).
+	| board martin juan match players dices deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	martin := self playerNamedMartin.
+	juan := self playerNamedJuan.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 6 throwing: #(1 2 3 4)).
 	players := OrderedCollection with: martin with: juan.
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	self assert: match nextPlayer name equals: 'Martin'.
 	match playedBy: martin.
 	self assert: match nextPlayer name equals: 'Juan'.
@@ -359,74 +512,77 @@ MatchTest >> testPlayersSequenceOnMatch [
 
 { #category : #tests }
 MatchTest >> testPositionOfPlayers [
-	| match board martin juan dices players |
-	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {NoEffect new}.
-	martin := Player named: 'Martin'.
-	juan := Player named: 'Juan'.
+	| match board martin juan dices players deck |
+	deck := self deckWithOverloadCard.
+	board := self boardWith10SpacesWithoutEffects.
+	martin := self playerNamedMartin.
+	juan := self playerNamedMartin.
 	players := OrderedCollection with: martin with: juan.
 	dices := OrderedCollection
-		with: (Dice deterministicWithSpaces: 6 throwing: #(3 2 5))
-		with: (Dice deterministicWithSpaces: 5 throwing: #(2 5 4))
-		with: (Dice deterministicWithSpaces: 5 throwing: #(1 2 3))
-		with: (Dice deterministicWithSpaces: 8 throwing: #(7 6 1))
-		with: (Dice deterministicWithSpaces: 2 throwing: #(1 2 1)).
+		with: (Dice deterministicWithFaces: 6 throwing: #(3 2 5))
+		with: (Dice deterministicWithFaces: 5 throwing: #(2 5 4))
+		with: (Dice deterministicWithFaces: 5 throwing: #(1 2 3))
+		with: (Dice deterministicWithFaces: 8 throwing: #(7 6 1))
+		with: (Dice deterministicWithFaces: 2 throwing: #(1 2 1)).
 	match := Match
 		playedBy: players
 		throwing: dices
 		during: 9
-		on: board.
+		on: board
+		dealingFrom: deck.
 	match playedBy: martin.
 	self
-		assert: (match positionOf: martin) currentSpace equals: 15;
-		assert: (match positionOf: martin) currentLap equals: 0.
-	match playedBy: juan.
-	self
-		assert: (match positionOf: juan) currentSpace equals: 18;
-		assert: (match positionOf: juan) currentLap equals: 0.
-	match playedBy: martin.
-	self
-		assert: (match positionOf: martin) currentSpace equals: 9;
+		assert: (match positionOf: martin) currentSpace equals: 5;
 		assert: (match positionOf: martin) currentLap equals: 1.
 	match playedBy: juan.
 	self
-		assert: (match positionOf: juan) currentSpace equals: 12;
+		assert: (match positionOf: juan) currentSpace equals: 8;
 		assert: (match positionOf: juan) currentLap equals: 1.
 	match playedBy: martin.
 	self
-		assert: (match positionOf: martin) currentSpace equals: 6;
+		assert: (match positionOf: martin) currentSpace equals: 9;
 		assert: (match positionOf: martin) currentLap equals: 2.
+	match playedBy: juan.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 2;
+		assert: (match positionOf: juan) currentLap equals: 3.
+	match playedBy: martin.
+	self
+		assert: (match positionOf: martin) currentSpace equals: 6;
+		assert: (match positionOf: martin) currentLap equals: 4.
 	match playedBy: juan.
 	self
 		assert: (match positionOf: juan) currentSpace equals: 6;
-		assert: (match positionOf: juan) currentLap equals: 2.
+		assert: (match positionOf: juan) currentLap equals: 4.
 	match playedBy: martin.
 	self
-		assert: (match positionOf: martin) currentSpace equals: 20;
-		assert: (match positionOf: martin) currentLap equals: 2.
+		assert: (match positionOf: martin) currentSpace equals: 10;
+		assert: (match positionOf: martin) currentLap equals: 5.
 	match playedBy: juan.
 	self
 		assert: (match positionOf: juan) currentSpace equals: 3;
-		assert: (match positionOf: juan) currentLap equals: 3.
+		assert: (match positionOf: juan) currentLap equals: 6.
 	match playedBy: martin.
 	self
-		assert: (match positionOf: martin) currentSpace equals: 14;
-		assert: (match positionOf: martin) currentLap equals: 3.
+		assert: (match positionOf: martin) currentSpace equals: 4;
+		assert: (match positionOf: martin) currentLap equals: 7.
 	match playedBy: juan.
 	self
-		assert: (match positionOf: juan) currentSpace equals: 17;
-		assert: (match positionOf: juan) currentLap equals: 3.
+		assert: (match positionOf: juan) currentSpace equals: 7;
+		assert: (match positionOf: juan) currentLap equals: 7.
 	match playedBy: martin.
 	self
-		assert: (match positionOf: juan) currentSpace equals: 17;
-		assert: (match positionOf: juan) currentLap equals: 3;
-		assert: (match positionOf: martin) currentSpace equals: 11;
-		assert: (match positionOf: martin) currentLap equals: 4
+		assert: (match positionOf: juan) currentSpace equals: 7;
+		assert: (match positionOf: juan) currentLap equals: 7;
+		assert: (match positionOf: martin) currentSpace equals: 1;
+		assert: (match positionOf: martin) currentLap equals: 9
 ]
 
 { #category : #tests }
 MatchTest >> testWhenMatchIsCreatedWithOnePlayerItIsHisTurn [
-	| matias match dices board players |
-	dices := OrderedCollection with: (Dice deterministicWithSpaces: 5 throwing: #(1)).
+	| matias match dices board players deck |
+	deck := self deckWithOverloadCard.
+	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(1)).
 	board := Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom:
@@ -438,6 +594,7 @@ MatchTest >> testWhenMatchIsCreatedWithOnePlayerItIsHisTurn [
 		playedBy: players
 		throwing: dices
 		during: 2
-		on: board.
+		on: board
+		dealingFrom: deck.
 	self assert: match nextPlayer name equals: 'Matias'
 ]
