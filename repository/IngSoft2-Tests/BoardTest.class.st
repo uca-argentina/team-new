@@ -13,7 +13,7 @@ BoardTest >> testCreatingBoardWithInvalidAmountOfSpaces [
 				andEffectsGeneratedFrom:
 					{NoEffect new.
 					AtomicBombEffect new} ]
-		raise: AssertionFailure
+		raise: MatchException 
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'you can not create a board with less than 1 space' ]
 ]
 

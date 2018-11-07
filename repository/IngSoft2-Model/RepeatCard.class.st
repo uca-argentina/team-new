@@ -5,6 +5,7 @@ Class {
 }
 
 { #category : #applying }
-RepeatCard >> applyIn: aMatch to: anObject [
-	aMatch lastEffect value turnOnEffectAt: aMatch activatedBy: aMatch lastEffect key
+RepeatCard >> applyIn: aMatch to: aPlayer [
+	aMatch lastEffect value turnOnEffectAt: aMatch activatedBy: aMatch lastEffect key.
+	aMatch updateLastCard: self.
 ]

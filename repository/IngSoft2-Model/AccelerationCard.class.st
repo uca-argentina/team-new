@@ -6,7 +6,8 @@ Class {
 
 { #category : #applying }
 AccelerationCard >> applyIn: aMatch to: aPlayer [
-	aMatch players do: [ :player | aMatch activate: self toBeAppliedTo: player ]
+	aMatch players do: [ :player | aMatch activate: self toBeAppliedTo: player ].
+	aMatch updateLastCard: self.
 ]
 
 { #category : #applying }

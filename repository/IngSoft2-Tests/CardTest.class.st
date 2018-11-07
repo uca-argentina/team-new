@@ -232,9 +232,9 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 { #category : #tests }
 CardTest >> testPlayerPlaysOverloadCard [
 	| juan jose board dice deck match overloadCard |
+	board := self boardWith10SpacesWithoutEffects.
 	juan := self playerNamedJuan.
 	jose := self playerNamedJose.
-	board := self boardWith10SpacesWithoutEffects.
 	overloadCard := OverloadCard new.
 	deck := Deck deterministicWithCardSequence: {overloadCard}.
 	dice := Dice deterministicWithFaces: 6 throwing: {2 . 6}.
@@ -253,6 +253,98 @@ CardTest >> testPlayerPlaysOverloadCard [
 	match playedBy: juan.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 5
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRedoCardRedoingACancellationCard [
+	| juan jose board dice deck match speedCard cancellationCard redoCard |
+	board := self boardWith10SpacesWithoutEffects.
+	juan := self playerNamedJuan.
+	jose := self playerNamedJose.
+	speedCard := SpeedCard new.
+	redoCard := RedoCard new.
+	cancellationCard := CancellationCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{speedCard.
+			redoCard.
+			cancellationCard }.
+	dice := Dice deterministicWithFaces: 6 throwing: #(2 3).
+	match := Match
+		playedBy: {juan . jose}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: speedCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 4.
+	match play: speedCard to: jose by: jose.
+	match playedBy: jose.
+	self assert: (match positionOf: jose) currentSpace equals: 5.
+	match play: cancellationCard by: jose affecting: juan andHis: speedCard.
+	match play: redoCard by: juan. 
+	match playedBy: juan;
+			playedBy: jose.
+	self assert: (match positionOf: juan) currentSpace equals: 7;
+		  assert: (match positionOf: jose) currentSpace equals: 9.
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRedoCardRedoingARedoCard [
+	| juan board dice deck match speedCard redoCard |
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: { NoEffect new . DealCardEffect new } .
+	juan := self playerNamedJuan.
+	speedCard := SpeedCard new.
+	redoCard := RedoCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{redoCard.
+			speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {2}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: speedCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 4.
+	match play: redoCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 8.
+	match play: redoCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 13.
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRedoCardRedoingARepeatCard [
+	| juan board dice deck match repeatCard redoCard |
+	board := Board deterministicWithSpaces: 15 andEffectsGeneratedFrom: { SpeedUpEffect new }.
+	juan := self playerNamedJuan.
+	repeatCard := RepeatCard new.
+	redoCard := RedoCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{repeatCard.
+			redoCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {1 . 2 . 3 . 4}.
+	match := Match
+		playedBy:
+			{juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 6.
+	match play: repeatCard by: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 10.
+	match play: redoCard by: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 14.
+
 ]
 
 { #category : #tests }
@@ -312,6 +404,32 @@ CardTest >> testPlayerPlaysRedoCardRedoingAnAccelerationCard [
 	self assert: (match positionOf: juan) currentSpace equals: 8.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 10.
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRedoCardRedoingAnOverloadCard [
+	| juan board dice deck match overloadCard redoCard |
+	board := self boardWith10SpacesWithoutEffects.
+	juan := self playerNamedJuan.
+	overloadCard := OverloadCard new.
+	redoCard := RedoCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{overloadCard.
+			redoCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: overloadCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 4.
+	match play: redoCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 5
 ]
 
 { #category : #tests }

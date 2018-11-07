@@ -6,7 +6,8 @@ Class {
 
 { #category : #applying }
 OverloadCard >> applyIn: aMatch to: aPlayer [
-	aMatch activate: self toBeAppliedTo: aPlayer
+	aMatch activate: self toBeAppliedTo: aPlayer.
+	aMatch updateLastCard: self.
 ]
 
 { #category : #applying }

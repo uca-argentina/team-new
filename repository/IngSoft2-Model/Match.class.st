@@ -100,7 +100,8 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 		do: [ :player | 
 			positionOfPlayers at: player put: Position atStart.
 			cardsAtHands at: player put: (OrderedCollection with: deck dealCard with: deck dealCard).
-			cardsAffectingPlayers at: player put: OrderedCollection new ]
+			cardsAffectingPlayers at: player put: OrderedCollection new ].
+	lastEffect := players first -> NoEffect new
 ]
 
 { #category : #'as yet unclassified' }
@@ -204,7 +205,6 @@ Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
 	self assertMatchIncludes: anAffecterPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
-	self updateLastCard: aCard.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
