@@ -5,7 +5,6 @@ Class {
 		'board',
 		'players',
 		'dices',
-		'orderOfPlayers',
 		'positionOfPlayers',
 		'playerIndex',
 		'totalLaps',
@@ -29,13 +28,8 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 ]
 
 { #category : #playing }
-Match >> activate: aCard toBeAppliedTo: aPlayer [ 
+Match >> add: aCard toBeAppliedTo: aPlayer [
 	(cardsAffectingPlayers at: aPlayer) add: aCard
-]
-
-{ #category : #'as yet unclassified' }
-Match >> activateInstant: aCard toBeAppliedoTo: aPlayer [
-	lastCard := aPlayer -> aCard
 ]
 
 { #category : #description }
@@ -101,15 +95,8 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 			positionOfPlayers at: player put: Position atStart.
 			cardsAtHands at: player put: (OrderedCollection with: deck dealCard with: deck dealCard).
 			cardsAffectingPlayers at: player put: OrderedCollection new ].
+	lastCard := NoCard new.
 	lastEffect := players first -> NoEffect new
-]
-
-{ #category : #'as yet unclassified' }
-Match >> instantRepeat: aRepeatCard by: aPlayer [
-	self assert: aPlayer owns: aRepeatCard.
-	self assertMatchIncludes: aPlayer.
-	aRepeatCard applyCardEffectOn: self.
-	self remove: aRepeatCard atHandfrom: aPlayer
 ]
 
 { #category : #description }
@@ -173,7 +160,6 @@ Match >> play: aCard by: aPlayer [
 	self assertMatchIncludes: aPlayer.
 	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
 	aCard applyIn: self to: aPlayer.
-	self updateLastCard: aCard.
 	self remove: aCard atHandfrom: aPlayer
 ]
 
@@ -182,8 +168,7 @@ Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
 	self assert: anAffecterPlayer owns: aCard.
 	self assert: anActivatedCard isAffecting: anAffecterPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
-	aCard activate: anActivatedCard affecting: anAffecterPlayer in: self.
-	self updateLastCard: aCard.
+	aCard applyTo: anActivatedCard affecting: anAffecterPlayer in: self.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
@@ -193,8 +178,7 @@ Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: ac
 	self assert: activatedCard isAffecting: anAffectedPlayer.
 	self assertMatchIncludes: anAffecterPlayer.
 	self assertMatchIncludes: anAffectedPlayer.
-	aCard activate: activatedCard affecting: anAffecterPlayer in: self.
-	self updateLastCard: aCard.
+	aCard applyTo: activatedCard affecting: anAffectedPlayer in: self.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 

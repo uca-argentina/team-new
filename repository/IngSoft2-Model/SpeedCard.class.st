@@ -6,7 +6,7 @@ Class {
 
 { #category : #applying }
 SpeedCard >> applyIn: aMatch to: aPlayer [
-	aMatch activate: self toBeAppliedTo: aPlayer.
+	aMatch add: self toBeAppliedTo: aPlayer.
 	aMatch updateLastCard: self.
 ]
 

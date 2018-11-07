@@ -27,7 +27,7 @@ Class {
 }
 
 { #category : #accessing }
-MatchTest >> boardWith10SpacesWithoutEffect [
+MatchTest >> boardWith10SpacesWithoutEffects [
 	^ Board
 		deterministicWithSpaces: 10
 		andEffectsGeneratedFrom: {NoEffect new}
@@ -57,7 +57,7 @@ MatchTest >> playerNamedMartin [
 MatchTest >> testAPlayerSkipsMoreThanOneLapInASingleThrow [
 	| fabio match dices board players deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
 	dices := OrderedCollection
@@ -78,7 +78,7 @@ MatchTest >> testAPlayerWantsToPlayACardHeDoesNotHave [
 	| juan jose board dice deck match speedCard overloadCard |
 	juan := self playerNamedJuan.
 	jose := Player named: 'Jose'.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	overloadCard := OverloadCard new.
 	speedCard := SpeedCard new.
 	deck := Deck deterministicWithCardSequence: {overloadCard}.
@@ -163,7 +163,7 @@ MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 	| fabio match board players dices deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 7 throwing: #(4 7)).
@@ -188,7 +188,7 @@ MatchTest >> testAPlayerWantsToPlayWhenMatchIsOver [
 MatchTest >> testAPlayerWins [
 	| match board martin dices players deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	martin := self playerNamedMartin.
 	players := OrderedCollection with: martin.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 6 throwing: #(6 4)).
@@ -211,7 +211,7 @@ MatchTest >> testAPlayerWins [
 MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 	| fabio match dices board players deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
 	dices := OrderedCollection
@@ -334,7 +334,7 @@ MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace1 [
 MatchTest >> testDealingInitialHandToPlayer [
 	| juan match board dice deck overloadCard speedCard redoCard |
 	juan := self playerNamedJuan.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	dice := Dice deterministicWithFaces: 5 throwing: {1}.
 	overloadCard := OverloadCard new.
 	speedCard := SpeedCard new.
@@ -391,7 +391,7 @@ MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 MatchTest >> testPlayerMovesForwardOnBoard [
 	| fabio match dices board players deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	fabio := self playerNamedFabio.
 	players := OrderedCollection with: fabio.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(4)) with: (Dice deterministicWithFaces: 3 throwing: #(3)).
@@ -407,11 +407,56 @@ MatchTest >> testPlayerMovesForwardOnBoard [
 ]
 
 { #category : #tests }
+MatchTest >> testPlayerWantsToPlayAPermanentCardButItIsNotHisTurn [
+	| juan martin board dice deck match speedCard |
+	juan := self playerNamedJuan.
+	martin := self playerNamedMartin.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy:
+			{juan.
+			martin}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		should: [ match play: speedCard to: juan by: martin ]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'A player can only play a permanent card in his turn' ]
+]
+
+{ #category : #tests }
+MatchTest >> testPlayerWantsToPlayAPermanentCardToAPlayerThatIsNotPlaying [
+	| juan martin board dice deck match speedCard |
+	juan := self playerNamedJuan.
+	martin := self playerNamedMartin.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy:
+			{juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		should: [ match play: speedCard to: martin by: juan]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ',martin name,' is not playing' ]
+]
+
+{ #category : #tests }
 MatchTest >> testPlayersRankings [
 	| luciana micaela carolina victoria match board dices players deck |
 	deck := self deckWithOverloadCard.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(1 3 5 4)).
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	luciana := Player named: 'Luciana'.
 	micaela := Player named: 'Micaela'.
 	carolina := Player named: 'Carolina'.
@@ -443,7 +488,7 @@ MatchTest >> testPlayersRankings [
 MatchTest >> testPlayersSequenceOnMatch [
 	| board martin juan match players dices deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	martin := self playerNamedMartin.
 	juan := self playerNamedJuan.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 6 throwing: #(1 2 3 4)).
@@ -469,7 +514,7 @@ MatchTest >> testPlayersSequenceOnMatch [
 MatchTest >> testPositionOfPlayers [
 	| match board martin juan dices players deck |
 	deck := self deckWithOverloadCard.
-	board := self boardWith10SpacesWithoutEffect.
+	board := self boardWith10SpacesWithoutEffects.
 	martin := self playerNamedMartin.
 	juan := self playerNamedMartin.
 	players := OrderedCollection with: martin with: juan.

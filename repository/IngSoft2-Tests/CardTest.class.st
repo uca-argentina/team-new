@@ -45,7 +45,7 @@ CardTest >> testPlayerPlaysAccelerationCard [
 		on: board
 		dealingFrom: deck.
 	match play: accelerationCard by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: {speedCard} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match playedBy: jose.
@@ -86,7 +86,7 @@ CardTest >> testPlayerPlaysCancellationCardAnulatingCancellatingCard [
 		by: juan
 		affecting: juan
 		andHis: accelerationCard.
-	self assert: (match cardsAtHandOf: juan) equals: {} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match playedBy: jose.
@@ -94,7 +94,7 @@ CardTest >> testPlayerPlaysCancellationCardAnulatingCancellatingCard [
 ]
 
 { #category : #tests }
-CardTest >> testPlayerPlaysCancellationCardCancellatingAPermanentCardButNoOnePlayedOne [
+CardTest >> testPlayerPlaysCancellationCardCancellatingACardButNoOnePlayedOne [
 	| juan board dice deck match accelerationCard cancellationCard jose |
 	juan := self playerNamedJuan.
 	jose := self playerNamedJose.
@@ -145,7 +145,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellatingAccelerationCard [
 		on: board
 		dealingFrom: deck.
 	match play: accelerationCard by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match playedBy: jose.
@@ -154,7 +154,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellatingAccelerationCard [
 		play: cancellationCard
 		by: juan
 		affecting: accelerationCard.
-	self assert: (match cardsAtHandOf: juan) equals: {} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match playedBy: jose.
@@ -180,7 +180,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 		on: board
 		dealingFrom: deck.
 	match play: overloadCard to: juan by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 10.
 	match
@@ -188,7 +188,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 		by: juan
 		affecting: juan
 		andHis: overloadCard.
-	self assert: (match cardsAtHandOf: juan) equals: {} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 2
 ]
@@ -214,7 +214,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 	match play: speedCard to: juan by: juan.
 	self
 		assert: (match cardsAtHandOf: juan)
-		equals: {cancellationCard} asOrderedCollection.
+		equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match
@@ -223,8 +223,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 		affecting: juan
 		andHis: speedCard.
 	self
-		assert: (match cardsAtHandOf: juan)
-		equals: {} asOrderedCollection.
+		assert: (match cardsAtHandOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 5
 ]
@@ -249,14 +248,36 @@ CardTest >> testPlayerPlaysOverloadCard [
 	match play: overloadCard to: jose by: juan.
 	self
 		assert: (match cardsAtHandOf: juan)
-		equals: {overloadCard} asOrderedCollection.
+		equals: overloadCard asOrderedCollection.
 	match playedBy: juan.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 5
 ]
 
 { #category : #tests }
-CardTest >> testPlayerPlaysRedoCardRedoingACancellationCard [
+CardTest >> testPlayerPlaysRedoCardButNoCardWasPlayedBefore [
+	| juan board dice deck match speedCard redoCard |
+	board := self boardWith10SpacesWithoutEffects.
+	juan := self playerNamedJuan.
+	speedCard := SpeedCard new.
+	redoCard := RedoCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{speedCard.
+			redoCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {2}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: redoCard to: juan by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRedoCardRedoingACancellationCardCancellatingASpeedCard [
 	| juan jose board dice deck match speedCard cancellationCard redoCard |
 	board := self boardWith10SpacesWithoutEffects.
 	juan := self playerNamedJuan.
@@ -283,10 +304,45 @@ CardTest >> testPlayerPlaysRedoCardRedoingACancellationCard [
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 5.
 	match play: cancellationCard by: jose affecting: juan andHis: speedCard.
-	match play: redoCard by: juan. 
+	match play: redoCard by: juan affecting: jose andHis: speedCard. 
 	match playedBy: juan;
 			playedBy: jose.
-	self assert: (match positionOf: juan) currentSpace equals: 7;
+	self assert: (match positionOf: juan) currentSpace equals: 6;
+		  assert: (match positionOf: jose) currentSpace equals: 8.
+]
+
+{ #category : #tests }
+CardTest >> testPlayerPlaysRedoCardRedoingACancellationCardCancellatingAnAccelerationCard [
+	| juan jose board dice deck match accelerationCard cancellationCard redoCard |
+	board := self boardWith10SpacesWithoutEffects.
+	juan := self playerNamedJuan.
+	jose := self playerNamedJose.
+	accelerationCard := AccelerationCard new.
+	redoCard := RedoCard new.
+	cancellationCard := CancellationCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{accelerationCard.
+			redoCard.
+			cancellationCard }.
+	dice := Dice deterministicWithFaces: 6 throwing: #(2 3).
+	match := Match
+		playedBy: {juan . jose}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	match play: accelerationCard to: juan by: juan.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 4.
+	match play: accelerationCard to: jose by: jose.
+	match playedBy: jose.
+	self assert: (match positionOf: jose) currentSpace equals: 6.
+	match play: cancellationCard by: jose affecting: accelerationCard.
+	match play: redoCard by: juan affecting: accelerationCard. 
+	match playedBy: juan;
+			playedBy: jose.
+	self assert: (match positionOf: juan) currentSpace equals: 6;
 		  assert: (match positionOf: jose) currentSpace equals: 9.
 ]
 
@@ -459,11 +515,15 @@ CardTest >> testPlayerPlaysRepeatCard [
 
 { #category : #tests }
 CardTest >> testPlayerPlaysRepeatCardButNoOneThrowedDices [
-	| juan board dice deck match repeatCard |
+	| juan board dice deck match repeatCard speedCard |
 	juan := self playerNamedJuan.
 	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: {SpeedUpEffect new}.
 	repeatCard := RepeatCard new.
-	deck := Deck deterministicWithCardSequence: {repeatCard}.
+	speedCard := SpeedCard new.
+	deck := Deck
+		deterministicWithCardSequence:
+			{repeatCard.
+			speedCard}.
 	dice := Dice deterministicWithFaces: 6 throwing: {1}.
 	match := Match
 		playedBy: {juan}
@@ -471,7 +531,9 @@ CardTest >> testPlayerPlaysRepeatCardButNoOneThrowedDices [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: repeatCard by: juan
+	match play: repeatCard by: juan.
+	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
+	self assert: (match positionOf: juan) currentSpace equals: 1
 ]
 
 { #category : #tests }
@@ -489,7 +551,7 @@ CardTest >> testPlayerPlaysSpeedCard [
 		on: board
 		dealingFrom: deck.
 	match play: speedCard to: juan by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: {speedCard} asOrderedCollection.
+	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 7
 ]

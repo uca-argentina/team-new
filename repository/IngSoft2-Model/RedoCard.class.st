@@ -10,6 +10,11 @@ RedoCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
+RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [ 
+	aMatch lastCard applyTo: aCard affecting: aPlayer in: aMatch.
+]
+
+{ #category : #applying }
 RedoCard >> needs: aPlayer ToBeTurnOf: aPlayer2 [ 
 	
 ]
