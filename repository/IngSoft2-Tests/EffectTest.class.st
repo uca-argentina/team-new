@@ -84,13 +84,13 @@ EffectTest >> testPlayerActivatesGetCardEffect [
 		on: board
 		dealingFrom: deck.
 	self
-		assert: (match cardsAtHandOf: matias)
+		assert: (match cardsOf: matias)
 		equals:
 			{overloadCard.
 			speedCard} asOrderedCollection.
 	match playedBy: matias.
 	self
-		assert: (match cardsAtHandOf: matias)
+		assert: (match cardsOf: matias)
 		equals:
 			{overloadCard.
 			speedCard.

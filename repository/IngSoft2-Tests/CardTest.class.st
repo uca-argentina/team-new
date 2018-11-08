@@ -45,7 +45,7 @@ CardTest >> testPlayerPlaysAccelerationCard [
 		on: board
 		dealingFrom: deck.
 	match play: accelerationCard by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
+	self assert: (match cardsOf: juan) equals: speedCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match playedBy: jose.
@@ -76,7 +76,7 @@ CardTest >> testPlayerPlaysCancellationCardAnulatingCancellatingCard [
 		on: board
 		dealingFrom: deck.
 	match play: accelerationCard by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: {cancellationCard} asOrderedCollection.
+	self assert: (match cardsOf: juan) equals: {cancellationCard} asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match playedBy: jose.
@@ -86,7 +86,7 @@ CardTest >> testPlayerPlaysCancellationCardAnulatingCancellatingCard [
 		by: juan
 		affecting: juan
 		andHis: accelerationCard.
-	self assert: (match cardsAtHandOf: juan) isEmpty.
+	self assert: (match cardsOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match playedBy: jose.
@@ -145,7 +145,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellatingAccelerationCard [
 		on: board
 		dealingFrom: deck.
 	match play: accelerationCard by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: cancellationCard asOrderedCollection.
+	self assert: (match cardsOf: juan) equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
 	match playedBy: jose.
@@ -154,7 +154,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellatingAccelerationCard [
 		play: cancellationCard
 		by: juan
 		affecting: accelerationCard.
-	self assert: (match cardsAtHandOf: juan) isEmpty.
+	self assert: (match cardsOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match playedBy: jose.
@@ -180,7 +180,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 		on: board
 		dealingFrom: deck.
 	match play: overloadCard to: juan by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: cancellationCard asOrderedCollection.
+	self assert: (match cardsOf: juan) equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 10.
 	match
@@ -188,7 +188,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 		by: juan
 		affecting: juan
 		andHis: overloadCard.
-	self assert: (match cardsAtHandOf: juan) isEmpty.
+	self assert: (match cardsOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 2
 ]
@@ -213,7 +213,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 		dealingFrom: deck.
 	match play: speedCard to: juan by: juan.
 	self
-		assert: (match cardsAtHandOf: juan)
+		assert: (match cardsOf: juan)
 		equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 3.
@@ -223,7 +223,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 		affecting: juan
 		andHis: speedCard.
 	self
-		assert: (match cardsAtHandOf: juan) isEmpty.
+		assert: (match cardsOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 5
 ]
@@ -247,7 +247,7 @@ CardTest >> testPlayerPlaysOverloadCard [
 		dealingFrom: deck.
 	match play: overloadCard to: jose by: juan.
 	self
-		assert: (match cardsAtHandOf: juan)
+		assert: (match cardsOf: juan)
 		equals: overloadCard asOrderedCollection.
 	match playedBy: juan.
 	match playedBy: jose.
@@ -273,7 +273,7 @@ CardTest >> testPlayerPlaysRedoCardButNoCardWasPlayedBefore [
 		on: board
 		dealingFrom: deck.
 	match play: redoCard to: juan by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection
+	self assert: (match cardsOf: juan) equals: speedCard asOrderedCollection
 ]
 
 { #category : #tests }
@@ -532,7 +532,7 @@ CardTest >> testPlayerPlaysRepeatCardButNoOneThrowedDices [
 		on: board
 		dealingFrom: deck.
 	match play: repeatCard by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
+	self assert: (match cardsOf: juan) equals: speedCard asOrderedCollection.
 	self assert: (match positionOf: juan) currentSpace equals: 1.
 	self assert: (match positionOf: juan) currentLap equals: 0
 ]
@@ -552,7 +552,7 @@ CardTest >> testPlayerPlaysSpeedCard [
 		on: board
 		dealingFrom: deck.
 	match play: speedCard to: juan by: juan.
-	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
+	self assert: (match cardsOf: juan) equals: speedCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 7
 ]

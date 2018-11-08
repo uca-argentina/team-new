@@ -92,7 +92,7 @@ MatchTest >> testAPlayerWantsToPlayACardHeDoesNotHave [
 		on: board
 		dealingFrom: deck.
 	self
-		assert: (match cardsAtHandOf: juan)
+		assert: (match cardsOf: juan)
 		equals:
 			{overloadCard.
 			overloadCard} asOrderedCollection.
@@ -351,7 +351,7 @@ MatchTest >> testDealingInitialHandToPlayer [
 		on: board
 		dealingFrom: deck.
 	self
-		assert: (match cardsAtHandOf: juan)
+		assert: (match cardsOf: juan)
 		equals:
 			{speedCard.
 			overloadCard} asOrderedCollection

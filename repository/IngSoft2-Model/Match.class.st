@@ -8,11 +8,11 @@ Class {
 		'positionOfPlayers',
 		'playerIndex',
 		'totalLaps',
-		'cardsAtHands',
 		'deck',
 		'lastEffect',
 		'cardsAffectingPlayers',
-		'lastCard'
+		'lastCard',
+		'playersCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -27,20 +27,21 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 		dealingFrom: aDeck
 ]
 
-{ #category : #playing }
+{ #category : #adding }
 Match >> add: aCard toBeAppliedTo: aPlayer [
-	(cardsAffectingPlayers at: aPlayer) add: aCard
+	(cardsAffectingPlayers at: aPlayer ifAbsentPut: [ OrderedCollection new ]) add: aCard
 ]
 
 { #category : #description }
 Match >> assert: aCard isAffecting: aPlayer [
-	((cardsAffectingPlayers at: aPlayer) includes: aCard)
+	((cardsAffectingPlayers at: aPlayer ifAbsentPut:[	OrderedCollection new ]) includes: aCard)
 		ifFalse: [ MatchException signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
 ]
 
 { #category : #description }
 Match >> assert: aPlayer owns: aCard [
-	(cardsAtHands at: aPlayer)
+	self assertIsPlaying: aPlayer.
+	(playersCards at: aPlayer ifAbsentPut: [ OrderedCollection with: deck dealCard with: deck dealCard ])
 		detect: [ :card | card = aCard ]
 		ifNone: [ MatchException signal: 'The player ' , aPlayer name , ' do not own ' , aCard className ]
 ]
@@ -64,8 +65,9 @@ Match >> assertTurnBelongsTo: aPlayer [
 ]
 
 { #category : #accessing }
-Match >> cardsAtHandOf: aPlayer [ 
-	^ cardsAtHands at: aPlayer
+Match >> cardsOf: aPlayer [
+	self assertIsPlaying: aPlayer.
+	^ playersCards at: aPlayer ifAbsentPut: [ OrderedCollection with: deck dealCard with: deck dealCard ]
 ]
 
 { #category : #playing }
@@ -75,7 +77,7 @@ Match >> changeTurn [
 
 { #category : #playing }
 Match >> dealCardTo: aPlayer [ 
-	(cardsAtHands at:aPlayer) add: deck dealCard.
+	(playersCards at:aPlayer) add: deck dealCard.
 ]
 
 { #category : #description }
@@ -93,11 +95,7 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 	deck := aDeck.
 	positionOfPlayers := Dictionary new.
 	cardsAffectingPlayers := Dictionary new.
-	cardsAtHands := Dictionary new.
-	players
-		do: [ :player | 
-			cardsAtHands at: player put: (OrderedCollection with: deck dealCard with: deck dealCard).
-			cardsAffectingPlayers at: player put: OrderedCollection new ].
+	playersCards := Dictionary new.
 	lastCard := NoneCard new.
 	lastEffect := players first -> NoEffect new
 ]
@@ -158,39 +156,35 @@ Match >> nextPlayerPosition [
 { #category : #playing }
 Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
-	self assertIsPlaying: aPlayer.
 	aCard needs: self nextPlayer toBeTurnOf: aPlayer.
 	aCard applyIn: self to: aPlayer.
-	self remove: aCard atHandfrom: aPlayer
+	self remove: aCard from: aPlayer
 ]
 
 { #category : #playing }
 Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
 	self assert: anAffecterPlayer owns: aCard.
 	self assert: anActivatedCard isAffecting: anAffecterPlayer.
-	self assertIsPlaying: anAffecterPlayer.
 	aCard applyTo: anActivatedCard affecting: anAffecterPlayer in: self.
-	self remove: aCard atHandfrom: anAffecterPlayer
+	self remove: aCard from: anAffecterPlayer
 ]
 
 { #category : #playing }
 Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: activatedCard [
 	self assert: anAffecterPlayer owns: aCard.
 	self assert: activatedCard isAffecting: anAffectedPlayer.
-	self assertIsPlaying: anAffecterPlayer.
 	self assertIsPlaying: anAffectedPlayer.
 	aCard applyTo: activatedCard affecting: anAffectedPlayer in: self.
-	self remove: aCard atHandfrom: anAffecterPlayer
+	self remove: aCard from: anAffecterPlayer
 ]
 
 { #category : #playing }
 Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
-	self assertIsPlaying: anAffecterPlayer.
 	aCard needs: self nextPlayer toBeTurnOf: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
-	self remove: aCard atHandfrom: anAffecterPlayer
+	self remove: aCard from: anAffecterPlayer
 ]
 
 { #category : #playing }
@@ -215,6 +209,7 @@ Match >> positionOf: aPlayer [
 
 { #category : #accessing }
 Match >> rankingOf: aPlayer [
+	self assertIsPlaying: aPlayer.
 	^ (players asSortedCollection: [ :player | self positionOf: player ] descending) indexOf: aPlayer
 ]
 
@@ -224,14 +219,16 @@ Match >> remove: aCard affecting: aPlayer [
 ]
 
 { #category : #removing }
-Match >> remove: aCard atHandfrom: aPlayer [ 
-	(cardsAtHands at:aPlayer) remove: aCard
+Match >> remove: aCard from: aPlayer [ 
+	(playersCards at:aPlayer) remove: aCard
 ]
 
 { #category : #playing }
 Match >> throwDicesAndApplyCardsBy: nextPlayer [
 	^ (nextPlayer throw: dices)
-		+ ((cardsAffectingPlayers at: nextPlayer) sumNumbers: [ :card | card spacesToMove ])
+		+
+			((cardsAffectingPlayers at: nextPlayer ifAbsentPut: [ OrderedCollection new ])
+				sumNumbers: [ :card | card spacesToMove ])
 ]
 
 { #category : #updating }
