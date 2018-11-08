@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #applying }
-InstantCard >> needs: aNextPlayer ToBeTurnOf: anAffecterPlayer [
+InstantCard >> needs: aNextPlayer toBeTurnOf: anAffecterPlayer [
 	
 ]

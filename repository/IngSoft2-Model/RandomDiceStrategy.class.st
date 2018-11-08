@@ -6,7 +6,5 @@ Class {
 
 { #category : #generating }
 RandomDiceStrategy >> nextNumberUsing: anAmountOfFaces [
-	| random |
-	random := Random new.
-	^ random nextInt: anAmountOfFaces
+	^ anAmountOfFaces atRandom
 ]

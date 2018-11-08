@@ -10,7 +10,7 @@ PermanentCard >> cancelAffecting: aPlayer on: aMatch [
 ]
 
 { #category : #applying }
-PermanentCard >> needs: aNextPlayer ToBeTurnOf: anAffecterPlayer [
+PermanentCard >> needs: aNextPlayer toBeTurnOf: anAffecterPlayer [
 	aNextPlayer = anAffecterPlayer
 		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
 ]

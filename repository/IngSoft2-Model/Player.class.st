@@ -33,8 +33,3 @@ Player >> name [
 Player >> throw: matchDices [
 	^ matchDices sumNumbers: #roll
 ]
-
-{ #category : #comparing }
-Player >> value: aPlayer [
-	^ self = aPlayer
-]

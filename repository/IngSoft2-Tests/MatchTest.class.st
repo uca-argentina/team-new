@@ -303,7 +303,7 @@ MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 	self assert: (match positionOf: fabio) currentSpace equals: 1.
 	self
 		should: [ match positionOf: andres ]
-		raise: AssertionFailure
+		raise: MatchException 
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ' , andres name , ' is not playing' ]
 ]
 

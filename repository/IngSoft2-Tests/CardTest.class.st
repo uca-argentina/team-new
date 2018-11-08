@@ -533,7 +533,8 @@ CardTest >> testPlayerPlaysRepeatCardButNoOneThrowedDices [
 		dealingFrom: deck.
 	match play: repeatCard by: juan.
 	self assert: (match cardsAtHandOf: juan) equals: speedCard asOrderedCollection.
-	self assert: (match positionOf: juan) currentSpace equals: 1
+	self assert: (match positionOf: juan) currentSpace equals: 1.
+	self assert: (match positionOf: juan) currentLap equals: 0
 ]
 
 { #category : #tests }

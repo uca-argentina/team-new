@@ -34,9 +34,8 @@ Match >> add: aCard toBeAppliedTo: aPlayer [
 
 { #category : #description }
 Match >> assert: aCard isAffecting: aPlayer [
-	(cardsAffectingPlayers at: aPlayer)
-		detect: [ :card | card = aCard ]
-		ifNone: [ MatchException signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
+	((cardsAffectingPlayers at: aPlayer) includes: aCard)
+		ifFalse: [ MatchException signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
 ]
 
 { #category : #description }
@@ -47,15 +46,15 @@ Match >> assert: aPlayer owns: aCard [
 ]
 
 { #category : #description }
-Match >> assertMatchHasEnded [
-	self matchNotEnded
-		ifFalse: [ MatchException signal: 'The match is over' ]
+Match >> assertIsPlaying: aPlayer [
+	(players includes: aPlayer)
+		ifFalse: [ MatchException signal: 'Player ' , aPlayer name , ' is not playing' ]
 ]
 
 { #category : #description }
-Match >> assertMatchIncludes: aPlayer [
-	(players includes: aPlayer)
-		ifFalse: [ MatchException signal: 'Player ' , aPlayer name , ' is not playing' ]
+Match >> assertMatchHasEnded [
+	self matchNotEnded
+		ifFalse: [ MatchException signal: 'The match is over' ]
 ]
 
 { #category : #description }
@@ -64,7 +63,7 @@ Match >> assertTurnBelongsTo: aPlayer [
 		ifFalse: [ MatchException signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
-{ #category : #description }
+{ #category : #accessing }
 Match >> cardsAtHandOf: aPlayer [ 
 	^ cardsAtHands at: aPlayer
 ]
@@ -77,6 +76,11 @@ Match >> changeTurn [
 { #category : #playing }
 Match >> dealCardTo: aPlayer [ 
 	(cardsAtHands at:aPlayer) add: deck dealCard.
+]
+
+{ #category : #description }
+Match >> hasWon: aPlayer [
+	^ (self positionOf: aPlayer) currentLap > (totalLaps - 1)
 ]
 
 { #category : #initialization }
@@ -92,18 +96,10 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 	cardsAtHands := Dictionary new.
 	players
 		do: [ :player | 
-			positionOfPlayers at: player put: Position atStart.
 			cardsAtHands at: player put: (OrderedCollection with: deck dealCard with: deck dealCard).
 			cardsAffectingPlayers at: player put: OrderedCollection new ].
-	lastCard := NoCard new.
+	lastCard := NoneCard new.
 	lastEffect := players first -> NoEffect new
-]
-
-{ #category : #description }
-Match >> isTheLastSpaceWithFinalLapCrossedBy: aPlayer [
-	| position |
-	position := self positionOf: aPlayer.
-	^ position currentLap > (totalLaps - 1)
 ]
 
 { #category : #accessing }
@@ -113,13 +109,18 @@ Match >> lastCard [
 
 { #category : #accessing }
 Match >> lastEffect [
-	^ lastEffect
+	^ lastEffect value
+]
+
+{ #category : #accessing }
+Match >> lastEffectTarget [
+	^ lastEffect key
 ]
 
 { #category : #playing }
 Match >> matchNotEnded [
 	^ players
-		noneSatisfy: [ :player | self isTheLastSpaceWithFinalLapCrossedBy: player ]
+		noneSatisfy: [ :player | self hasWon: player ]
 ]
 
 { #category : #moving }
@@ -139,7 +140,7 @@ Match >> moveByEffectTo: aPlayer spaces: anAmountOfSpaces [
 				onBoardOfSize: board spaces)
 ]
 
-{ #category : #description }
+{ #category : #accessing }
 Match >> nextPlayer [
 	^ players at: playerIndex
 ]
@@ -157,8 +158,8 @@ Match >> nextPlayerPosition [
 { #category : #playing }
 Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
-	self assertMatchIncludes: aPlayer.
-	aCard needs: self nextPlayer ToBeTurnOf: aPlayer.
+	self assertIsPlaying: aPlayer.
+	aCard needs: self nextPlayer toBeTurnOf: aPlayer.
 	aCard applyIn: self to: aPlayer.
 	self remove: aCard atHandfrom: aPlayer
 ]
@@ -167,7 +168,7 @@ Match >> play: aCard by: aPlayer [
 Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
 	self assert: anAffecterPlayer owns: aCard.
 	self assert: anActivatedCard isAffecting: anAffecterPlayer.
-	self assertMatchIncludes: anAffecterPlayer.
+	self assertIsPlaying: anAffecterPlayer.
 	aCard applyTo: anActivatedCard affecting: anAffecterPlayer in: self.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
@@ -176,8 +177,8 @@ Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
 Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: activatedCard [
 	self assert: anAffecterPlayer owns: aCard.
 	self assert: activatedCard isAffecting: anAffectedPlayer.
-	self assertMatchIncludes: anAffecterPlayer.
-	self assertMatchIncludes: anAffectedPlayer.
+	self assertIsPlaying: anAffecterPlayer.
+	self assertIsPlaying: anAffectedPlayer.
 	aCard applyTo: activatedCard affecting: anAffectedPlayer in: self.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
@@ -185,16 +186,16 @@ Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: ac
 { #category : #playing }
 Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
-	self assertMatchIncludes: anAffectedPlayer.
-	self assertMatchIncludes: anAffecterPlayer.
-	aCard needs: self nextPlayer ToBeTurnOf: anAffecterPlayer.
+	self assertIsPlaying: anAffectedPlayer.
+	self assertIsPlaying: anAffecterPlayer.
+	aCard needs: self nextPlayer toBeTurnOf: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard atHandfrom: anAffecterPlayer
 ]
 
 { #category : #playing }
 Match >> playedBy: aPlayer [
-	self assertMatchIncludes: aPlayer.
+	self assertIsPlaying: aPlayer.
 	self assertMatchHasEnded.
 	self move: aPlayer.
 	board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
@@ -206,15 +207,15 @@ Match >> players [
 	^ players
 ]
 
-{ #category : #description }
+{ #category : #accessing }
 Match >> positionOf: aPlayer [
-	^ positionOfPlayers at: aPlayer ifAbsent: [ AssertionFailure signal: 'Player ' , aPlayer name , ' is not playing' ]
+	self assertIsPlaying: aPlayer.
+	^ positionOfPlayers at: aPlayer ifAbsentPut: [ Position atStart ]
 ]
 
-{ #category : #description }
+{ #category : #accessing }
 Match >> rankingOf: aPlayer [
-	^ (players asSortedCollection: [ :player | self positionOf: player ] descending)
-		detectIndex: aPlayer
+	^ (players asSortedCollection: [ :player | self positionOf: player ] descending) indexOf: aPlayer
 ]
 
 { #category : #removing }
@@ -243,9 +244,9 @@ Match >> updateLastEffect: anEffectToPlayer [
 	lastEffect := anEffectToPlayer
 ]
 
-{ #category : #description }
+{ #category : #accessing }
 Match >> winner [
 	self matchNotEnded
 		ifTrue: [ MatchException signal: 'There is no winner' ].
-	^ players detect: [ :player | self isTheLastSpaceWithFinalLapCrossedBy: player ]
+	^ players detect: [ :player | self hasWon: player ]
 ]
