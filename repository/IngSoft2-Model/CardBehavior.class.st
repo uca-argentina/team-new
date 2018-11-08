@@ -1,15 +1,15 @@
 Class {
-	#name : #Card,
+	#name : #CardBehavior,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #applying }
-Card >> applyIn: aMatch to: aPlayer [
+CardBehavior >> applyIn: aMatch to: aPlayer [
 	self subclassResponsibility
 ]
 
 { #category : #applying }
-Card >> needs: aNextPlayer toBeTurnOf: aPlayer [
+CardBehavior >> asserting: aPlayer isHisTurnOn: aNextPlayer [
 	self subclassResponsibility
 ]

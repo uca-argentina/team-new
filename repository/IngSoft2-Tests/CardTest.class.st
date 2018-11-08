@@ -179,7 +179,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: overloadCard to: juan by: juan.
+	match play: overloadCard targeting: juan by: juan.
 	self assert: (match cardsOf: juan) equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 10.
@@ -211,7 +211,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard to: juan by: juan.
+	match play: speedCard targeting: juan by: juan.
 	self
 		assert: (match cardsOf: juan)
 		equals: cancellationCard asOrderedCollection.
@@ -245,7 +245,7 @@ CardTest >> testPlayerPlaysOverloadCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: overloadCard to: jose by: juan.
+	match play: overloadCard targeting: jose by: juan.
 	self
 		assert: (match cardsOf: juan)
 		equals: overloadCard asOrderedCollection.
@@ -272,7 +272,7 @@ CardTest >> testPlayerPlaysRedoCardButNoCardWasPlayedBefore [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: redoCard to: juan by: juan.
+	match play: redoCard targeting: juan by: juan.
 	self assert: (match cardsOf: juan) equals: speedCard asOrderedCollection
 ]
 
@@ -297,10 +297,10 @@ CardTest >> testPlayerPlaysRedoCardRedoingACancellationCardCancellatingASpeedCar
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard to: juan by: juan.
+	match play: speedCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: speedCard to: jose by: jose.
+	match play: speedCard targeting: jose by: jose.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 5.
 	match play: cancellationCard by: jose affecting: juan andHis: speedCard.
@@ -332,10 +332,10 @@ CardTest >> testPlayerPlaysRedoCardRedoingACancellationCardCancellatingAnAcceler
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: accelerationCard to: juan by: juan.
+	match play: accelerationCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: accelerationCard to: jose by: jose.
+	match play: accelerationCard targeting: jose by: jose.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 6.
 	match play: cancellationCard by: jose affecting: accelerationCard.
@@ -364,13 +364,13 @@ CardTest >> testPlayerPlaysRedoCardRedoingARedoCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard to: juan by: juan.
+	match play: speedCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: redoCard to: juan by: juan.
+	match play: redoCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 8.
-	match play: redoCard to: juan by: juan.
+	match play: redoCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 13.
 ]
@@ -421,10 +421,10 @@ CardTest >> testPlayerPlaysRedoCardRedoingASpeedCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard to: juan by: juan.
+	match play: speedCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: redoCard to: juan by: juan.
+	match play: redoCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 8
 ]
@@ -480,10 +480,10 @@ CardTest >> testPlayerPlaysRedoCardRedoingAnOverloadCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: overloadCard to: juan by: juan.
+	match play: overloadCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: redoCard to: juan by: juan.
+	match play: redoCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 5
 ]
@@ -551,7 +551,7 @@ CardTest >> testPlayerPlaysSpeedCard [
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard to: juan by: juan.
+	match play: speedCard targeting: juan by: juan.
 	self assert: (match cardsOf: juan) equals: speedCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 7

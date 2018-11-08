@@ -1,6 +1,6 @@
 Class {
 	#name : #RedoCard,
-	#superclass : #Card,
+	#superclass : #CardBehavior,
 	#category : #'IngSoft2-Model'
 }
 
@@ -15,6 +15,6 @@ RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [
 ]
 
 { #category : #applying }
-RedoCard >> needs: aPlayer toBeTurnOf: aPlayer2 [ 
+RedoCard >> asserting: aPlayer2 isHisTurnOn: aPlayer [ 
 	
 ]

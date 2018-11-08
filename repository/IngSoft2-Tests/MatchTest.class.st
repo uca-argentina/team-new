@@ -97,7 +97,7 @@ MatchTest >> testAPlayerWantsToPlayACardHeDoesNotHave [
 			{overloadCard.
 			overloadCard} asOrderedCollection.
 	self
-		should: [ match play: speedCard to: jose by: juan ]
+		should: [ match play: speedCard targeting: jose by: juan ]
 		raise: MatchException
 		withExceptionDo:
 			[ :exception | self assert: exception messageText equals: 'The player Juan do not own SpeedCard' ]
@@ -424,7 +424,7 @@ MatchTest >> testPlayerWantsToPlayAPermanentCardButItIsNotHisTurn [
 		on: board
 		dealingFrom: deck.
 	self
-		should: [ match play: speedCard to: juan by: martin ]
+		should: [ match play: speedCard targeting: juan by: martin ]
 		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'A player can only play a permanent card in his turn' ]
 ]
@@ -446,7 +446,7 @@ MatchTest >> testPlayerWantsToPlayAPermanentCardToAPlayerThatIsNotPlaying [
 		on: board
 		dealingFrom: deck.
 	self
-		should: [ match play: speedCard to: martin by: juan]
+		should: [ match play: speedCard targeting: martin by: juan]
 		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ',martin name,' is not playing' ]
 ]

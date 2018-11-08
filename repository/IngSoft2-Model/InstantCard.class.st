@@ -1,10 +1,10 @@
 Class {
 	#name : #InstantCard,
-	#superclass : #Card,
+	#superclass : #CardBehavior,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #applying }
-InstantCard >> needs: aNextPlayer toBeTurnOf: anAffecterPlayer [
+InstantCard >> asserting: anAffecterPlayer isHisTurnOn: aNextPlayer [
 	
 ]

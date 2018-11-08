@@ -156,7 +156,7 @@ Match >> nextPlayerPosition [
 { #category : #playing }
 Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
-	aCard needs: self nextPlayer toBeTurnOf: aPlayer.
+	aCard asserting: aPlayer isHisTurnOn: self.
 	aCard applyIn: self to: aPlayer.
 	self remove: aCard from: aPlayer
 ]
@@ -179,10 +179,10 @@ Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: ac
 ]
 
 { #category : #playing }
-Match >> play: aCard to: anAffectedPlayer by: anAffecterPlayer [
+Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
-	aCard needs: self nextPlayer toBeTurnOf: anAffecterPlayer.
+	aCard asserting: anAffecterPlayer isHisTurnOn: self.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard from: anAffecterPlayer
 ]
