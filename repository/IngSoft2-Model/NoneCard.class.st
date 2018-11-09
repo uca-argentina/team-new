@@ -8,3 +8,7 @@ Class {
 NoneCard >> applyIn: aMatch to: aPlayer [ 
 
 ]
+
+{ #category : #applying }
+NoneCard >> redoIn: aMatch to: aPlayer by: aRedoCard [ 
+]

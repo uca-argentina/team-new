@@ -11,8 +11,14 @@ SpeedCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-SpeedCard >> cancelAffecting: aPlayer on: aMatch [
+SpeedCard >> cancelAffecting: aPlayer in: aMatch [
 	aMatch remove: self affecting: aPlayer
+]
+
+{ #category : #applying }
+SpeedCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
+	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
+	aMatch updateLastCard: aRedoCard
 ]
 
 { #category : #applying }

@@ -15,6 +15,11 @@ CardBehavior >> assertingNextPlayerIn: aNextPlayer is: aPlayer [
 ]
 
 { #category : #applying }
-CardBehavior >> cancelAffecting: aPlayer on: aMatch [
+CardBehavior >> cancelAffecting: aPlayer in: aMatch [
+	self subclassResponsibility
+]
+
+{ #category : #applying }
+CardBehavior >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	self subclassResponsibility
 ]
