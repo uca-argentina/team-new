@@ -11,6 +11,6 @@ PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 ]
 
 { #category : #applying }
-PermanentCard >> cancelAffecting: aPlayer in: aMatch [
+PermanentCard >> spacesToMove [
 	self subclassResponsibility
 ]

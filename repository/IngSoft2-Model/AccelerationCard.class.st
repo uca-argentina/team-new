@@ -11,8 +11,8 @@ AccelerationCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-AccelerationCard >> cancelAffecting: aPlayer in: aMatch [
-	aMatch players do: [ :player | aMatch remove: self affecting: player ]
+AccelerationCard >> canceledIn: aMatch [
+	aMatch removeActivated: self
 ]
 
 { #category : #applying }

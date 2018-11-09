@@ -81,7 +81,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingACardButNoOnePlayedOne [
 		withExceptionDo: [ :exception | 
 			self
 				assert: exception messageText
-				equals: 'There is not a card ' , accelerationCard className , ' affecting ' , juan name ]
+				equals: 'There is not a ' , accelerationCard className , ' activated' ]
 ]
 
 { #category : #'tests-cancellationCard' }
@@ -147,8 +147,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 	match
 		play: cancellationCard
 		by: juan
-		targeting: juan
-		andHis: overloadCard.
+		targeting: overloadCard.
 	self assert: (match cardsOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 2
@@ -188,8 +187,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingRedoCard [
 	match
 		play: cancellationCard
 		by: juan
-		targeting: juan
-		andHis: redoCard.
+		targeting: redoCard.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 14.
 ]
@@ -219,8 +217,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingSpeedCard [
 	match
 		play: cancellationCard
 		by: juan
-		targeting: juan
-		andHis: speedCard.
+		targeting: speedCard.
 	self assert: (match cardsOf: juan) isEmpty.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 5
@@ -276,72 +273,92 @@ CardTest >> testPlayerPlaysRedoCardButNoCardWasPlayedBefore [
 
 { #category : #'tests-redoCard' }
 CardTest >> testPlayerPlaysRedoCardRedoingACancellationCardCancellingASpeedCard [
-	| juan jose board dice deck match speedCard cancellationCard redoCard |
+	| juan jose board dice deck match juanSpeedCard joseSpeedCard cancellationCard redoCard |
 	board := self boardWith10SpacesWithoutEffects.
 	juan := self playerNamedJuan.
 	jose := self playerNamedJose.
-	speedCard := SpeedCard new.
+	juanSpeedCard := SpeedCard new.
+	joseSpeedCard := SpeedCard new.
 	redoCard := RedoCard new.
 	cancellationCard := CancellationCard new.
 	deck := Deck
 		deterministicWithCardSequence:
-			{speedCard.
+			{juanSpeedCard.
 			redoCard.
-			cancellationCard }.
+			joseSpeedCard.
+			cancellationCard .
+			redoCard
+			}.
 	dice := Dice deterministicWithFaces: 6 throwing: #(2 3).
 	match := Match
-		playedBy: {juan . jose}
+		playedBy:
+			{juan.
+			jose}
 		throwing: {dice}
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: speedCard targeting: juan by: juan.
+	match play: juanSpeedCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: speedCard targeting: jose by: jose.
+	match play: joseSpeedCard targeting: jose by: jose.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 5.
-	match play: cancellationCard by: jose targeting: juan andHis: speedCard.
-	match play: redoCard by: juan targeting: jose andHis: speedCard. 
-	match playedBy: juan;
-			playedBy: jose.
-	self assert: (match positionOf: juan) currentSpace equals: 6;
-		  assert: (match positionOf: jose) currentSpace equals: 8.
+	match
+		play: cancellationCard
+		by: jose
+		targeting:  juanSpeedCard.
+	match
+		play: redoCard
+		by: juan
+		targeting: joseSpeedCard.
+	match
+		playedBy: juan;
+		playedBy: jose.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 6;
+		assert: (match positionOf: jose) currentSpace equals: 8
 ]
 
 { #category : #'tests-redoCard' }
 CardTest >> testPlayerPlaysRedoCardRedoingACancellationCardCancellingAnAccelerationCard [
-	| juan jose board dice deck match accelerationCard cancellationCard redoCard |
+	| juan jose board dice deck match juanAccelerationCard joseAccelerationCard cancellationCard redoCard |
 	board := self boardWith10SpacesWithoutEffects.
 	juan := self playerNamedJuan.
 	jose := self playerNamedJose.
-	accelerationCard := AccelerationCard new.
+	juanAccelerationCard := AccelerationCard new.
+	joseAccelerationCard := AccelerationCard new.
 	redoCard := RedoCard new.
 	cancellationCard := CancellationCard new.
 	deck := Deck
 		deterministicWithCardSequence:
-			{accelerationCard.
+			{juanAccelerationCard.
 			redoCard.
-			cancellationCard }.
+			joseAccelerationCard.
+			cancellationCard}.
 	dice := Dice deterministicWithFaces: 6 throwing: #(2 3).
 	match := Match
-		playedBy: {juan . jose}
+		playedBy:
+			{juan.
+			jose}
 		throwing: {dice}
 		during: 3
 		on: board
 		dealingFrom: deck.
-	match play: accelerationCard targeting: juan by: juan.
+	match play: juanAccelerationCard targeting: juan by: juan.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 4.
-	match play: accelerationCard targeting: jose by: jose.
+	match play: joseAccelerationCard targeting: jose by: jose.
 	match playedBy: jose.
 	self assert: (match positionOf: jose) currentSpace equals: 6.
-	match play: cancellationCard by: jose targeting: accelerationCard.
-	match play: redoCard by: juan targeting: accelerationCard. 
-	match playedBy: juan;
-			playedBy: jose.
-	self assert: (match positionOf: juan) currentSpace equals: 6;
-		  assert: (match positionOf: jose) currentSpace equals: 9.
+	match play: cancellationCard by: jose targeting: joseAccelerationCard.
+	match play: redoCard by: juan targeting: juanAccelerationCard.
+	match
+		playedBy: juan;
+		playedBy: jose.
+	self
+		assert: (match positionOf: juan) currentSpace equals: 6;
+		assert: (match positionOf: jose) currentSpace equals: 9
 ]
 
 { #category : #'tests-redoCard' }
@@ -586,8 +603,7 @@ CardTest >> testPlayerWantsToPlayCancellationCardCancellingAnInstantCard [
 	match
 		play: cancellationCard
 		by: juan
-		targeting: juan
-		andHis: accelerationCard.
+		targeting: accelerationCard.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 6.
 	match playedBy: jose.

@@ -11,12 +11,12 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-OverloadCard >> cancelAffecting: aPlayer in: aMatch [
-	aMatch remove: self affecting: aPlayer
+OverloadCard >> canceledIn: aMatch [
+	aMatch removeActivated: self
 ]
 
 { #category : #applying }
-OverloadCard >> redoIn: aMatch to: aPlayer by:aRedoCard [
+OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
 	aMatch updateLastCard: aRedoCard
 ]

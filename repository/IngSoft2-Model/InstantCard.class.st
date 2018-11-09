@@ -5,11 +5,11 @@ Class {
 }
 
 { #category : #applying }
-InstantCard >> assertingNextPlayerIn: onMatch is: aPlayer [
+InstantCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 	
 ]
 
 { #category : #applying }
-InstantCard >> cancelAffecting: aPlayer in: aMatch [ 
+InstantCard >> canceledIn: aMatch [ 
 	MatchException signal: 'Cancellation card can only be used affecting a Permantent Card'.
 ]

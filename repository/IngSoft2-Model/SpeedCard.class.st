@@ -11,8 +11,8 @@ SpeedCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-SpeedCard >> cancelAffecting: aPlayer in: aMatch [
-	aMatch remove: self affecting: aPlayer
+SpeedCard >> canceledIn: aMatch [
+	aMatch removeActivated: self
 ]
 
 { #category : #applying }

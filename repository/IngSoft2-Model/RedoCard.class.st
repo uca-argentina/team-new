@@ -9,13 +9,8 @@ Class {
 
 { #category : #applying }
 RedoCard >> applyIn: aMatch to: aPlayer [
-	behaviour:= aMatch lastCard.
-	behaviour redoIn: aMatch to: aPlayer by:self.
-]
-
-{ #category : #applying }
-RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [
-	aMatch lastCard applyTo: aCard affecting: aPlayer in: aMatch
+	behaviour := aMatch lastCard.
+	behaviour redoIn: aMatch to: aPlayer by: self
 ]
 
 { #category : #applying }
@@ -24,8 +19,8 @@ RedoCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 ]
 
 { #category : #applying }
-RedoCard >> cancelAffecting: aPlayer in: aMatch [ 
-	behaviour cancelAffecting: aPlayer in: aMatch. 
+RedoCard >> canceledIn: aMatch [ 
+	behaviour canceledIn: aMatch. 
 ]
 
 { #category : #intialization }

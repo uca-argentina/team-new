@@ -29,13 +29,7 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 
 { #category : #adding }
 Match >> add: aCard toBeAppliedTo: aPlayer [
-	(cardsAffectingPlayers at: aPlayer ifAbsentPut: [ OrderedCollection new ]) add: aCard
-]
-
-{ #category : #description }
-Match >> assert: aCard isAffecting: aPlayer [
-	((cardsAffectingPlayers at: aPlayer ifAbsentPut:[	OrderedCollection new ]) includes: aCard)
-		ifFalse: [ MatchException signal: 'There is not a card ' , aCard className , ' affecting ' , aPlayer name ]
+	(cardsAffectingPlayers at: aCard ifAbsentPut: [ OrderedCollection new ]) add: aPlayer
 ]
 
 { #category : #description }
@@ -62,6 +56,11 @@ Match >> assertMatchHasEnded [
 Match >> assertTurnBelongsTo: aPlayer [
 	aPlayer = self nextPlayer
 		ifFalse: [ MatchException signal: 'It is not ' , aPlayer name , ' turn' ]
+]
+
+{ #category : #playing }
+Match >> cardsAffecting: aPlayer [
+	^ (cardsAffectingPlayers select: [ :affectedPlayers | affectedPlayers includes: aPlayer ]) keys
 ]
 
 { #category : #accessing }
@@ -117,8 +116,7 @@ Match >> lastEffectTarget [
 
 { #category : #playing }
 Match >> matchNotEnded [
-	^ players
-		noneSatisfy: [ :player | self hasWon: player ]
+	^ players noneSatisfy: [ :player | self hasWon: player ]
 ]
 
 { #category : #moving }
@@ -162,26 +160,18 @@ Match >> play: aCard by: aPlayer [
 ]
 
 { #category : #playing }
-Match >> play: aCard by: anAffecterPlayer targeting: anActivatedCard [
-	self assert: anAffecterPlayer owns: aCard.
-	"self assert: anActivatedCard isAffecting: anAffecterPlayer."
-	aCard applyTo: anActivatedCard affecting: anAffecterPlayer in: self.
-	self remove: aCard from: anAffecterPlayer
-]
-
-{ #category : #playing }
-Match >> play: aCard by: anAffecterPlayer targeting: anAffectedPlayer andHis: activatedCard [
-	self assert: anAffecterPlayer owns: aCard.
-	self assert: activatedCard isAffecting: anAffectedPlayer.
-	self assertIsPlaying: anAffectedPlayer.
-	aCard applyTo: activatedCard affecting: anAffectedPlayer in: self.
-	self remove: aCard from: anAffecterPlayer
+Match >> play: aCard by: aPlayer targeting: anActivatedCard [
+	self assert: aPlayer owns: aCard.
+	aCard assertingNextPlayerIn: self is: aPlayer.
+	aCard applyIn: self to: anActivatedCard.
+	self remove: aCard from: aPlayer
 ]
 
 { #category : #playing }
 Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
+	self assertIsPlaying: anAffecterPlayer.
 	aCard assertingNextPlayerIn: self is: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard from: anAffecterPlayer
@@ -214,22 +204,18 @@ Match >> rankingOf: aPlayer [
 ]
 
 { #category : #removing }
-Match >> remove: aCard affecting: aPlayer [
-	self assert: aCard isAffecting: aPlayer.
-	(cardsAffectingPlayers at: aPlayer) remove: aCard
-]
-
-{ #category : #removing }
 Match >> remove: aCard from: aPlayer [ 
 	(playersCards at:aPlayer) remove: aCard
 ]
 
+{ #category : #removing }
+Match >> removeActivated: card [
+	cardsAffectingPlayers removeKey: card ifAbsent: [ MatchException signal: 'There is not a ' , card className , ' activated' ]
+]
+
 { #category : #playing }
-Match >> throwDicesAndApplyCardsBy: nextPlayer [
-	^ (nextPlayer throw: dices)
-		+
-			((cardsAffectingPlayers at: nextPlayer ifAbsentPut: [ OrderedCollection new ])
-				sumNumbers: [ :card | card spacesToMove ])
+Match >> throwDicesAndApplyCardsBy: aPlayer [
+	^ (aPlayer throw: dices) + ((self cardsAffecting: aPlayer) sumNumbers: [ :card | card spacesToMove ])
 ]
 
 { #category : #updating }
