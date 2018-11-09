@@ -10,6 +10,11 @@ CardBehavior >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-CardBehavior >> asserting: aPlayer isHisTurnOn: aNextPlayer [
+CardBehavior >> assertingNextPlayerOn: aNextPlayer is: aPlayer [
+	self subclassResponsibility
+]
+
+{ #category : #applying }
+CardBehavior >> cancelAffecting: aPlayer on: aMatch [
 	self subclassResponsibility
 ]

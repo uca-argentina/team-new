@@ -7,5 +7,5 @@ Class {
 { #category : #applying }
 RepeatCard >> applyIn: aMatch to: aPlayer [
 	aMatch lastEffect turnOnEffectAt: aMatch activatedBy: aMatch lastEffectTarget.
-	aMatch updateLastCard: self.
+	aMatch updateLastCard: self
 ]

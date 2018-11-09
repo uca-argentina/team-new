@@ -6,15 +6,15 @@ Class {
 
 { #category : #applying }
 RedoCard >> applyIn: aMatch to: aPlayer [
-	(aMatch lastCard) applyIn: aMatch to: aPlayer
+	aMatch lastCard applyIn: aMatch to: aPlayer
 ]
 
 { #category : #applying }
-RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [ 
-	aMatch lastCard applyTo: aCard affecting: aPlayer in: aMatch.
+RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [
+	aMatch lastCard applyTo: aCard affecting: aPlayer in: aMatch
 ]
 
 { #category : #applying }
-RedoCard >> asserting: aPlayer2 isHisTurnOn: aPlayer [ 
+RedoCard >> assertingNextPlayerOn: aMatch is: aPlayer [ 
 	
 ]

@@ -156,21 +156,21 @@ Match >> nextPlayerPosition [
 { #category : #playing }
 Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
-	aCard asserting: aPlayer isHisTurnOn: self.
+	aCard assertingNextPlayerOn: self is: aPlayer.
 	aCard applyIn: self to: aPlayer.
 	self remove: aCard from: aPlayer
 ]
 
 { #category : #playing }
-Match >> play: aCard by: anAffecterPlayer affecting: anActivatedCard [
+Match >> play: aCard by: anAffecterPlayer targeting: anActivatedCard [
 	self assert: anAffecterPlayer owns: aCard.
-	self assert: anActivatedCard isAffecting: anAffecterPlayer.
+	"self assert: anActivatedCard isAffecting: anAffecterPlayer."
 	aCard applyTo: anActivatedCard affecting: anAffecterPlayer in: self.
 	self remove: aCard from: anAffecterPlayer
 ]
 
 { #category : #playing }
-Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: activatedCard [
+Match >> play: aCard by: anAffecterPlayer targeting: anAffectedPlayer andHis: activatedCard [
 	self assert: anAffecterPlayer owns: aCard.
 	self assert: activatedCard isAffecting: anAffectedPlayer.
 	self assertIsPlaying: anAffectedPlayer.
@@ -182,7 +182,7 @@ Match >> play: aCard by: anAffecterPlayer affecting: anAffectedPlayer andHis: ac
 Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
-	aCard asserting: anAffecterPlayer isHisTurnOn: self.
+	aCard assertingNextPlayerOn: self is: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard from: anAffecterPlayer
 ]
@@ -215,6 +215,7 @@ Match >> rankingOf: aPlayer [
 
 { #category : #removing }
 Match >> remove: aCard affecting: aPlayer [
+	self assert: aCard isAffecting: aPlayer.
 	(cardsAffectingPlayers at: aPlayer) remove: aCard
 ]
 

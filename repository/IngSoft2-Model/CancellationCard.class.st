@@ -7,5 +7,5 @@ Class {
 { #category : #applying }
 CancellationCard >> applyTo: aCard affecting: aPlayer in: aMatch [
 	aCard cancelAffecting: aPlayer on: aMatch.
-	aMatch updateLastCard: self.
+	aMatch updateLastCard: self
 ]

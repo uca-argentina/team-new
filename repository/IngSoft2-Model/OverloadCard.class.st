@@ -7,7 +7,7 @@ Class {
 { #category : #applying }
 OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch add: self toBeAppliedTo: aPlayer.
-	aMatch updateLastCard: self.
+	aMatch updateLastCard: self
 ]
 
 { #category : #applying }
