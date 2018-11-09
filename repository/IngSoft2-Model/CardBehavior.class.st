@@ -10,7 +10,7 @@ CardBehavior >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #applying }
-CardBehavior >> assertingNextPlayerOn: aNextPlayer is: aPlayer [
+CardBehavior >> assertingNextPlayerIn: aNextPlayer is: aPlayer [
 	self subclassResponsibility
 ]
 

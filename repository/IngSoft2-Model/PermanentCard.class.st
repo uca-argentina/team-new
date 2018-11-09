@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #applying }
-PermanentCard >> assertingNextPlayerOn: aMatch is: aPlayer [
+PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 	aMatch nextPlayer = aPlayer
 		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
 ]

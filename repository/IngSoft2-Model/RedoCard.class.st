@@ -15,6 +15,6 @@ RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [
 ]
 
 { #category : #applying }
-RedoCard >> assertingNextPlayerOn: aMatch is: aPlayer [ 
+RedoCard >> assertingNextPlayerIn: aMatch is: aPlayer [ 
 	
 ]

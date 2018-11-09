@@ -156,7 +156,7 @@ Match >> nextPlayerPosition [
 { #category : #playing }
 Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
-	aCard assertingNextPlayerOn: self is: aPlayer.
+	aCard assertingNextPlayerIn: self is: aPlayer.
 	aCard applyIn: self to: aPlayer.
 	self remove: aCard from: aPlayer
 ]
@@ -182,7 +182,7 @@ Match >> play: aCard by: anAffecterPlayer targeting: anAffectedPlayer andHis: ac
 Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
-	aCard assertingNextPlayerOn: self is: anAffecterPlayer.
+	aCard assertingNextPlayerIn: self is: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard from: anAffecterPlayer
 ]

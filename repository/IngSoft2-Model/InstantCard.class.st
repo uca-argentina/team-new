@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #applying }
-InstantCard >> assertingNextPlayerOn: onMatch is: aPlayer [
+InstantCard >> assertingNextPlayerIn: onMatch is: aPlayer [
 	
 ]
 
