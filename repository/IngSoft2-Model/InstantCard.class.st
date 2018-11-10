@@ -4,12 +4,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #applying }
+{ #category : #asserting }
 InstantCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 	
 ]
 
-{ #category : #applying }
+{ #category : #deactivation }
 InstantCard >> canceledIn: aMatch [ 
 	MatchException signal: 'Cancellation card can only be used affecting a Permantent Card'.
 ]

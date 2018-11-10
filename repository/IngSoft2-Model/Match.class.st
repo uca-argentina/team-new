@@ -10,9 +10,9 @@ Class {
 		'totalLaps',
 		'deck',
 		'lastEffect',
-		'cardsAffectingPlayers',
 		'lastCard',
-		'playersCards'
+		'playersCards',
+		'cardsTargetingPlayers'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -29,7 +29,7 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 
 { #category : #adding }
 Match >> add: aCard toBeAppliedTo: aPlayer [
-	(cardsAffectingPlayers at: aCard ifAbsentPut: [ OrderedCollection new ]) add: aPlayer
+	(cardsTargetingPlayers at: aCard ifAbsentPut: [ OrderedCollection new ]) add: aPlayer
 ]
 
 { #category : #description }
@@ -60,7 +60,7 @@ Match >> assertTurnBelongsTo: aPlayer [
 
 { #category : #playing }
 Match >> cardsAffecting: aPlayer [
-	^ (cardsAffectingPlayers select: [ :affectedPlayers | affectedPlayers includes: aPlayer ]) keys
+	^ (cardsTargetingPlayers select: [ :targetedPlayers | targetedPlayers includes: aPlayer ]) keys
 ]
 
 { #category : #accessing }
@@ -93,7 +93,7 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 	board := aBoard.
 	deck := aDeck.
 	positionOfPlayers := Dictionary new.
-	cardsAffectingPlayers := Dictionary new.
+	cardsTargetingPlayers := Dictionary new.
 	playersCards := Dictionary new.
 	lastCard := NoneCard new.
 	lastEffect := players first -> NoEffect new
@@ -156,7 +156,7 @@ Match >> play: aCard by: aPlayer [
 	self assert: aPlayer owns: aCard.
 	aCard assertingNextPlayerIn: self is: aPlayer.
 	aCard applyIn: self to: aPlayer.
-	self remove: aCard from: aPlayer
+	self remove: aCard fromHandOf: aPlayer
 ]
 
 { #category : #playing }
@@ -164,7 +164,7 @@ Match >> play: aCard by: aPlayer targeting: anActivatedCard [
 	self assert: aPlayer owns: aCard.
 	aCard assertingNextPlayerIn: self is: aPlayer.
 	aCard applyIn: self to: anActivatedCard.
-	self remove: aCard from: aPlayer
+	self remove: aCard fromHandOf: aPlayer
 ]
 
 { #category : #playing }
@@ -174,7 +174,7 @@ Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assertIsPlaying: anAffecterPlayer.
 	aCard assertingNextPlayerIn: self is: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
-	self remove: aCard from: anAffecterPlayer
+	self remove: aCard fromHandOf: anAffecterPlayer
 ]
 
 { #category : #playing }
@@ -204,13 +204,13 @@ Match >> rankingOf: aPlayer [
 ]
 
 { #category : #removing }
-Match >> remove: aCard from: aPlayer [ 
+Match >> remove: aCard fromHandOf: aPlayer [ 
 	(playersCards at:aPlayer) remove: aCard
 ]
 
 { #category : #removing }
 Match >> removeActivated: card [
-	cardsAffectingPlayers removeKey: card ifAbsent: [ MatchException signal: 'There is not a ' , card className , ' activated' ]
+	cardsTargetingPlayers removeKey: card ifAbsent: [ MatchException signal: 'There is not a ' , card className , ' activated' ]
 ]
 
 { #category : #playing }

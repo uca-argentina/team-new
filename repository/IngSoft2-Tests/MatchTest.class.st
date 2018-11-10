@@ -239,6 +239,101 @@ MatchTest >> testAPlayerWinsInAGameWithMoreThanOneLap [
 ]
 
 { #category : #tests }
+MatchTest >> testAllCardsAndAllEfectsInOneMatch [
+	| martin fabio juan dice board deck overloadCard speedCard accelerationCard cancellationCard repeatCard redoCard match |
+	juan := self playerNamedJuan.
+	fabio := self playerNamedFabio.
+	martin := self playerNamedMartin.
+	dice := Dice deterministicWithFaces: 7 throwing: { 3 . 6 . 7 . 2 . 3 . 6 }.
+	board := Board
+		deterministicWithSpaces: 30
+		andEffectsGeneratedFrom:
+			{NoEffect new.
+			AtomicBombEffect new.
+			(MoonWalkEffect moving: 2).
+			SpeedUpEffect new.
+			WormHoleEffect new}.
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	accelerationCard := AccelerationCard new.
+	cancellationCard := CancellationCard new.
+	repeatCard := RepeatCard new.
+	redoCard := RedoCard new.
+	deck := Deck deterministicWithCardSequence: { overloadCard . speedCard . accelerationCard . cancellationCard . repeatCard . redoCard }.
+	match := Match playedBy: { juan . fabio . martin } throwing: { dice } during: 4 on: board dealingFrom: deck.
+	match play: overloadCard targeting: fabio by: juan.
+	self assert: (match cardsOf: juan) equals: { speedCard } asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 8.
+	match play: accelerationCard by: fabio.
+	self assert: (match cardsOf: fabio) equals: { cancellationCard } asOrderedCollection.
+	match playedBy: fabio.
+	self assert: (match positionOf: fabio) currentSpace equals: 6.
+	match play: redoCard by: martin.
+	self assert: (match cardsOf: martin) equals: { repeatCard } asOrderedCollection.
+	match playedBy: martin.
+	self assert: (match positionOf: martin) currentSpace equals: 6.
+	match play: speedCard targeting: juan by: juan.
+	self assert: (match cardsOf: juan) equals: {  } asOrderedCollection.
+	match play: cancellationCard by: fabio targeting: overloadCard.
+	self assert: (match cardsOf: fabio) equals: {  } asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 13.
+	self assert: (match positionOf: fabio) currentSpace equals: 4.
+	self assert: (match positionOf: martin) currentSpace equals: 4.
+	match playedBy: fabio.
+	self assert: (match positionOf: fabio) currentSpace equals: 13.
+	match play: repeatCard by: martin.
+	self assert: (match cardsOf: martin) equals: {  } asOrderedCollection.
+	self assert: (match positionOf: fabio) currentSpace equals: 17.
+	match playedBy: martin.
+	self assert: (match positionOf: juan) currentSpace equals: 1.
+	self assert: (match positionOf: fabio) currentSpace equals: 1.
+	self assert: (match positionOf: martin) currentSpace equals: 1.
+]
+
+{ #category : #tests }
+MatchTest >> testAllCardsInOneMatch [
+	| martin fabio juan dice board deck overloadCard speedCard accelerationCard cancellationCard repeatCard redoCard match |
+	juan := self playerNamedJuan.
+	fabio := self playerNamedFabio.
+	martin := self playerNamedMartin.
+	dice := Dice deterministicWithFaces: 6 throwing: { 3 }.
+	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: { NoEffect new . SpeedUpEffect new }.
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	accelerationCard := AccelerationCard new.
+	cancellationCard := CancellationCard new.
+	repeatCard := RepeatCard new.
+	redoCard := RedoCard new.
+	deck := Deck deterministicWithCardSequence: { overloadCard . speedCard . accelerationCard . cancellationCard . repeatCard . redoCard }.
+	match := Match playedBy: { juan . fabio . martin } throwing: { dice } during: 4 on: board dealingFrom: deck.
+	match play: overloadCard targeting: fabio by: juan.
+	self assert: (match cardsOf: juan) equals: { speedCard } asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 8.
+	match play: accelerationCard by: fabio.
+	self assert: (match cardsOf: fabio) equals: { cancellationCard } asOrderedCollection.
+	match playedBy: fabio.
+	self assert: (match positionOf: fabio) currentSpace equals: 3.
+	match play: redoCard by: martin.
+	self assert: (match cardsOf: martin) equals: { repeatCard } asOrderedCollection.
+	match playedBy: martin.
+	self assert: (match positionOf: martin) currentSpace equals: 10.
+	match play: speedCard targeting: juan by: juan.
+	self assert: (match cardsOf: juan) equals: {  } asOrderedCollection.
+	match play: cancellationCard by: fabio targeting: overloadCard.
+	self assert: (match cardsOf: fabio) equals: {  } asOrderedCollection.
+	match playedBy: juan.
+	self assert: (match positionOf: juan) currentSpace equals: 18.
+	match playedBy: fabio.
+	self assert: (match positionOf: fabio) currentSpace equals: 12.
+	match play: repeatCard by: martin.
+	self assert: (match cardsOf: martin) equals: {  } asOrderedCollection.
+	self assert: (match positionOf: fabio) currentSpace equals: 16
+]
+
+{ #category : #tests }
 MatchTest >> testAllEffectsInOneMatch [
 	| fabio cristian juan match board dices players deck |
 	deck := self deckWithOverloadCard.

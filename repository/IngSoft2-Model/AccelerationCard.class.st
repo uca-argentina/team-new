@@ -10,7 +10,7 @@ AccelerationCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #applying }
+{ #category : #deactivation }
 AccelerationCard >> canceledIn: aMatch [
 	aMatch removeActivated: self
 ]
@@ -21,7 +21,7 @@ AccelerationCard >> redoIn: aMatch to: aPlayer by:aRedoCard [
 	aMatch updateLastCard: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 AccelerationCard >> spacesToMove [
 	^ 1
 ]

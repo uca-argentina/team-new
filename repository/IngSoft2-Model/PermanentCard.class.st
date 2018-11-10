@@ -4,13 +4,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #applying }
+{ #category : #asserting }
 PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 	aMatch nextPlayer = aPlayer
 		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 PermanentCard >> spacesToMove [
 	self subclassResponsibility
 ]

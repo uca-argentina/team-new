@@ -13,12 +13,12 @@ RedoCard >> applyIn: aMatch to: aPlayer [
 	behaviour redoIn: aMatch to: aPlayer by: self
 ]
 
-{ #category : #applying }
+{ #category : #asserting }
 RedoCard >> assertingNextPlayerIn: aMatch is: aPlayer [ 
 	
 ]
 
-{ #category : #applying }
+{ #category : #deactivation }
 RedoCard >> canceledIn: aMatch [ 
 	behaviour canceledIn: aMatch. 
 ]
@@ -33,7 +33,7 @@ RedoCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	behaviour redoIn: aMatch to: aPlayer by: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 RedoCard >> spacesToMove [
 	^ behaviour spacesToMove.
 ]

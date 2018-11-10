@@ -10,7 +10,7 @@ SpeedCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #applying }
+{ #category : #deactivation }
 SpeedCard >> canceledIn: aMatch [
 	aMatch removeActivated: self
 ]
@@ -21,7 +21,7 @@ SpeedCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch updateLastCard: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 SpeedCard >> spacesToMove [
 	^ 1
 ]

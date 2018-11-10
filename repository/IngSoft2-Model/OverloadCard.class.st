@@ -10,7 +10,7 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #applying }
+{ #category : #deactivation }
 OverloadCard >> canceledIn: aMatch [
 	aMatch removeActivated: self
 ]
@@ -21,7 +21,7 @@ OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch updateLastCard: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 OverloadCard >> spacesToMove [
 	^ -2
 ]
