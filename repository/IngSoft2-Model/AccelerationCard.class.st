@@ -7,15 +7,21 @@ Class {
 { #category : #applying }
 AccelerationCard >> applyIn: aMatch to: aPlayer [
 	aMatch players do: [ :player | aMatch add: self toBeAppliedTo: player ].
-	aMatch updateLastCard: self.
+	aMatch updateLastCard: self
+]
+
+{ #category : #cancelling }
+AccelerationCard >> canceledIn: aMatch [
+	aMatch removeActivated: self
 ]
 
 { #category : #applying }
-AccelerationCard >> cancelAffecting: aPlayer on: aMatch [
-	aMatch players do: [ :player | aMatch remove: self affecting: player ]
+AccelerationCard >> redoIn: aMatch to: aPlayer by:aRedoCard [
+	aMatch players do: [ :player | aMatch add: aRedoCard toBeAppliedTo: player ].
+	aMatch updateLastCard: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 AccelerationCard >> spacesToMove [
 	^ 1
 ]

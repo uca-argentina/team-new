@@ -7,15 +7,21 @@ Class {
 { #category : #applying }
 OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch add: self toBeAppliedTo: aPlayer.
-	aMatch updateLastCard: self.
+	aMatch updateLastCard: self
+]
+
+{ #category : #cancelling }
+OverloadCard >> canceledIn: aMatch [
+	aMatch removeActivated: self
 ]
 
 { #category : #applying }
-OverloadCard >> cancelAffecting: aPlayer on: aMatch [
-	aMatch remove: self affecting: aPlayer
+OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
+	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
+	aMatch updateLastCard: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 OverloadCard >> spacesToMove [
 	^ -2
 ]

@@ -6,6 +6,12 @@ Class {
 
 { #category : #applying }
 RepeatCard >> applyIn: aMatch to: aPlayer [
-	aMatch lastEffect value turnOnEffectAt: aMatch activatedBy: aMatch lastEffect key.
-	aMatch updateLastCard: self.
+	aMatch lastEffect turnOnEffectAt: aMatch activatedBy: aMatch lastEffectTarget.
+	aMatch updateLastCard: self
+]
+
+{ #category : #applying }
+RepeatCard >> redoIn: aMatch to: aPlayer by: aRedoCard [ 
+	aMatch lastEffect turnOnEffectAt: aMatch activatedBy: aMatch lastEffectTarget.
+	aMatch updateLastCard: aRedoCard
 ]

@@ -5,7 +5,13 @@ Class {
 }
 
 { #category : #applying }
-CancellationCard >> applyTo: aCard affecting: aPlayer in: aMatch [
-	aCard cancelAffecting: aPlayer on: aMatch.
-	aMatch updateLastCard: self.
+CancellationCard >> applyIn: aMatch to: aCard [
+	aCard canceledIn: aMatch.
+	aMatch updateLastCard: self
+]
+
+{ #category : #applying }
+CancellationCard >> redoIn: aMatch to: aCard by: aRedoCard [ 
+	aCard canceledIn: aMatch.
+	aMatch updateLastCard: aRedoCard
 ]

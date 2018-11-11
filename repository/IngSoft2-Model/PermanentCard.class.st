@@ -1,16 +1,16 @@
 Class {
 	#name : #PermanentCard,
-	#superclass : #Card,
+	#superclass : #CardBehavior,
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #applying }
-PermanentCard >> cancelAffecting: aPlayer on: aMatch [
-	self subclassResponsibility
+{ #category : #description }
+PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
+	aMatch nextPlayer = aPlayer
+		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
 ]
 
-{ #category : #applying }
-PermanentCard >> needs: aNextPlayer ToBeTurnOf: anAffecterPlayer [
-	aNextPlayer = anAffecterPlayer
-		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
+{ #category : #moving }
+PermanentCard >> spacesToMove [
+	self subclassResponsibility
 ]

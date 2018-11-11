@@ -1,20 +1,39 @@
 Class {
 	#name : #RedoCard,
-	#superclass : #Card,
+	#superclass : #CardBehavior,
+	#instVars : [
+		'behaviour'
+	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #applying }
 RedoCard >> applyIn: aMatch to: aPlayer [
-	(aMatch lastCard) applyIn: aMatch to: aPlayer
+	behaviour := aMatch lastCard.
+	behaviour redoIn: aMatch to: aPlayer by: self
 ]
 
-{ #category : #applying }
-RedoCard >> applyTo: aCard affecting: aPlayer in: aMatch [ 
-	aMatch lastCard applyTo: aCard affecting: aPlayer in: aMatch.
-]
-
-{ #category : #applying }
-RedoCard >> needs: aPlayer ToBeTurnOf: aPlayer2 [ 
+{ #category : #description }
+RedoCard >> assertingNextPlayerIn: aMatch is: aPlayer [ 
 	
+]
+
+{ #category : #cancelling }
+RedoCard >> canceledIn: aMatch [ 
+	behaviour canceledIn: aMatch. 
+]
+
+{ #category : #intialization }
+RedoCard >> initialize [
+	behaviour := NoneCard new
+]
+
+{ #category : #applying }
+RedoCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
+	behaviour redoIn: aMatch to: aPlayer by: aRedoCard
+]
+
+{ #category : #moving }
+RedoCard >> spacesToMove [
+	^ behaviour spacesToMove.
 ]

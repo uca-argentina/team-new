@@ -18,3 +18,9 @@ DeterministicStrategy >> initializeUsing: aSequence [
 	sequence := aSequence.
 	index := 0
 ]
+
+{ #category : #generating }
+DeterministicStrategy >> next [
+	index := index % sequence size + 1.
+	^ sequence at: index
+]

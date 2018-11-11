@@ -7,15 +7,21 @@ Class {
 { #category : #applying }
 SpeedCard >> applyIn: aMatch to: aPlayer [
 	aMatch add: self toBeAppliedTo: aPlayer.
-	aMatch updateLastCard: self.
+	aMatch updateLastCard: self
+]
+
+{ #category : #cancelling }
+SpeedCard >> canceledIn: aMatch [
+	aMatch removeActivated: self
 ]
 
 { #category : #applying }
-SpeedCard >> cancelAffecting: aPlayer on: aMatch [
-	aMatch remove: self affecting: aPlayer
+SpeedCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
+	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
+	aMatch updateLastCard: aRedoCard
 ]
 
-{ #category : #applying }
+{ #category : #moving }
 SpeedCard >> spacesToMove [
 	^ 1
 ]
