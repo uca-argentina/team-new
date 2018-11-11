@@ -203,7 +203,6 @@ MatchTest >> testAPlayerWins [
 		assert: (match positionOf: martin) currentSpace equals: 7;
 		assert: (match positionOf: martin) currentLap equals: 0.
 	match playedBy: martin.
-	match.
 	self assert: match winner name equals: 'Martin'
 ]
 
@@ -580,7 +579,7 @@ MatchTest >> testPlayersRankings [
 ]
 
 { #category : #tests }
-MatchTest >> testPlayersSequenceOnMatch [
+MatchTest >> testPlayersSequenceInMatch [
 	| board martin juan match players dices deck |
 	deck := self deckWithOverloadCard.
 	board := self boardWith10SpacesWithoutEffects.

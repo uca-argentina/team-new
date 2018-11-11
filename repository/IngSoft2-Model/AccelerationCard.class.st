@@ -10,7 +10,7 @@ AccelerationCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #deactivation }
+{ #category : #cancelling }
 AccelerationCard >> canceledIn: aMatch [
 	aMatch removeActivated: self
 ]

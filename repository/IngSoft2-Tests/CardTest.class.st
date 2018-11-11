@@ -77,11 +77,8 @@ CardTest >> testPlayerPlaysCancellationCardCancellingACardButNoOnePlayedOne [
 		dealingFrom: deck.
 	self
 		should: [ match play: cancellationCard by: juan targeting: accelerationCard ]
-		raise: MatchException 
-		withExceptionDo: [ :exception | 
-			self
-				assert: exception messageText
-				equals: 'There is not a ' , accelerationCard className , ' activated' ]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'There is not a ' , accelerationCard className , ' activated' ]
 ]
 
 { #category : #'tests-cancellationCard' }
@@ -144,6 +141,7 @@ CardTest >> testPlayerPlaysCancellationCardCancellingOverloadCard [
 	self assert: (match cardsOf: juan) equals: cancellationCard asOrderedCollection.
 	match playedBy: juan.
 	self assert: (match positionOf: juan) currentSpace equals: 10.
+	self assert: (match positionOf: juan) currentLap equals: -1.
 	match
 		play: cancellationCard
 		by: juan

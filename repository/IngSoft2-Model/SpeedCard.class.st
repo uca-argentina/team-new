@@ -10,7 +10,7 @@ SpeedCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #deactivation }
+{ #category : #cancelling }
 SpeedCard >> canceledIn: aMatch [
 	aMatch removeActivated: self
 ]

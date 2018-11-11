@@ -10,7 +10,7 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #deactivation }
+{ #category : #cancelling }
 OverloadCard >> canceledIn: aMatch [
 	aMatch removeActivated: self
 ]

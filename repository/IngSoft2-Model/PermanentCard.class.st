@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
+{ #category : #description }
 PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 	aMatch nextPlayer = aPlayer
 		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]

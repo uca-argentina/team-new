@@ -9,12 +9,12 @@ CardBehavior >> applyIn: aMatch to: aPlayer [
 	self subclassResponsibility
 ]
 
-{ #category : #asserting }
+{ #category : #description }
 CardBehavior >> assertingNextPlayerIn: aMatch is: aPlayer [
 	self subclassResponsibility
 ]
 
-{ #category : #deactivation }
+{ #category : #cancelling }
 CardBehavior >> canceledIn: aMatch [
 	self subclassResponsibility
 ]

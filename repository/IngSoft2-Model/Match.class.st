@@ -12,7 +12,7 @@ Class {
 		'lastEffect',
 		'lastCard',
 		'playersCards',
-		'cardsTargetingPlayers'
+		'cardsActivated'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -29,7 +29,7 @@ Match class >> playedBy: thePlayers throwing: gameDices during: aNumberOfLaps on
 
 { #category : #adding }
 Match >> add: aCard toBeAppliedTo: aPlayer [
-	(cardsTargetingPlayers at: aCard ifAbsentPut: [ OrderedCollection new ]) add: aPlayer
+	(cardsActivated at: aCard ifAbsentPut: [ OrderedCollection new ] ) add: aPlayer
 ]
 
 { #category : #description }
@@ -58,15 +58,15 @@ Match >> assertTurnBelongsTo: aPlayer [
 		ifFalse: [ MatchException signal: 'It is not ' , aPlayer name , ' turn' ]
 ]
 
-{ #category : #playing }
-Match >> cardsAffecting: aPlayer [
-	^ (cardsTargetingPlayers select: [ :targetedPlayers | targetedPlayers includes: aPlayer ]) keys
-]
-
 { #category : #accessing }
 Match >> cardsOf: aPlayer [
 	self assertIsPlaying: aPlayer.
 	^ playersCards at: aPlayer ifAbsentPut: [ OrderedCollection with: deck dealCard with: deck dealCard ]
+]
+
+{ #category : #accessing }
+Match >> cardsTargeting: aPlayer [
+	^ (cardsActivated select: [ :targetedPlayers | targetedPlayers includes: aPlayer ]) keys
 ]
 
 { #category : #playing }
@@ -93,7 +93,7 @@ Match >> initializePlayedBy: thePlayers throwing: theDices during: aNumberOfLaps
 	board := aBoard.
 	deck := aDeck.
 	positionOfPlayers := Dictionary new.
-	cardsTargetingPlayers := Dictionary new.
+	cardsActivated := Dictionary new.
 	playersCards := Dictionary new.
 	lastCard := NoneCard new.
 	lastEffect := players first -> NoEffect new
@@ -204,18 +204,18 @@ Match >> rankingOf: aPlayer [
 ]
 
 { #category : #removing }
-Match >> remove: aCard fromHandOf: aPlayer [ 
-	(playersCards at:aPlayer) remove: aCard
+Match >> remove: aCard fromHandOf: aPlayer [
+	(playersCards at: aPlayer) remove: aCard
 ]
 
 { #category : #removing }
 Match >> removeActivated: card [
-	cardsTargetingPlayers removeKey: card ifAbsent: [ MatchException signal: 'There is not a ' , card className , ' activated' ]
+	cardsActivated removeKey: card ifAbsent: [ MatchException signal: 'There is not a ' , card className , ' activated' ]
 ]
 
 { #category : #playing }
 Match >> throwDicesAndApplyCardsBy: aPlayer [
-	^ (aPlayer throw: dices) + ((self cardsAffecting: aPlayer) sumNumbers: [ :card | card spacesToMove ])
+	^ (aPlayer throw: dices) + ((self cardsTargeting: aPlayer) sumNumbers: [ :card | card spacesToMove ])
 ]
 
 { #category : #updating }
