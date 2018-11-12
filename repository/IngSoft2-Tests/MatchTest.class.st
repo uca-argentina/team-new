@@ -501,6 +501,48 @@ MatchTest >> testPlayerMovesForwardOnBoard [
 ]
 
 { #category : #tests }
+MatchTest >> testPlayerWantsToPlayACardButHeIsNotPartOfTheMatch [
+	| juan martin board dice deck match speedCard |
+	juan := self playerNamedJuan.
+	martin := self playerNamedMartin.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		should: [ match play: speedCard targeting: juan by: martin ]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ',martin name,' is not playing' ]
+]
+
+{ #category : #tests }
+MatchTest >> testPlayerWantsToPlayACardToAPlayerThatIsNotPlaying [
+	| juan martin board dice deck match speedCard |
+	juan := self playerNamedJuan.
+	martin := self playerNamedMartin.
+	board := self boardWith10SpacesWithoutEffects.
+	speedCard := SpeedCard new.
+	deck := Deck deterministicWithCardSequence: {speedCard}.
+	dice := Dice deterministicWithFaces: 6 throwing: {5}.
+	match := Match
+		playedBy: {juan}
+		throwing: {dice}
+		during: 3
+		on: board
+		dealingFrom: deck.
+	self
+		should: [ match play: speedCard targeting: martin by: juan]
+		raise: MatchException
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ',martin name,' is not playing' ]
+]
+
+{ #category : #tests }
 MatchTest >> testPlayerWantsToPlayAPermanentCardButItIsNotHisTurn [
 	| juan martin board dice deck match speedCard |
 	juan := self playerNamedJuan.
@@ -521,28 +563,6 @@ MatchTest >> testPlayerWantsToPlayAPermanentCardButItIsNotHisTurn [
 		should: [ match play: speedCard targeting: juan by: martin ]
 		raise: MatchException
 		withExceptionDo: [ :exception | self assert: exception messageText equals: 'A player can only play a permanent card in his turn' ]
-]
-
-{ #category : #tests }
-MatchTest >> testPlayerWantsToPlayAPermanentCardToAPlayerThatIsNotPlaying [
-	| juan martin board dice deck match speedCard |
-	juan := self playerNamedJuan.
-	martin := self playerNamedMartin.
-	board := self boardWith10SpacesWithoutEffects.
-	speedCard := SpeedCard new.
-	deck := Deck deterministicWithCardSequence: {speedCard}.
-	dice := Dice deterministicWithFaces: 6 throwing: {5}.
-	match := Match
-		playedBy:
-			{juan}
-		throwing: {dice}
-		during: 3
-		on: board
-		dealingFrom: deck.
-	self
-		should: [ match play: speedCard targeting: martin by: juan]
-		raise: MatchException
-		withExceptionDo: [ :exception | self assert: exception messageText equals: 'Player ',martin name,' is not playing' ]
 ]
 
 { #category : #tests }

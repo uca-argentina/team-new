@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : #applying }
-RedoCard >> applyIn: aMatch to: aPlayer [
+RedoCard >> applyIn: aMatch to: aPlayerOrACard [
 	behaviour := aMatch lastCard.
-	behaviour redoIn: aMatch to: aPlayer by: self
+	behaviour redoIn: aMatch to: aPlayerOrACard by: self
 ]
 
 { #category : #description }
@@ -23,14 +23,14 @@ RedoCard >> canceledIn: aMatch [
 	behaviour canceledIn: aMatch. 
 ]
 
-{ #category : #intialization }
+{ #category : #initialization }
 RedoCard >> initialize [
 	behaviour := NoneCard new
 ]
 
 { #category : #applying }
-RedoCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
-	behaviour redoIn: aMatch to: aPlayer by: aRedoCard
+RedoCard >> redoIn: aMatch to: aPlayerOrACard by: aRedoCard [
+	behaviour redoIn: aMatch to: aPlayerOrACard by: aRedoCard
 ]
 
 { #category : #moving }

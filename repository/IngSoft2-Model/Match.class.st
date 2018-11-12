@@ -79,7 +79,7 @@ Match >> dealCardTo: aPlayer [
 	(playersCards at:aPlayer) add: deck dealCard.
 ]
 
-{ #category : #description }
+{ #category : #accessing }
 Match >> hasWon: aPlayer [
 	^ (self positionOf: aPlayer) currentLap > (totalLaps - 1)
 ]
@@ -114,7 +114,7 @@ Match >> lastEffectTarget [
 	^ lastEffect key
 ]
 
-{ #category : #playing }
+{ #category : #accessing }
 Match >> matchNotEnded [
 	^ players noneSatisfy: [ :player | self hasWon: player ]
 ]
@@ -171,7 +171,6 @@ Match >> play: aCard by: aPlayer targeting: anActivatedCard [
 Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
-	self assertIsPlaying: anAffecterPlayer.
 	aCard assertingNextPlayerIn: self is: anAffecterPlayer.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard fromHandOf: anAffecterPlayer
@@ -182,7 +181,7 @@ Match >> playedBy: aPlayer [
 	self assertIsPlaying: aPlayer.
 	self assertMatchHasEnded.
 	self move: aPlayer.
-	board applyEffectOf: (self positionOf: aPlayer) currentSpace on: self activatedBy: aPlayer.
+	board applyEffectOf: (self positionOf: aPlayer) currentSpace in: self activatedBy: aPlayer.
 	self changeTurn
 ]
 
