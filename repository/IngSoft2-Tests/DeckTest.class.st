@@ -5,6 +5,14 @@ Class {
 }
 
 { #category : #tests }
+DeckTest >> testCreatingDeterministicDeckWithAnEmptyCardSuccession [
+	| deck |
+	self should: [ deck := Deck deterministicWithCardSequence: {  } ]
+	raise: MatchException 
+	withExceptionDo: [ :exception | self assert: exception messageText equals: 'The card succession must have at least one card' ]
+]
+
+{ #category : #tests }
 DeckTest >> testDealingCardFromDeckWithDeterministicStrategy [
 	| deck overloadCard speedCard |
 	overloadCard := OverloadCard new.

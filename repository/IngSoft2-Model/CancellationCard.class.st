@@ -6,12 +6,12 @@ Class {
 
 { #category : #applying }
 CancellationCard >> applyIn: aMatch to: aCard [
-	aCard canceledIn: aMatch.
+	aCard cancelledIn: aMatch.
 	aMatch updateLastCard: self
 ]
 
 { #category : #applying }
 CancellationCard >> redoIn: aMatch to: aCard by: aRedoCard [ 
-	aCard canceledIn: aMatch.
+	aCard cancelledIn: aMatch.
 	aMatch updateLastCard: aRedoCard
 ]

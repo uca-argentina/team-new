@@ -15,7 +15,7 @@ CardBehavior >> assertingNextPlayerIn: aMatch is: aPlayer [
 ]
 
 { #category : #cancelling }
-CardBehavior >> canceledIn: aMatch [
+CardBehavior >> cancelledIn: aMatch [
 	self subclassResponsibility
 ]
 
