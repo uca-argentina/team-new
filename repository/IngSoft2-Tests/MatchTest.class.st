@@ -522,6 +522,29 @@ MatchTest >> testPlayerWantsToPlayACardButHeIsNotPartOfTheMatch [
 ]
 
 { #category : #tests }
+MatchTest >> testPlayerWantsToPlayACardButTheMatchHasFinished [
+	| fabio match dices board players accelerationCard deck |
+	accelerationCard := AccelerationCard new.
+	board := self boardWith10SpacesWithoutEffects.
+	fabio := self playerNamedFabio.
+	players := OrderedCollection with: fabio.
+	dices := OrderedCollection
+		with: (Dice deterministicWithFaces: 10 throwing: {10}).
+	deck := Deck deterministicWithCardSequence: { accelerationCard }.
+	match := Match
+		playedBy: players
+		throwing: dices
+		during: 1
+		on: board
+		dealingFrom: deck.
+	match playedBy: fabio.
+	self
+		should: [ match play: accelerationCard by: fabio ]
+		raise: MatchException 
+		withExceptionDo: [ :exception | self assert: exception messageText equals: 'The match is over' ]
+]
+
+{ #category : #tests }
 MatchTest >> testPlayerWantsToPlayACardToAPlayerThatIsNotPlaying [
 	| juan martin board dice deck match speedCard |
 	juan := self playerNamedJuan.

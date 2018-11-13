@@ -19,8 +19,8 @@ RedoCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 ]
 
 { #category : #cancelling }
-RedoCard >> canceledIn: aMatch [ 
-	behaviour canceledIn: aMatch. 
+RedoCard >> cancelledIn: aMatch [ 
+	behaviour cancelledIn: aMatch. 
 ]
 
 { #category : #initialization }

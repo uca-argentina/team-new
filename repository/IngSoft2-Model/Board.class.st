@@ -9,6 +9,13 @@ Class {
 }
 
 { #category : #'instance creation' }
+Board class >> assertIsEmpty: effectSuccession [
+	effectSuccession isEmpty
+		ifTrue: [ MatchException
+				signal: 'The effect succession must have at least one effect' ]
+]
+
+{ #category : #'instance creation' }
 Board class >> boardOf: anAmountOfSpaces with: aBoardStrategy [
 	^ self new initializeWith: anAmountOfSpaces and: aBoardStrategy
 ]
@@ -21,11 +28,11 @@ Board class >> checkIsValid: anAmountOfSpaces [
 
 { #category : #'instance creation' }
 Board class >> deterministicWithSpaces: anAmountOfSpaces andEffectsGeneratedFrom: effectSuccession [
+	self assertIsEmpty: effectSuccession.
 	self checkIsValid: anAmountOfSpaces.
 	^ self
 		boardOf: anAmountOfSpaces
-		with:
-			(DeterministicBoardStrategy using: effectSuccession  )
+		with: (DeterministicBoardStrategy using: effectSuccession)
 ]
 
 { #category : #'instance creation' }

@@ -8,8 +8,16 @@ Class {
 }
 
 { #category : #'instance creation' }
+Deck class >> assertIsEmpty: cardSuccession [
+	cardSuccession isEmpty
+		ifTrue: [ MatchException
+				signal: 'The card succession must have at least one card' ]
+]
+
+{ #category : #'instance creation' }
 Deck class >> deterministicWithCardSequence: cardSuccession [
-	^ self shuffledBy:( DeterministicDeckStrategy using: cardSuccession)
+	self assertIsEmpty: cardSuccession.
+	^ self shuffledBy: (DeterministicDeckStrategy using: cardSuccession)
 ]
 
 { #category : #'instance creation' }

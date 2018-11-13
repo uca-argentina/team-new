@@ -10,6 +10,6 @@ InstantCard >> assertingNextPlayerIn: aMatch is: aPlayer [
 ]
 
 { #category : #cancelling }
-InstantCard >> canceledIn: aMatch [ 
+InstantCard >> cancelledIn: aMatch [ 
 	MatchException signal: 'Cancellation card can only be used affecting a Permantent Card'.
 ]

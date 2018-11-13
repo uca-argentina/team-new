@@ -11,7 +11,7 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #cancelling }
-OverloadCard >> canceledIn: aMatch [
+OverloadCard >> cancelledIn: aMatch [
 	aMatch removeActivated: self
 ]
 

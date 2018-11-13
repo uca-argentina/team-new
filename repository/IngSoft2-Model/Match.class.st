@@ -153,6 +153,7 @@ Match >> nextPlayerPosition [
 
 { #category : #playing }
 Match >> play: aCard by: aPlayer [
+	self assertMatchHasEnded.
 	self assert: aPlayer owns: aCard.
 	aCard assertingNextPlayerIn: self is: aPlayer.
 	aCard applyIn: self to: aPlayer.
@@ -161,6 +162,7 @@ Match >> play: aCard by: aPlayer [
 
 { #category : #playing }
 Match >> play: aCard by: aPlayer targeting: anActivatedCard [
+	self assertMatchHasEnded.
 	self assert: aPlayer owns: aCard.
 	aCard assertingNextPlayerIn: self is: aPlayer.
 	aCard applyIn: self to: anActivatedCard.
@@ -169,6 +171,7 @@ Match >> play: aCard by: aPlayer targeting: anActivatedCard [
 
 { #category : #playing }
 Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
+	self assertMatchHasEnded.
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
 	aCard assertingNextPlayerIn: self is: anAffecterPlayer.

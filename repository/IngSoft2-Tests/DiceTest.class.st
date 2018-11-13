@@ -15,6 +15,14 @@ DiceTest >> testCreatingDeterministDiceWithInvalidSequenceNumber [
 ]
 
 { #category : #tests }
+DiceTest >> testCreatingDeterministicDiceWithAnEmptySequence [
+	| dice |
+	self should: [ dice := Dice deterministicWithFaces: 5 throwing: {  } ]
+	raise: MatchException 
+	withExceptionDo: [ :exception | self assert:  exception messageText equals: 'Sequence must have at least one number']
+]
+
+{ #category : #tests }
 DiceTest >> testCreatingRandomDiceWithAmountOfFacesNoValid [
 	| dice |
 	self

@@ -9,6 +9,12 @@ Class {
 }
 
 { #category : #'creation validation' }
+Dice class >> assertIsEmpty: sequence [
+	sequence isEmpty
+		ifTrue: [ MatchException signal: 'Sequence must have at least one number' ]
+]
+
+{ #category : #'creation validation' }
 Dice class >> checkIsValid: anAmountOfFaces [
 	anAmountOfFaces > 0
 		ifFalse: [ MatchException signal: 'you can not create a dice with less than 1 face' ]
@@ -16,9 +22,11 @@ Dice class >> checkIsValid: anAmountOfFaces [
 
 { #category : #'creation validation' }
 Dice class >> checkIsValidThrowing: sequence with: anAmountOfFaces [
+	self assertIsEmpty: sequence.
 	sequence
 		detect: [ :aNumber | aNumber > anAmountOfFaces ]
-		ifFound: [ MatchException signal: 'The sequence can not have a number bigger than amount of faces' ]
+		ifFound: [ MatchException
+				signal: 'The sequence can not have a number bigger than amount of faces' ]
 ]
 
 { #category : #'instance creation' }

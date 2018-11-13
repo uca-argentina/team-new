@@ -27,10 +27,10 @@ Position class >> onSpace: aSpace ofLap: aLap [
 
 { #category : #'instance creation' }
 Position class >> whenMoving: anAmountOfSpaces from: aPosition onBoardOfSize: aBoardSize [
-	| newSpaces newLap |
-	newSpaces := (aPosition currentSpace + anAmountOfSpaces - 1) % aBoardSize + 1.
+	| newSpace newLap |
+	newSpace := (aPosition currentSpace + anAmountOfSpaces - 1) % aBoardSize + 1.
 	newLap := aPosition currentLap + ((aPosition currentSpace + anAmountOfSpaces - 1) // aBoardSize).
-	^ self onSpace: newSpaces ofLap: newLap
+	^ self onSpace: newSpace ofLap: newLap
 ]
 
 { #category : #comparing }
