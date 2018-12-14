@@ -10,11 +10,6 @@ SpeedCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #cancelling }
-SpeedCard >> cancelledIn: aMatch [
-	aMatch removeActivated: self
-]
-
 { #category : #applying }
 SpeedCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
@@ -22,6 +17,6 @@ SpeedCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 ]
 
 { #category : #moving }
-SpeedCard >> spacesToMove [
+SpeedCard >> rollModifier [
 	^ 1
 ]

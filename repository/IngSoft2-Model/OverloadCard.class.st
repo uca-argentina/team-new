@@ -10,11 +10,6 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #cancelling }
-OverloadCard >> cancelledIn: aMatch [
-	aMatch removeActivated: self
-]
-
 { #category : #applying }
 OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
@@ -22,6 +17,6 @@ OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 ]
 
 { #category : #moving }
-OverloadCard >> spacesToMove [
+OverloadCard >> rollModifier [
 	^ -2
 ]

@@ -10,11 +10,6 @@ AccelerationCard >> applyIn: aMatch to: aPlayer [
 	aMatch updateLastCard: self
 ]
 
-{ #category : #cancelling }
-AccelerationCard >> cancelledIn: aMatch [
-	aMatch removeActivated: self
-]
-
 { #category : #applying }
 AccelerationCard >> redoIn: aMatch to: aPlayer by:aRedoCard [
 	aMatch players do: [ :player | aMatch add: aRedoCard toBeAppliedTo: player ].
@@ -22,6 +17,6 @@ AccelerationCard >> redoIn: aMatch to: aPlayer by:aRedoCard [
 ]
 
 { #category : #moving }
-AccelerationCard >> spacesToMove [
+AccelerationCard >> rollModifier [
 	^ 1
 ]

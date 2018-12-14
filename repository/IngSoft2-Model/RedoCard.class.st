@@ -14,7 +14,7 @@ RedoCard >> applyIn: aMatch to: aPlayerOrACard [
 ]
 
 { #category : #description }
-RedoCard >> assertingNextPlayerIn: aMatch is: aPlayer [ 
+RedoCard >> assertCanBePlayedBy: aPlayer in: aMatch [ 
 	
 ]
 
@@ -34,6 +34,6 @@ RedoCard >> redoIn: aMatch to: aPlayerOrACard by: aRedoCard [
 ]
 
 { #category : #moving }
-RedoCard >> spacesToMove [
-	^ behaviour spacesToMove.
+RedoCard >> rollModifier [
+	^ behaviour rollModifier.
 ]

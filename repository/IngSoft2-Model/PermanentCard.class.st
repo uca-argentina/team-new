@@ -5,12 +5,17 @@ Class {
 }
 
 { #category : #description }
-PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
+PermanentCard >> assertCanBePlayedBy: aPlayer in: aMatch [
 	aMatch nextPlayer = aPlayer
 		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
 ]
 
+{ #category : #cancelling }
+PermanentCard >> cancelledIn: aMatch [
+	aMatch removeActivated: self
+]
+
 { #category : #moving }
-PermanentCard >> spacesToMove [
+PermanentCard >> rollModifier [
 	self subclassResponsibility
 ]

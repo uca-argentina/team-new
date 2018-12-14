@@ -34,8 +34,7 @@ Match >> add: aCard toBeAppliedTo: aPlayer [
 
 { #category : #description }
 Match >> assert: aPlayer owns: aCard [
-	self assertIsPlaying: aPlayer.
-	(playersCards at: aPlayer ifAbsentPut: [ OrderedCollection with: deck dealCard with: deck dealCard ])
+	(self cardsOf: aPlayer)
 		detect: [ :card | card = aCard ]
 		ifNone: [ MatchException signal: 'The player ' , aPlayer name , ' do not own ' , aCard className ]
 ]
@@ -155,7 +154,7 @@ Match >> nextPlayerPosition [
 Match >> play: aCard by: aPlayer [
 	self assertMatchHasEnded.
 	self assert: aPlayer owns: aCard.
-	aCard assertingNextPlayerIn: self is: aPlayer.
+	aCard assertCanBePlayedBy: aPlayer in: self.
 	aCard applyIn: self to: aPlayer.
 	self remove: aCard fromHandOf: aPlayer
 ]
@@ -164,7 +163,7 @@ Match >> play: aCard by: aPlayer [
 Match >> play: aCard by: aPlayer targeting: anActivatedCard [
 	self assertMatchHasEnded.
 	self assert: aPlayer owns: aCard.
-	aCard assertingNextPlayerIn: self is: aPlayer.
+	aCard assertCanBePlayedBy: aPlayer in: self.
 	aCard applyIn: self to: anActivatedCard.
 	self remove: aCard fromHandOf: aPlayer
 ]
@@ -174,7 +173,7 @@ Match >> play: aCard targeting: anAffectedPlayer by: anAffecterPlayer [
 	self assertMatchHasEnded.
 	self assert: anAffecterPlayer owns: aCard.
 	self assertIsPlaying: anAffectedPlayer.
-	aCard assertingNextPlayerIn: self is: anAffecterPlayer.
+	aCard assertCanBePlayedBy: anAffecterPlayer in: self.
 	aCard applyIn: self to: anAffectedPlayer.
 	self remove: aCard fromHandOf: anAffecterPlayer
 ]
@@ -217,7 +216,7 @@ Match >> removeActivated: card [
 
 { #category : #playing }
 Match >> throwDicesAndApplyCardsBy: aPlayer [
-	^ (aPlayer throw: dices) + ((self cardsTargeting: aPlayer) sumNumbers: [ :card | card spacesToMove ])
+	^ (aPlayer throw: dices) + ((self cardsTargeting: aPlayer) sumNumbers: [ :card | card rollModifier ])
 ]
 
 { #category : #updating }
