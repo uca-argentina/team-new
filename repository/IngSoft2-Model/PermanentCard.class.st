@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #moving }
+PermanentCard >> affectDiceRoll: aRoll [
+	self subclassResponsibility
+]
+
 { #category : #description }
 PermanentCard >> assertCanBePlayedBy: aPlayer in: aMatch [
 	aMatch nextPlayer = aPlayer
@@ -13,9 +18,4 @@ PermanentCard >> assertCanBePlayedBy: aPlayer in: aMatch [
 { #category : #cancelling }
 PermanentCard >> cancelledIn: aMatch [
 	aMatch removeActivated: self
-]
-
-{ #category : #moving }
-PermanentCard >> rollModifier [
-	self subclassResponsibility
 ]

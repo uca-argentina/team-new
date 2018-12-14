@@ -216,7 +216,10 @@ Match >> removeActivated: card [
 
 { #category : #playing }
 Match >> throwDicesAndApplyCardsBy: aPlayer [
-	^ (aPlayer throw: dices) + ((self cardsTargeting: aPlayer) sumNumbers: [ :card | card rollModifier ])
+	| throw |
+	throw := aPlayer throw: dices.
+	(self cardsTargeting: aPlayer) do: [ :card | throw := card affectDiceRoll: throw ].
+	^ throw
 ]
 
 { #category : #updating }

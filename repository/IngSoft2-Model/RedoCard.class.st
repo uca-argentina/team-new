@@ -7,6 +7,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #moving }
+RedoCard >> affectDiceRoll: aRoll [
+	^ behaviour affectDiceRoll: aRoll
+]
+
 { #category : #applying }
 RedoCard >> applyIn: aMatch to: aPlayerOrACard [
 	behaviour := aMatch lastCard.
@@ -31,9 +36,4 @@ RedoCard >> initialize [
 { #category : #applying }
 RedoCard >> redoIn: aMatch to: aPlayerOrACard by: aRedoCard [
 	behaviour redoIn: aMatch to: aPlayerOrACard by: aRedoCard
-]
-
-{ #category : #moving }
-RedoCard >> rollModifier [
-	^ behaviour rollModifier.
 ]

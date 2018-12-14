@@ -1,5 +1,5 @@
 Class {
-	#name : #DeterministicDiceStrategy,
+	#name : #DeterministicEffectProvidingStrategy,
 	#superclass : #Object,
 	#instVars : [
 		'deterministicStrategy'
@@ -8,16 +8,17 @@ Class {
 }
 
 { #category : #'instance creation' }
-DeterministicDiceStrategy class >> using: aSequence [
+DeterministicEffectProvidingStrategy class >> using: aSequence [
 	^ self new initializeUsing: aSequence
 ]
 
 { #category : #initialization }
-DeterministicDiceStrategy >> initializeUsing: aSequence [
+DeterministicEffectProvidingStrategy >> initializeUsing: aSequence [
 deterministicStrategy := DeterministicStrategy using: aSequence
+
 ]
 
 { #category : #generating }
-DeterministicDiceStrategy >> nextNumberUsing: anAmountOfFaces [
-	^ deterministicStrategy next
+DeterministicEffectProvidingStrategy >> nextEffect [
+	^ deterministicStrategy  next
 ]

@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #moving }
+AccelerationCard >> affectDiceRoll: aRoll [
+	^ aRoll + 1
+]
+
 { #category : #applying }
 AccelerationCard >> applyIn: aMatch to: aPlayer [
 	aMatch players do: [ :player | aMatch add: self toBeAppliedTo: player ].
@@ -14,9 +19,4 @@ AccelerationCard >> applyIn: aMatch to: aPlayer [
 AccelerationCard >> redoIn: aMatch to: aPlayer by:aRedoCard [
 	aMatch players do: [ :player | aMatch add: aRedoCard toBeAppliedTo: player ].
 	aMatch updateLastCard: aRedoCard
-]
-
-{ #category : #moving }
-AccelerationCard >> rollModifier [
-	^ 1
 ]

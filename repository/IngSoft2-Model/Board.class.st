@@ -27,18 +27,18 @@ Board class >> checkIsValid: anAmountOfSpaces [
 ]
 
 { #category : #'instance creation' }
-Board class >> deterministicWithSpaces: anAmountOfSpaces andEffectsGeneratedFrom: effectSuccession [
+Board class >> withRandomEffectsAndSpaces: anAmountOfSpaces [
+	self checkIsValid: anAmountOfSpaces.
+	^ self boardOf: anAmountOfSpaces with: RandomEffectProvidingStrategy new
+]
+
+{ #category : #'instance creation' }
+Board class >> withSpaces: anAmountOfSpaces andDeterministicEffectsGeneratedFrom: effectSuccession [
 	self assertIsEmpty: effectSuccession.
 	self checkIsValid: anAmountOfSpaces.
 	^ self
 		boardOf: anAmountOfSpaces
-		with: (DeterministicBoardStrategy using: effectSuccession)
-]
-
-{ #category : #'instance creation' }
-Board class >> randomWithSpaces: anAmountOfSpaces [
-	self checkIsValid: anAmountOfSpaces.
-	^ self boardOf: anAmountOfSpaces with: RandomBoardStrategy new
+		with: (DeterministicEffectProvidingStrategy using: effectSuccession)
 ]
 
 { #category : #'game play' }

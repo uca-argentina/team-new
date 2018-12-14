@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #moving }
+OverloadCard >> affectDiceRoll: aRoll [
+	^ aRoll - 2
+]
+
 { #category : #applying }
 OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch add: self toBeAppliedTo: aPlayer.
@@ -14,9 +19,4 @@ OverloadCard >> applyIn: aMatch to: aPlayer [
 OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
 	aMatch updateLastCard: aRedoCard
-]
-
-{ #category : #moving }
-OverloadCard >> rollModifier [
-	^ -2
 ]
