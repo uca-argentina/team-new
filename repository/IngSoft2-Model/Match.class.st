@@ -216,10 +216,10 @@ Match >> removeActivated: card [
 
 { #category : #playing }
 Match >> throwDicesAndApplyCardsBy: aPlayer [
-	| throw |
-	throw := aPlayer throw: dices.
-	(self cardsTargeting: aPlayer) do: [ :card | throw := card affectDiceRoll: throw ].
-	^ throw
+	| roll |
+	roll := aPlayer throw: dices.
+	(self cardsTargeting: aPlayer) do: [ :card | roll := card affectDiceRoll: roll ].
+	^ roll
 ]
 
 { #category : #updating }
