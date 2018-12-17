@@ -4,13 +4,18 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #moving }
+PermanentCard >> affectDiceRoll: aRoll [
+	self subclassResponsibility
+]
+
 { #category : #description }
-PermanentCard >> assertingNextPlayerIn: aMatch is: aPlayer [
+PermanentCard >> assertCanBePlayedBy: aPlayer in: aMatch [
 	aMatch nextPlayer = aPlayer
 		ifFalse: [ MatchException signal: 'A player can only play a permanent card in his turn' ]
 ]
 
-{ #category : #moving }
-PermanentCard >> spacesToMove [
-	self subclassResponsibility
+{ #category : #cancelling }
+PermanentCard >> cancelledIn: aMatch [
+	aMatch removeActivated: self
 ]

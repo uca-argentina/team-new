@@ -9,8 +9,8 @@ BoardTest >> testCreatingBoardWithInvalidAmountOfSpaces [
 	| board |
 	self
 		should: [ board := Board
-				deterministicWithSpaces: -30
-				andEffectsGeneratedFrom:
+				withSpaces: -30
+				andDeterministicEffectsGeneratedFrom:
 					{NoEffect new.
 					AtomicBombEffect new} ]
 		raise: MatchException 
@@ -20,7 +20,7 @@ BoardTest >> testCreatingBoardWithInvalidAmountOfSpaces [
 { #category : #tests }
 BoardTest >> testCreatingBoardWithRandomStrategy [
 	| board |
-	board := Board randomWithSpaces: 50.
+	board := Board withRandomEffectsAndSpaces: 50.
 	self
 		assert: (board effects allSatisfy: [ :effect | effect respondsTo: #turnOnEffectAt:activatedBy: ])
 ]
@@ -29,8 +29,8 @@ BoardTest >> testCreatingBoardWithRandomStrategy [
 BoardTest >> testCreatingBoardWithValidAmountOfSpaces [
 	| board |
 	board := Board
-		deterministicWithSpaces: 30
-		andEffectsGeneratedFrom:
+		withSpaces: 30
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	self assert: board spaces equals: 30
@@ -40,7 +40,7 @@ BoardTest >> testCreatingBoardWithValidAmountOfSpaces [
 BoardTest >> testCreatingDeterministicBoardWithAnEmptyEffectSuccession [
 	| board |
 	self should: [
-	board := Board deterministicWithSpaces: 10 andEffectsGeneratedFrom: {  }]
+	board := Board withSpaces: 10 andDeterministicEffectsGeneratedFrom: {  }]
 	raise: MatchException 
 	withExceptionDo: [ :exception | self assert: exception messageText equals: 'The effect succession must have at least one effect' ]
 	

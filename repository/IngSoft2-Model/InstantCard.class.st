@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #description }
-InstantCard >> assertingNextPlayerIn: aMatch is: aPlayer [
+InstantCard >> assertCanBePlayedBy: aPlayer in: aMatch [
 	
 ]
 

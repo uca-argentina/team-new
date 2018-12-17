@@ -10,7 +10,7 @@ CardBehavior >> applyIn: aMatch to: aPlayer [
 ]
 
 { #category : #description }
-CardBehavior >> assertingNextPlayerIn: aMatch is: aPlayer [
+CardBehavior >> assertCanBePlayedBy: aPlayer in: aMatch [
 	self subclassResponsibility
 ]
 

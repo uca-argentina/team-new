@@ -23,8 +23,8 @@ EffectTest >> testPlayerActivateAtomicBombEffect [
 	| matias fabio dices board match players deck|
 	deck:= self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	matias := Player named: 'Matias'.
@@ -70,8 +70,8 @@ EffectTest >> testPlayerActivatesGetCardEffect [
 			speedCard.
 			redoCard}.
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			DealCardEffect new}.
 	matias := Player named: 'Matias'.
@@ -102,8 +102,8 @@ EffectTest >> testPlayerActivatesMoonWalkAndLosesMoreThanOneLap [
 	| matias fabio dices board match players deck|
 	deck:= self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 5
-		andEffectsGeneratedFrom: {(MoonWalkEffect moving: 7)}.
+		withSpaces: 5
+		andDeterministicEffectsGeneratedFrom: {(MoonWalkEffect moving: 7)}.
 	matias := Player named: 'Matias'.
 	fabio := Player named: 'Fabio'.
 	players := OrderedCollection with: matias with: fabio.
@@ -126,8 +126,8 @@ EffectTest >> testPlayerActivatesMoonWalkEffect [
 	| matias fabio dices board match players deck|
 	deck:= self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			(MoonWalkEffect moving: 1)}.
 	matias := Player named: 'Matias'.
@@ -160,8 +160,8 @@ EffectTest >> testPlayerActivatesSpeedUpEffect [
 	| matias dices board match players deck|
 	deck:= self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			SpeedUpEffect new}.
 	matias := Player named: 'Matias'.
@@ -183,8 +183,8 @@ EffectTest >> testPlayerActivatesWormHoleEffect [
 	| matias dices board match players deck|
 	deck:= self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			WormHoleEffect new}.
 	matias := Player named: 'Matias'.

@@ -29,8 +29,8 @@ Class {
 { #category : #accessing }
 MatchTest >> boardWith10SpacesWithoutEffects [
 	^ Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom: {NoEffect new}
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom: {NoEffect new}
 ]
 
 { #category : #accessing }
@@ -109,8 +109,8 @@ MatchTest >> testAPlayerWantsToPlayButHeIsNotPartOfTheMatch [
 	deck := self deckWithOverloadCard.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	fabio := self playerNamedFabio.
@@ -134,8 +134,8 @@ MatchTest >> testAPlayerWantsToPlayWhenItIsNotHisTurn [
 	| match board martin juan dices players deck |
 	deck := self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 20
-		andEffectsGeneratedFrom:
+		withSpaces: 20
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	martin := self playerNamedMartin.
@@ -245,8 +245,8 @@ MatchTest >> testAllCardsAndAllEfectsInOneMatch [
 	martin := self playerNamedMartin.
 	dice := Dice deterministicWithFaces: 7 throwing: { 3 . 6 . 7 . 2 . 3 . 6 }.
 	board := Board
-		deterministicWithSpaces: 30
-		andEffectsGeneratedFrom:
+		withSpaces: 30
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new.
 			(MoonWalkEffect moving: 2).
@@ -298,7 +298,7 @@ MatchTest >> testAllCardsInOneMatch [
 	fabio := self playerNamedFabio.
 	martin := self playerNamedMartin.
 	dice := Dice deterministicWithFaces: 6 throwing: { 3 }.
-	board := Board deterministicWithSpaces: 20 andEffectsGeneratedFrom: { NoEffect new . SpeedUpEffect new }.
+	board := Board withSpaces: 20 andDeterministicEffectsGeneratedFrom: { NoEffect new . SpeedUpEffect new }.
 	overloadCard := OverloadCard new.
 	speedCard := SpeedCard new.
 	accelerationCard := AccelerationCard new.
@@ -340,8 +340,8 @@ MatchTest >> testAllEffectsInOneMatch [
 		with: (Dice deterministicWithFaces: 5 throwing: #(1 5 3 4 1))
 		with: (Dice deterministicWithFaces: 4 throwing: #(2 4 2 1 2)).
 	board := Board
-		deterministicWithSpaces: 20
-		andEffectsGeneratedFrom:
+		withSpaces: 20
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new.
 			(MoonWalkEffect moving: 2).
@@ -381,8 +381,8 @@ MatchTest >> testAskingAPositionOfPlayerThatIsNotPlaying [
 	deck := self deckWithOverloadCard.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(5)).
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	fabio := self playerNamedFabio.
@@ -407,8 +407,8 @@ MatchTest >> testCreatingMatchAndAllPlayersStartAtSpace1 [
 	deck := self deckWithOverloadCard.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(1)).
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	fabio := self playerNamedFabio.
@@ -456,8 +456,8 @@ MatchTest >> testNoPlayerPlaysAndThereIsNoWinner [
 	| match board mateo marcos players dices deck |
 	deck := self deckWithOverloadCard.
 	board := Board
-		deterministicWithSpaces: 30
-		andEffectsGeneratedFrom:
+		withSpaces: 30
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	mateo := Player named: 'Mateo'.
@@ -721,8 +721,8 @@ MatchTest >> testWhenMatchIsCreatedWithOnePlayerItIsHisTurn [
 	deck := self deckWithOverloadCard.
 	dices := OrderedCollection with: (Dice deterministicWithFaces: 5 throwing: #(1)).
 	board := Board
-		deterministicWithSpaces: 10
-		andEffectsGeneratedFrom:
+		withSpaces: 10
+		andDeterministicEffectsGeneratedFrom:
 			{NoEffect new.
 			AtomicBombEffect new}.
 	matias := Player named: 'Matias'.

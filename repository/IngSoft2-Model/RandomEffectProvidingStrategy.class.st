@@ -1,5 +1,5 @@
 Class {
-	#name : #RandomBoardStrategy,
+	#name : #RandomEffectProvidingStrategy,
 	#superclass : #Object,
 	#instVars : [
 		'effects'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #generating }
-RandomBoardStrategy >> generateEffectsDistribution [
+RandomEffectProvidingStrategy >> generateEffectsDistribution [
 	effects := OrderedCollection new.
 	effects
 		addAll: ((1 to: 2) collect: [ :i | AtomicBombEffect new ]);
@@ -20,11 +20,11 @@ RandomBoardStrategy >> generateEffectsDistribution [
 ]
 
 { #category : #initialization }
-RandomBoardStrategy >> initialize [
+RandomEffectProvidingStrategy >> initialize [
 	self generateEffectsDistribution
 ]
 
 { #category : #generating }
-RandomBoardStrategy >> nextEffect [
+RandomEffectProvidingStrategy >> nextEffect [
 	^ effects at: 100 atRandom
 ]

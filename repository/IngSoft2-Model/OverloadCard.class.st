@@ -4,24 +4,19 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #moving }
+OverloadCard >> affectDiceRoll: aRoll [
+	^ aRoll - 2
+]
+
 { #category : #applying }
 OverloadCard >> applyIn: aMatch to: aPlayer [
 	aMatch add: self toBeAppliedTo: aPlayer.
 	aMatch updateLastCard: self
 ]
 
-{ #category : #cancelling }
-OverloadCard >> cancelledIn: aMatch [
-	aMatch removeActivated: self
-]
-
 { #category : #applying }
 OverloadCard >> redoIn: aMatch to: aPlayer by: aRedoCard [
 	aMatch add: aRedoCard toBeAppliedTo: aPlayer.
 	aMatch updateLastCard: aRedoCard
-]
-
-{ #category : #moving }
-OverloadCard >> spacesToMove [
-	^ -2
 ]
